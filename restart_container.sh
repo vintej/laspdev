@@ -1,7 +1,7 @@
 docker stop laspvinA
 docker stop laspvinB
 
-sleep 300
+sleep 120
 
 docker start laspvinA
 docker start laspvinB
