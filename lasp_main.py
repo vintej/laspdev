@@ -1,11 +1,12 @@
 #!/usr/bin/python
 
 import pexpect
-import subprocess
 import time
 import sys
+import os
 import logging
 from threading import Thread
+import multiprocessing
 from setup_lasp import start
 #from nodeA import setup_table
 #from nodeB import check_update
@@ -16,7 +17,7 @@ B_ready_to_join = False
 membership = False
 ipA = '172.17.0.2'
 ipB = '172.17.0.3'
-
+run_name = str(sys.argv[1])
 
 def exec_cmd(child, cmd, pmt, node):
     child.sendline(cmd)
@@ -115,10 +116,25 @@ def laspB_s(node):
     #logger_2.shutdown()    
     laspB.logfile.close()
     lfileB.close()
-    
+
+def bw_log(bw):
+        os.system('docker exec laspvinA bash -c "date > /tmp/bwLogs"')
+        os.system('docker exec laspvinA bash -c "iftop -t >> /tmp/bwLogs"')
+
 #Start main here
 if __name__ == "__main__":
     tA = Thread(target=laspA_s, args=('Node A',))
     tB = Thread(target=laspB_s, args=('Node B',))
     tA.start()
     tB.start()
+    pBW = multiprocessing.Process(target=bw_log, args=('bw',))
+    pBW.start()
+    while tA.isAlive() or tB.isAlive():
+        pass
+    pBW.terminate()
+    os.system("mkdir results/"+run_name)
+    os.system("mv logs/* results/"+run_name)
+    os.system("docker cp laspvinA:/tmp/bwLogs results/"+run_name)
+    print("Execution Ended")
+
+
