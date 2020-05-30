@@ -33,6 +33,8 @@ def stop_node(node):
     e = find_key(node)
     i = node
     print("Stopping node:"+i+" in session:"+e)
+    os.system('screen -S '+e+' -p '+i+' -X stuff "^M"')
+    os.system('screen -S '+e+' -p '+i+' -X stuff "^M"')
     os.system('screen -S '+e+' -p '+i+' -X stuff "lasp_peer_service:stop().^M"')
     time.sleep(2)
     os.system('screen -S '+e+' -p '+i+' -X stuff "^M"')
@@ -50,7 +52,10 @@ def test(node):
     print("Session:"+find_key(node)+" Terminal:"+node)
 
 def exec_com(command, node):
+    os.system('screen -S '+find_key(node)+' -p '+node+' -X stuff "'+command+'^M"')
     #os.system('screen -S '+find_key(node)+' -p '+node+' -X stuff "^M"')
     #time.sleep(1)
-    #os.system('screen -S '+find_key(node)+' -p '+node+' -X stuff "^M"')
-    os.system('screen -S '+find_key(node)+' -p '+node+' -X stuff "'+command+'^M"')
+    #os.system('screen -S '+find_key(node)+' -p '+node+' -X stuff "^M"') stuff \''+command+'^M\''
+
+def exec_spec_com(command, node):
+    os.system('screen -S '+find_key(node)+' -p '+node+' -X stuff \''+command+'^M\'')

@@ -16,8 +16,8 @@ net.addController('c0')
 info('*** Adding docker containers\n')
 lasp_base="vinayaktj/lasp:base"
 lasp_dev="vinayaktj/lasp:dev"
-#chosen_image = lasp_dev
-chosen_image = lasp_base
+chosen_image = lasp_dev
+#chosen_image = lasp_base
 d1 = net.addDocker('d1', ip='10.0.0.250', dimage=chosen_image)
 d2 = net.addDocker('d2', ip='10.0.0.251', dimage=chosen_image)
 d3 = net.addDocker('d3', ip='10.0.0.252', dimage=chosen_image)
