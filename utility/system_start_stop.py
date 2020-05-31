@@ -35,11 +35,10 @@ def stop_node(node):
     print("Stopping node:"+i+" in session:"+e)
     os.system('screen -S '+e+' -p '+i+' -X stuff "^M"')
     os.system('screen -S '+e+' -p '+i+' -X stuff "^M"')
-    os.system('screen -S '+e+' -p '+i+' -X stuff "lasp_peer_service:stop().^M"')
     time.sleep(2)
-    os.system('screen -S '+e+' -p '+i+' -X stuff "^M"')
-    os.system('screen -S '+e+' -p '+i+' -X stuff "^M"')
-    os.system('screen -S '+e+' -p '+i+' -X stuff "exit^M"')
+    os.system('screen -S '+e+' -p '+i+' -X stuff "lasp_peer_service:stop().^M"')
+    time.sleep(4)
+    #os.system('screen -S '+e+' -p '+i+' -X stuff "exit^M"')
 
 
 def find_key(node):
