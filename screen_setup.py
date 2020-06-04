@@ -18,7 +18,7 @@ def flattenList(data):
 
 def get_allNodes():
     global node
-    with open("NodeDirectory.txt", "rb") as fp:
+    with open("utility/NodeDirectory.txt", "rb") as fp:
             node = pickle.load(fp)
     allNodes = []
     for cluster in node.keys():

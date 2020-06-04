@@ -6,7 +6,7 @@ tempnode = 'd1'
 numberOfnodes = 20
 nodesPerCluster = 5
 c1_nodes = ['c']
-c3_nodes = ['d']
+c3_nodes = ['d','e']
 
 nodename = 'a'
 network = 10
@@ -27,7 +27,7 @@ for i in range(1,numberOfnodes+1):
                 nodename = 'a'
                 network = network + 1
                 ip = 10
-    print("node at session "+session+":"+node_name(nodename, i))
+    #print("node at session "+session+":"+node_name(nodename, i))
     if session in node:
         nodetemp = node[session]
     else:
@@ -44,12 +44,12 @@ for i in range(1,numberOfnodes+1):
         nodeinfo['rate'] = 'c2'
     nodetemp["d"+str(i)] = nodeinfo
     node.update({session:nodetemp})
-    print node[session]
+    #print node[session]
 
 for x in node:
         print "\n "+(x)+ " " + str(node[x])
 
-with open("NodeDirectory.txt", 'wb') as fp:
+with open("utility/NodeDirectory.txt", 'wb') as fp:
     pickle.dump(node, fp)
 
 
