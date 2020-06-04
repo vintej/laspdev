@@ -22,10 +22,24 @@ def get_allNodes():
         allNodes.append(node[cluster].keys())
     return flattenList(allNodes)
 
+def get_allClusters():
+    global node
+    allClusters = []
+    for cluster in node.keys():
+        allClusters.append(cluster)
+    return allClusters
+
 def get_cluster(nodeName):
     for cluster in node:
         if nodeName in node[cluster]:
             return cluster
+
+def get_clusterNodes(clusterno):
+    nodelist = []
+    for cluster in node:
+        if cluster == clusterno:
+            return node[cluster].keys()
+
 
 def get_ip(nodeName):
     for cluster in node:
