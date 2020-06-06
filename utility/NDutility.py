@@ -59,6 +59,12 @@ def get_rate(nodeName):
         if nodeName in node[cluster]:
             return node[cluster][nodeName]['rate']
 
+def get_edge(cluster):
+    for nodeName in node[cluster]:
+        if get_id(nodeName)=='a':
+            return nodeName
+
+
 #print get_allNodes()
 if __name__ == '__main__':
     nodeName = sys.argv[1]
@@ -66,4 +72,7 @@ if __name__ == '__main__':
     print ('Cluster: '+get_cluster(nodeName))
     print ('IP: '+get_ip(nodeName))
     print ('ID:'+get_id(nodeName))
-    print('Rate:'+get_rate(nodeName))
+    print ('Rate:'+get_rate(nodeName))
+    print ('EdgeNode:'+str(get_edge(get_cluster(nodeName))))
+    print (get_id(get_edge(get_cluster(nodeName))))
+    print (get_ip(get_edge(get_cluster(nodeName))))

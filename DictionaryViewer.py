@@ -2,7 +2,7 @@ import utility.NDutility4net as ND
 import itertools
 import pickle
 
-with open("/home/ubuntu/laspdev/utility/NodeDirectory.txt", "rb") as fp:
+with open("utility/NodeDirectory.txt", "rb") as fp:
         node = pickle.load(fp)
 
 for i in range(1, len(node)+1):
@@ -12,7 +12,7 @@ for i in range(1, len(node)+1):
 #print (ND.get_allNodes())
 for node in ND.get_allNodes():
     if  ND.get_id(node) == 'a':
-        print ("Edge Node in Cluster:"+ND.get_cluster(node)+" nodeName:"+ND.get_id(node)+" ip:"+ND.get_ip(node)+" rate"+ND.get_rate(node))
+        print ("Edge Node in "+ND.get_cluster(node)+" Node:"+node+" nodeName:"+ND.get_id(node)+" ip:"+ND.get_ip(node)+" rate"+ND.get_rate(node))
 
 cluster_switch = {}
 i=1

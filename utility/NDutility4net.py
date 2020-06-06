@@ -2,7 +2,7 @@ import pickle
 import os
 import sys
 
-with open("/home/ubuntu/laspdev/utility/NodeDirectory.txt", "rb") as fp:
+with open("utility/NodeDirectory.txt", "rb") as fp:
     node = pickle.load(fp)
 
 #print (node)
