@@ -4,19 +4,12 @@ import os
 import time
 import sys
 import utility.system_start_stop as systemFun
-import utility.node_directory as ND
+import utility.NDutility as ND
 import datetime
 import fnmatch
 from random import randint
 
-#print(ND.getIp('d1'))
-#print(ND.getName('d1'))
-#print(ND.getRate('d1'))
-
-#start_node("d4")
-#stop_node("d4")
-#exec_com("lasp_peer_service:stop().", "d4")
-allNodes = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8' ]
+allNodes = ND.get_allNodes()
 #allNodes = ['d1', 'd3', 'd5', 'd7']
 d1_ready = False
 ready_to_join = False
@@ -35,18 +28,14 @@ def start_system(nodeName):
                 logFile = name
     print("Logfile: "+logFile)
     os.system('echo "" > /home/ubuntu/laspdev/utility/log/'+logFile)
-    time.sleep(2)
-    #systemFun.exec_com('docker exec mn.'+nodeName+' bash -c "date > /opt/bwLogs"', nodeName)
-    #time.sleep(2)
-    #systemFun.exec_com('docker exec mn.'+nodeName+' bash -c "nohup iftop -i '+nodeName+'-eth0 -t >> /opt/bwLogs &"', nodeName)
-    time.sleep(2)
+    time.sleep(4)
     systemFun.exec_com("", nodeName)
     systemFun.exec_com("", nodeName)
     global d1_ready, ready_to_join
     time.sleep(2)
     systemFun.start_node(nodeName)
     time.sleep(2)
-    if nodeName != 'd1' and nodeName != 'd5':
+    if ND.get_id(nodeName) != 'a':
         #For every other node
         while ready_to_join == False:
             print('Waiting ready_to_join from:'+nodeName)
@@ -60,11 +49,11 @@ def start_system(nodeName):
             d1_ready = True
             node_status.append("Ready")
         else:
-            #For node d5
+            #For nodes other than d1 and node_id= 'a'
             while d1_ready==False:
                 print('Waiting for d1 from:'+nodeName)
                 time.sleep(2)
-            join_system_overlay('d1', 'd5')
+            join_system_overlay('d1', nodeName)
             ready_to_join = True
             node_status.append("Ready")
     print("Node Status count: "+str(node_status.count("Ready")))
@@ -80,15 +69,15 @@ def start_system(nodeName):
                 deltaRcvSys.append("True")
                 deltaRecv = True
                 break
-            time.sleep(10)
+    #        time.sleep(10)
     print("***********Test Completed*********")
 
 def exec_operation(nodeName):
     while node_status.count("Ready") != len(allNodes):
-        print("Waiting for nodes to be ready")
-        time.sleep(2)
-    print("Executing operations after 5 secs")
-    time.sleep(5)
+        print("Waiting 5 secs for nodes to be ready")
+        time.sleep(5)
+    print("Executing operations after 10 secs")
+    time.sleep(10)
     systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:time_stamp().', nodeName)
     systemFun.exec_spec_com( 'f().', nodeName)
     time.sleep(2)
@@ -116,11 +105,11 @@ def exec_operation(nodeName):
 
 def join_system_overlay(ToNode, FromNode):
     time.sleep(5)
-    systemFun.exec_com("lasp_peer_service:join('"+ND.getName(ToNode)+"@"+ND.getIp(ToNode)+"').", FromNode)
+    systemFun.exec_com("lasp_peer_service:join('"+ND.get_id(ToNode)+"@"+ND.get_ip(ToNode)+"').", FromNode)
 
 def join_system_internal(nodeName):
     time.sleep(5)
-    systemFun.exec_com("lasp_peer_service:join('"+ND.getName(systemFun.find_key(nodeName))+"@"+ND.getIp(systemFun.find_key(nodeName))+"').", nodeName)
+    systemFun.exec_com("lasp_peer_service:join('"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))+"').", nodeName)
 
 def stop_system(nodeName):
     systemFun.stop_node(nodeName)
@@ -130,18 +119,12 @@ def stop_system(nodeName):
     systemFun.exec_com("", nodeName)
     print("2 enters sleep 4")
     time.sleep(4)
-    #systemFun.exec_com('docker exec mn.'+nodeName+' bash -c "kill %1"', nodeName)
-    #systemFun.exec_com("kill %1", nodeName)
-    #systemFun.exec_com("", nodeName)
-    #systemFun.exec_com("", nodeName)
-    #time.sleep(4)
     systemFun.exec_com("", nodeName)
     systemFun.exec_com("", nodeName)
     systemFun.exec_com("exit", nodeName)
     print("exit sleep 4")
     time.sleep(4)
     systemFun.exec_com("", nodeName)
-    #systemFun.exec_com("screen -X log off", nodeName)
     print('Stopped Node:'+nodeName)
 
 def bw_log(nodeName):
@@ -174,22 +157,9 @@ if __name__ == "__main__":
         if operation=="start":
             bw_threads_stop()
         if operation == "stop":
+            print("Stopped")
             folder = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
-            os.system("mkdir /home/ubuntu/laspdev/utility/results/"+folder)
-            os.system("cp /home/ubuntu/laspdev/utility/log/* /home/ubuntu/laspdev/utility/results/"+folder)
+            os.system("mkdir /home/ubuntu/laspdev/results/"+folder)
+            os.system("cp /home/ubuntu/laspdev/utility/log/* /home/ubuntu/laspdev/results/"+folder)
             for node in allNodes:
-                os.system("docker cp mn."+node+":/opt/"+node+"_bwLogs /home/ubuntu/laspdev/utility/results/"+folder)
-
-        #tA = Thread(target=laspA_s, args=('Node A',))
-        #tB = Thread(target=laspB_s, args=('Node B',))
-        #tA.start()
-        #tB.start()
-        #pBW = multiprocessing.Process(target=bw_log, args=('bw',))
-        #pBW.start()
-        #while tA.isAlive() or tB.isAlive():
-        #    pass
-        #pBW.terminate()
-        #os.system("mkdir results/"+run_name)
-        #os.system("mv logs/* results/"+run_name)
-        #os.system("docker cp laspvinA:/tmp/bwLogs results/"+run_name)
-        #print("Execution Ended")
+                os.system("docker cp mn."+node+":/opt/"+node+"_bwLogs /home/ubuntu/laspdev/results/"+folder)

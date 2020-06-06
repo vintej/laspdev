@@ -2,7 +2,7 @@ import pickle
 import os
 import sys
 
-with open("NodeDirectory.txt", "rb") as fp:
+with open("/home/ubuntu/laspdev/utility/NodeDirectory.txt", "rb") as fp:
     node = pickle.load(fp)
 
 def flattenList(data):
