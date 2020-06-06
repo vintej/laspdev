@@ -3,8 +3,8 @@ import pickle
 node = {}
 session = "cluster1"
 tempnode = 'd1'
-numberOfnodes = 20
-nodesPerCluster = 5
+numberOfnodes = 12
+nodesPerCluster = 4
 c1_nodes = ['c']
 c3_nodes = ['d','e']
 
@@ -47,7 +47,7 @@ for i in range(1,numberOfnodes+1):
     #print node[session]
 
 for x in node:
-        print "\n "+(x)+ " " + str(node[x])
+        print ("\n "+(x)+ " " + str(node[x]))
 
 with open("utility/NodeDirectory.txt", 'wb') as fp:
     pickle.dump(node, fp)
@@ -67,7 +67,7 @@ def flattenList(data):
 #for x in node:
 #            print "\n "+(x)+ " " + str(node[x])
 
-print node.keys()
+print (node.keys())
 
 def get_allNodes():
     with open("NodeDirectory.txt", "rb") as fp:

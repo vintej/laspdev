@@ -22,6 +22,9 @@ def get_allNodes():
         allNodes.append(node[cluster].keys())
     return flattenList(allNodes)
 
+def get_dict():
+    return node
+
 def get_allClusters():
     global node
     allClusters = []

@@ -2,9 +2,10 @@ import pickle
 import os
 import sys
 
-with open("NodeDirectory.txt", "rb") as fp:
+with open("/home/ubuntu/laspdev/utility/NodeDirectory.txt", "rb") as fp:
     node = pickle.load(fp)
 
+#print (node)
 def flattenList(data):
         results = []
         for rec in data:
@@ -20,8 +21,11 @@ def get_allNodes():
     allNodes = []
     for cluster in node.keys():
         allNodes.append(list(node[cluster]))
-    print (list(allNodes))
+    #print (list(allNodes))
     return list(flattenList(allNodes))
+
+def get_dict():
+        return node
 
 def get_allClusters():
     global node
