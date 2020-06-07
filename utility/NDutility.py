@@ -64,6 +64,11 @@ def get_edge(cluster):
         if get_id(nodeName)=='a':
             return nodeName
 
+def get_allEdges():
+        edge = []
+        for cluster in node:
+            edge.append(get_edge(cluster))
+        return edge
 
 #print get_allNodes()
 if __name__ == '__main__':
@@ -76,3 +81,5 @@ if __name__ == '__main__':
     print ('EdgeNode:'+str(get_edge(get_cluster(nodeName))))
     print (get_id(get_edge(get_cluster(nodeName))))
     print (get_ip(get_edge(get_cluster(nodeName))))
+    print (get_allEdges())
+    print (str(len(get_allEdges())))

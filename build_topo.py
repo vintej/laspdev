@@ -23,13 +23,14 @@ def start_screens():
                 os.system("screen -S "+cluster+" -X screen -t "+d)
                 os.system("screen -S "+cluster+" -p "+d+" -X stuff 'screen -X logfile /home/ubuntu/laspdev/utility/log/"+d+"_log.%n^M'")
                 os.system("screen -S "+cluster+" -p "+d+" -X stuff 'screen -X log on^M'")
-                time.sleep(3)
+                time.sleep(2)
         #elif operate == "stop":
         #    os.system("screen -S "+cluster+" -p 0 -X stuff 'screen -X quit^M'")
 
 def stop_screens():
     for cluster in scnode:
         os.system("screen -S "+cluster+" -p 0 -X stuff 'screen -X quit^M'")
+    os.system("rm /home/ubuntu/laspdev/utility/log/*")
 
 setLogLevel('info')
 
@@ -76,8 +77,8 @@ d8 = net.addDocker('d8', ip='11.0.0.253', dimage=chosen_image)
 info('*** Adding switches\n')
 cluster_switch = {}
 for cluster in ND.get_allClusters():
-    print("cluster_swithc["+cluster+"] = net.addSwitch("+'s'+cluster[7:8])
-    cluster_switch[cluster] = net.addSwitch('s'+cluster[7:8])
+    print("cluster_swithc["+cluster+"] = net.addSwitch("+'s'+cluster[7:len(cluster)])
+    cluster_switch[cluster] = net.addSwitch('s'+cluster[7:len(cluster)])
 '''
 s1 = net.addSwitch('s1')
 s2 = net.addSwitch('s2')
@@ -85,6 +86,7 @@ s2 = net.addSwitch('s2')
 info('*** Creating links\n')
 router = net.addDocker('r0', cls=LinuxRouter, ip='10.0.0.10/8')
 for i in range(1, len(cluster_switch)+1):
+        print("cluster_switch['cluster"+str(i)+"'] ="+str(cluster_switch['cluster'+str(i)])+" r0-eth"+str(i)+" ip:1"+str(i-1)+".0.0.10/8")
         net.addLink(cluster_switch['cluster'+str(i)], router, intfName2='r0-eth'+str(i), params2={'ip':'1'+str(i-1)+'.0.0.10/8'})
         print("net.addLink cluster_switch["+'cluster'+str(i)+"]),router, intfName2= 'r0-eth"+str(i)+", params2={'ip':'1"+str(i-1)+".0.0.10/8")
         #net.addLink(s1, router, intfName2='r0-eth1', params2={'ip':'10.0.0.10/8'})
