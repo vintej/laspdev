@@ -62,20 +62,20 @@ def start_system(nodeName):
             node_status.append("Ready")
     print("Node Status Ready count: "+str(node_status.count("Ready")))
     #Doing operations on node d3
-    if nodeName == 'd3':
-        while (node_status.count("Ready")) != len(allNodes):
-            print("Waiting for nodes to be ready for Executing operation")
-            time.sleep(60)
-        print("Executing operation")
-        exec_operation('d3')
-    while deltaRecv == False:
-        with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
-            if 'Received delta' in f.read():
-                print("Delta Received at Node "+nodeName)
-                deltaRcvSys.append("True")
-                deltaRecv = True
-                break
-        time.sleep(30)
+    #if nodeName == 'd3':
+    #    while (node_status.count("Ready")) != len(allNodes):
+    #        print("Waiting for nodes to be ready for Executing operation")
+    #        time.sleep(60)
+    #    print("Executing operation")
+    #    exec_operation('d3')
+    #while deltaRecv == False:
+    #    with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
+    #        if 'Received delta' in f.read():
+    #            print("Delta Received at Node "+nodeName)
+    #            deltaRcvSys.append("True")
+    #            deltaRecv = True
+    #            break
+    #    time.sleep(30)
     print("***********Test Completed at "+nodeName+"*********")
 
 def exec_operation(nodeName):
@@ -116,12 +116,10 @@ def join_system_overlay(ToNode, FromNode, logFile):
     time.sleep(20)
     systemFun.exec_com("lasp_peer_service:members().", FromNode)
     time.sleep(20)
-    with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
-                lines = f.readlines()
     while execCom == False:
         with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
             temp = f.read()
-            if 'lasp_peer_service:join(' in temp and 'CRASH REPORT' not in temp:
+            if 'lasp_peer_service:join(' in temp: #and 'CRASH REPORT' not in temp:
                 #if "{ok,['d@14.0.0.14','c@14.0.0.13','b@14.0.0.12','a@14.0.0.11']}"
                 if (",'"+ND.get_id(ToNode)+"@"+ND.get_ip(ToNode)) in temp or ("'"+ND.get_id(ToNode)+"@"+ND.get_ip(ToNode)+"',") in temp or ("'"+ND.get_id(ToNode)+"@"+ND.get_ip(ToNode)+"']}") in temp:
                     print(FromNode+" Joined System Overlay")
@@ -138,9 +136,18 @@ def join_system_overlay(ToNode, FromNode, logFile):
                 time.sleep(20)
                 systemFun.exec_com("lasp_peer_service:members().", FromNode)
                 time.sleep(20)
-                for line in lines:
-                    if line.strip("\n") != "CRASH REPORT":
-                        f.write(line)
+                #if 'CRASH REPORT' in temp:
+                #    print (FromNode+" Crashed...")
+                #    f.close()
+                #    with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'r') as f2:
+                #        lines = f2.readlines()
+                #    f2.close()
+                #    with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'w') as f3:
+                #        for line in lines:
+                #            if 'CRASH REPORT' not in line.strip("\n"):
+                #                f3.write(line)
+                #    f3.close()
+                print (FromNode+" Retrying")
         time.sleep(30)
 
 def join_system_internal(nodeName, logFile):
@@ -154,8 +161,7 @@ def join_system_internal(nodeName, logFile):
         print ("Checking from "+nodeName)
         with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
             temp = f.read()
-            lines = f.readlines()
-            if 'lasp_peer_service:join(' in temp and 'CRASH REPORT' not in temp:
+            if 'lasp_peer_service:join(' in temp: #and 'CRASH REPORT' not in temp:
                 if (",'"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))) in temp or ("'"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))+"',") in temp or ("'"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))+"']}") in temp:
                     print(nodeName+" Joined internal system ")
                     execCom = True
@@ -170,10 +176,18 @@ def join_system_internal(nodeName, logFile):
                 systemFun.exec_com("lasp_peer_service:join('"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))+"').", nodeName)
                 time.sleep(20)
                 systemFun.exec_com("lasp_peer_service:members().", nodeName)
-                print(nodeName+" Crashed... Retrying ")
-                for line in lines:
-                    if line.strip("\n") != "CRASH REPORT":
-                        f.write(line)
+                #if 'CRASH REPORT' in temp:
+                #    print(nodeName+" Crashed...")
+                #    f.close()
+                #    with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'r') as f2:
+                #        lines = f2.readlines()
+                #    f2.close()
+                #    with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'w') as f3:
+                #        for line in lines:
+                #            if "CRASH REPORT" not in line.strip("\n"):
+                #                f3.write(line)
+                #    f3.close()
+                print("Retrying from "+nodeName)
         time.sleep(30)
 
 def stop_system(nodeName):
@@ -213,7 +227,7 @@ def start_testing():
             #bw_threads.append(multiprocessing.Process(target=bw_log, args=(node,)))
             #bw_threads[-1].start()
             threads_main[-1].start()
-    bw_threads_stop()
+    #bw_threads_stop()
 
 def stop_testing():
     threads_main=[]
@@ -230,6 +244,15 @@ def stop_testing():
 
 #Start main here
 if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "start":
+            print ("Starting")
+            start_testing()
+        elif sys.argv[1] == "stop":
+            print ("Stopping")
+            stop_testing()
+    else:
+        print ("Do both")
         start_testing()
         stop_testing()
         '''
