@@ -3,8 +3,8 @@ import pickle
 node = {}
 session = "cluster1"
 tempnode = 'd1'
-numberOfnodes = 30
-nodesPerCluster = 5
+numberOfnodes = 60
+nodesPerCluster = 6
 c1_nodes = ['c']
 c3_nodes = ['d','e']
 
