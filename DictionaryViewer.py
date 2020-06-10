@@ -2,7 +2,7 @@ import utility.NDutility4net as ND
 import itertools
 import pickle
 
-with open("utility/NodeDirectory.txt", "rb") as fp:
+with open("/home/ubuntu/laspdev/utility/NodeDirectory.txt", "rb") as fp:
         node = pickle.load(fp)
 
 for i in range(1, len(node)+1):
