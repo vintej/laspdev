@@ -116,7 +116,8 @@ def join_system_overlay(ToNode, FromNode, logFile):
     time.sleep(20)
     systemFun.exec_com("lasp_peer_service:members().", FromNode)
     time.sleep(20)
-    while execCom == False:
+    tempCheck = 0
+    while execCom == False and tempCheck < 3:
         with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
             temp = f.read()
             if 'lasp_peer_service:join(' in temp: #and 'CRASH REPORT' not in temp:
@@ -149,6 +150,10 @@ def join_system_overlay(ToNode, FromNode, logFile):
                 #    f3.close()
                 print (FromNode+" Retrying")
         time.sleep(30)
+        if tempCheck == 3:
+            execCom = True
+            break
+        tempCheck = tempCheck + 1
 
 def join_system_internal(nodeName, logFile):
     time.sleep(5)
@@ -157,7 +162,8 @@ def join_system_internal(nodeName, logFile):
     time.sleep(20)
     systemFun.exec_com("lasp_peer_service:members().", nodeName)
     time.sleep(20)
-    while execCom == False:
+    tempCheck = 0
+    while execCom == False and tempCheck < 3:
         print ("Checking from "+nodeName)
         with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
             temp = f.read()
@@ -190,6 +196,10 @@ def join_system_internal(nodeName, logFile):
                 #    f3.close()
                 print("Retrying from "+nodeName)
         time.sleep(30)
+        if tempCheck == 3:
+            execCom = True
+            break
+        tempCheck = tempCheck + 1
 
 def stop_system(nodeName):
     systemFun.stop_node(nodeName)
