@@ -13,8 +13,7 @@ def wait_for(this):
 def clean_log():
     os.system("echo '' > /home/ubuntu/laspdev/containernet_log")
 
-if len(sys.argv) > 1:
-    if sys.argv[1] == "start":
+def start_bringup():
         clean_log()
         deltaRecv = False
         os.system('screen -S containernet -p mininet -X stuff "mn --clean^M"')
@@ -30,7 +29,8 @@ if len(sys.argv) > 1:
         time.sleep(10)
         os.system('screen -S mainTest -p bash -X stuff "python system_main.py start^M"')
         print ('Auto Testing (system_main.py) Starting...')
-    elif sys.argv[1] == "stop":
+
+def stop_bringup():
         clean_log()
         os.system("bash /home/ubuntu/laspdev/kill_lasp.sh")
         print("Killed setup_lasp and system_main")
@@ -59,6 +59,12 @@ if len(sys.argv) > 1:
         print("Restarting Docker")
         time.sleep(2)
         print("Stopped")
+
+if len(sys.argv) > 1:
+    if sys.argv[1] == "start":
+        start_bringup()
+    elif sys.argv[1] == "stop":
+        stop_bringup()
 
 
 
