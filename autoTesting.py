@@ -35,6 +35,8 @@ def stop_bringup():
         os.system("bash /home/ubuntu/laspdev/kill_lasp.sh")
         print("Killed setup_lasp and system_main")
         time.sleep(2)
+        os.system("echo '' > /home/ubuntu/laspdev/mainTest_log")
+        time.sleep(2)
         os.system('screen -S containernet -p mininet -X stuff "exit^M"')
         deltaRecv = False
         print("Sent exit to containernet")
@@ -65,6 +67,9 @@ if len(sys.argv) > 1:
         start_bringup()
     elif sys.argv[1] == "stop":
         stop_bringup()
+    elif sys.argv[1] == "restart":
+        stop_bringup()
+        start_bringup()
 
 
 
