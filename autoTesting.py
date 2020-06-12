@@ -69,6 +69,7 @@ if len(sys.argv) > 1:
         stop_bringup()
     elif sys.argv[1] == "restart":
         stop_bringup()
+        time.sleep(2)
         start_bringup()
 
 
