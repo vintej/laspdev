@@ -42,6 +42,8 @@ def start(ip, node, rate):
     exp()
     child.sendline("erlang:set_cookie(node(),'RPJVCXYDYULBNZFEFPHJ').")
     exp()
+    child.sendline("lager:set_loglevel(lager_console_backend, '=debug').")
+    exp()
     child.interact()
     #return child
 

@@ -176,6 +176,7 @@ def join_system_internal(nodeName, logFile):
                 systemFun.exec_com("lasp_peer_service:join('"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))+"').", nodeName)
                 time.sleep(20)
                 systemFun.exec_com("lasp_peer_service:members().", nodeName)
+                time.sleep(5)
                 #if 'CRASH REPORT' in temp:
                 #    print(nodeName+" Crashed...")
                 #    f.close()
