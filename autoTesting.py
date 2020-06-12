@@ -21,18 +21,23 @@ if len(sys.argv) > 1:
         time.sleep(5)
         os.system('screen -S containernet -p mininet -X stuff "python3 build_topo.py^M"')
         while deltaRecv == False:
-            print('Containernet Running')
+            print('Containernet Getting Ready')
             if wait_for('containernet>'):
-                    print("Containernet Ready")
+                    print("Containernet is Ready")
                     deltaRecv = True
                     break
             time.sleep(10)
         time.sleep(10)
         os.system('screen -S mainTest -p bash -X stuff "python system_main.py start^M"')
-        print ('Finished')
+        print ('Auto Testing (system_main.py) Starting...')
     elif sys.argv[1] == "stop":
         clean_log()
+        os.system("bash /home/ubuntu/laspdev/kill_lasp.sh")
+        print("Killed setup_lasp and system_main")
+        time.sleep(2)
         os.system('screen -S containernet -p mininet -X stuff "exit^M"')
+        deltaRecv = False
+        print("Sent exit to containernet")
         while deltaRecv == False:
             print("Containernet Exiting")
             if wait_for('root@csst-06:/home/ubuntu/laspdev#'):
@@ -42,13 +47,17 @@ if len(sys.argv) > 1:
             time.sleep(5)
         time.sleep(5)
         os.system('screen -S containernet -p mininet -X stuff "mn --clean^M"')
+        print("mn --clean")
         clean_log()
         while wait_for('root@csst-06:/home/ubuntu/laspdev#') == False:
             print("Cleaning")
             time.sleep(5)
+            'screen -S containernet -p mininet -X stuff "^M"'
             if wait_for('root@csst-06:/home/ubuntu/laspdev#'):
                 break
         os.system('screen -S containernet -p mininet -X stuff "service docker restart^M"')
+        print("Restarting Docker")
+        time.sleep(2)
         print("Stopped")
 
 
