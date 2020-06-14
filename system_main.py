@@ -41,9 +41,9 @@ def start_system(nodeName):
         #For every other node
         while (ready_to_join.count("Ready")) != len(ND.get_allEdges()):
             #print('Waiting ready_to_join from:'+nodeName+" EdgesReady:"+str(ready_to_join))
-            time.sleep(60)
-        print("Joining internal network in 10 sec from:"+nodeName)
-        time.sleep(10)
+            time.sleep(30)
+        print("Joining internal network in 5 sec from:"+nodeName)
+        time.sleep(5)
         join_system_internal(nodeName, logFile)
         node_status.append("Ready")
     else:
@@ -57,11 +57,11 @@ def start_system(nodeName):
             #For nodes other edges than d1 and node_id= 'a'
             edgeToJoin = (ND.get_edge((ND.get_cluster(nodeName)[0:7])+str(int((ND.get_cluster(nodeName)[7:len(ND.get_cluster(nodeName))]))-1)))
             while edgeToJoin not in edges_ready: #d1_ready==False:
-                print('Waiting for '+edgeToJoin+' to be ready from:'+nodeName)
-                time.sleep(10)
+                print('Waiting for edge '+edgeToJoin+' to be ready from:'+nodeName)
+                time.sleep(5)
             #systemFun.exec_com("ping -c 2 "+ND.get_ip('d1'), nodeName)
             print (nodeName+" Joining to edge "+edgeToJoin)
-            time.sleep(5)
+            time.sleep(2)
             join_system_overlay(edgeToJoin, nodeName, logFile)
             ready_to_join.append("Ready")
             node_status.append("Ready")
@@ -84,10 +84,10 @@ def start_system(nodeName):
     #            deltaRecv = True
     #            break
     #    time.sleep(30)
-    print("***********Test Completed at "+nodeName+"*********")
+    print("\t ***********Test Completed at "+nodeName+"*********")
 
 def check_subscription(nodeName, logFile):
-    time.sleep(20)
+    time.sleep(10)
     sub=False
     while sub==False:
         systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:get_members(peer_rates).', nodeName)
@@ -136,9 +136,9 @@ def join_system_overlay(ToNode, FromNode, logFile):
     time.sleep(5)
     execCom = False
     systemFun.exec_com("lasp_peer_service:join('"+ND.get_id(ToNode)+"@"+ND.get_ip(ToNode)+"').", FromNode)
-    time.sleep(20)
+    time.sleep(5)
     systemFun.exec_com("lasp_peer_service:members().", FromNode)
-    time.sleep(20)
+    time.sleep(5)
     tempCheck = 0
     while execCom == False and tempCheck < 3:
         with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
@@ -152,14 +152,14 @@ def join_system_overlay(ToNode, FromNode, logFile):
                 else:
                     print(FromNode+" Not found Peer:"+ToNode)
                     systemFun.exec_com("lasp_peer_service:join('"+ND.get_id(ToNode)+"@"+ND.get_ip(ToNode)+"').", FromNode)
-                    time.sleep(20)
+                    time.sleep(5)
                     systemFun.exec_com("lasp_peer_service:members().", FromNode)
-                    time.sleep(20)
+                    time.sleep(5)
             else:
                 systemFun.exec_com("lasp_peer_service:join('"+ND.get_id(ToNode)+"@"+ND.get_ip(ToNode)+"').", FromNode)
-                time.sleep(20)
+                time.sleep(5)
                 systemFun.exec_com("lasp_peer_service:members().", FromNode)
-                time.sleep(20)
+                time.sleep(5)
                 #if 'CRASH REPORT' in temp:
                 #    print (FromNode+" Crashed...")
                 #    f.close()
@@ -172,7 +172,7 @@ def join_system_overlay(ToNode, FromNode, logFile):
                 #                f3.write(line)
                 #    f3.close()
                 print (FromNode+" Retrying")
-        time.sleep(30)
+        time.sleep(5)
         if tempCheck == 3:
             execCom = True
             break
@@ -182,9 +182,9 @@ def join_system_internal(nodeName, logFile):
     time.sleep(5)
     execCom = False
     systemFun.exec_com("lasp_peer_service:join('"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))+"').", nodeName)
-    time.sleep(20)
+    time.sleep(5)
     systemFun.exec_com("lasp_peer_service:members().", nodeName)
-    time.sleep(20)
+    time.sleep(5)
     tempCheck = 0
     while execCom == False and tempCheck < 3:
         print ("Checking from "+nodeName)
@@ -198,12 +198,12 @@ def join_system_internal(nodeName, logFile):
                 else:
                     print(nodeName+"Not found edge Peer in "+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName))))
                     systemFun.exec_com("lasp_peer_service:join('"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))+"').", nodeName)
-                    time.sleep(20)
+                    time.sleep(5)
                     systemFun.exec_com("lasp_peer_service:members().", nodeName)
-                    time.sleep(20)
+                    time.sleep(5)
             else:
                 systemFun.exec_com("lasp_peer_service:join('"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))+"').", nodeName)
-                time.sleep(20)
+                time.sleep(5)
                 systemFun.exec_com("lasp_peer_service:members().", nodeName)
                 time.sleep(5)
                 #if 'CRASH REPORT' in temp:
@@ -218,7 +218,7 @@ def join_system_internal(nodeName, logFile):
                 #                f3.write(line)
                 #    f3.close()
                 print("Retrying from "+nodeName)
-        time.sleep(30)
+        time.sleep(5)
         if tempCheck == 3:
             execCom = True
             break
@@ -289,7 +289,8 @@ if __name__ == "__main__":
         print ("Do both")
         start_testing()
         stop_testing()
-        '''
+    print("\t******AUTO TESTING COMPLETED*****")
+    '''
         operation = sys.argv[1]
         threads_main = []
         for node in allNodes:
@@ -310,4 +311,4 @@ if __name__ == "__main__":
             os.system("cp /home/ubuntu/laspdev/utility/log/* /home/ubuntu/laspdev/results/"+folder)
             for node in allNodes:
                 os.system("docker cp mn."+node+":/opt/"+node+"_bwLogs /home/ubuntu/laspdev/results/"+folder)
-        '''
+    '''
