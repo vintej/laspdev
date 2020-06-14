@@ -58,7 +58,7 @@ def start_system(nodeName):
             edgeToJoin = (ND.get_edge((ND.get_cluster(nodeName)[0:7])+str(int((ND.get_cluster(nodeName)[7:len(ND.get_cluster(nodeName))]))-1)))
             while edgeToJoin not in edges_ready: #d1_ready==False:
                 print('Waiting for '+edgeToJoin+' to be ready from:'+nodeName)
-                time.sleep(30)
+                time.sleep(10)
             #systemFun.exec_com("ping -c 2 "+ND.get_ip('d1'), nodeName)
             print (nodeName+" Joining to edge "+edgeToJoin)
             time.sleep(5)
