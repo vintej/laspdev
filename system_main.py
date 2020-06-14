@@ -17,6 +17,7 @@ node_status = []
 bw_threads = []
 deltaRcvSys = []
 ready_to_join = []
+edges_ready = []
 
 def start_system(nodeName):
     logFile = ''
@@ -39,8 +40,8 @@ def start_system(nodeName):
     if ND.get_id(nodeName) != 'a':
         #For every other node
         while (ready_to_join.count("Ready")) != len(ND.get_allEdges()):
-            print('Waiting ready_to_join from:'+nodeName+" EdgesReady:"+str(ready_to_join))
-            time.sleep(20)
+            #print('Waiting ready_to_join from:'+nodeName+" EdgesReady:"+str(ready_to_join))
+            time.sleep(60)
         print("Joining internal network in 10 sec from:"+nodeName)
         time.sleep(10)
         join_system_internal(nodeName, logFile)
@@ -51,16 +52,22 @@ def start_system(nodeName):
             d1_ready = True
             node_status.append("Ready")
             ready_to_join.append("Ready")
+            edges_ready.append(nodeName)
         else:
             #For nodes other edges than d1 and node_id= 'a'
-            while d1_ready==False:
-                print('Waiting for d1 from:'+nodeName)
-                time.sleep(10)
+            edgeToJoin = (ND.get_edge((ND.get_cluster(nodeName)[0:7])+str(int((ND.get_cluster(nodeName)[7:len(ND.get_cluster(nodeName))]))-1)))
+            while edgeToJoin not in edges_ready: #d1_ready==False:
+                print('Waiting for '+edgeToJoin+' to be ready from:'+nodeName)
+                time.sleep(30)
             #systemFun.exec_com("ping -c 2 "+ND.get_ip('d1'), nodeName)
-            join_system_overlay('d1', nodeName, logFile)
+            print (nodeName+" Joining to edge "+edgeToJoin)
+            time.sleep(5)
+            join_system_overlay(edgeToJoin, nodeName, logFile)
             ready_to_join.append("Ready")
             node_status.append("Ready")
+            edges_ready.append(nodeName)
     print("Node Status Ready count: "+str(node_status.count("Ready")))
+    check_subscription(nodeName, logFile)
     #Doing operations on node d3
     #if nodeName == 'd3':
     #    while (node_status.count("Ready")) != len(allNodes):
@@ -77,6 +84,21 @@ def start_system(nodeName):
     #            break
     #    time.sleep(30)
     print("***********Test Completed at "+nodeName+"*********")
+
+def check_subscription(nodeName, logFile):
+    time.sleep(20)
+    sub=False
+    while sub==False:
+        systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:get_members(peer_rates).', nodeName)
+        time.sleep(10)
+        with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
+            temp = f.read()
+            if '{"subscription",' in temp:
+                print ("Subscription done at "+nodeName)
+                sub=True
+                break
+        print("Subscription not yet done at "+nodeName)
+
 
 def exec_operation(nodeName):
     while node_status.count("Ready") != len(allNodes):

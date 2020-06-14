@@ -55,6 +55,7 @@ lasp_base="vinayaktj/lasp:base"
 lasp_dev="vinayaktj/lasp:dev"
 chosen_image = lasp_dev
 #chosen_image = lasp_base
+print("CHOSEN IMAGE "+chosen_image)
 node_objects = {}
 edgeNodes = []
 for node in ND.get_allNodes():
