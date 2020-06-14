@@ -67,7 +67,8 @@ def start_system(nodeName):
             node_status.append("Ready")
             edges_ready.append(nodeName)
     print("Node Status Ready count: "+str(node_status.count("Ready")))
-    check_subscription(nodeName, logFile)
+    if ND.get_rate(nodeName) == 'c1':
+        check_subscription(nodeName, logFile)
     #Doing operations on node d3
     #if nodeName == 'd3':
     #    while (node_status.count("Ready")) != len(allNodes):
