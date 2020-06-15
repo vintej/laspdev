@@ -57,13 +57,27 @@ chosen_image = lasp_dev
 print("CHOSEN IMAGE "+chosen_image)
 node_objects = {}
 edgeNodes = []
-for node in ND.get_allNodes():
-    print("node_objects["+node+"] = net.addDocker("+node+", ip="+str(ND.get_ip(node))+", dimage=chosen_image)")
-    node_objects[node] = net.addDocker(node, ip=str(ND.get_ip(node)), dimage=chosen_image)
-    if ND.get_id(node)=='a':
-        edgeNodes.append(node)
+container_ready = []
+
+def start_container(cluster):
+    global chosen_image, net
+    for node in cluster:
+        print("node_objects["+node+"] = net.addDocker("+node+", ip="+str(ND.get_ip(node))+", dimage=chosen_image)")
+        node_objects[node] = net.addDocker(node, ip=str(ND.get_ip(node)), dimage=chosen_image)
+        if ND.get_id(node)=='a':
+            edgeNodes.append(node)
+        container_ready.append("Ready")
         #print ('node_objects[node].cmd("ip route add default via '+(str(ND.get_ip(node))[0:8]+'0')+' '+node+'-eth0)')
         #node_objects[node].cmd("ip route add default via "+(str(ND.get_ip(node))[0:8]+'0')+" "+node+"-eth0")
+
+
+threads_container = []
+for cluster in scnode:
+    threads_container.append(Thread(target=start_container, args=(scnode[cluster],)))
+    threads_container[-1].start()
+
+while container_ready.count("Ready") != len(ND.get_allNodes()):
+    time.sleep(10)
 '''
 d1 = net.addDocker('d1', ip='10.0.0.250', dimage=chosen_image)
 d2 = net.addDocker('d2', ip='10.0.0.251', dimage=chosen_image)
