@@ -10,13 +10,11 @@ from mininet.log import info, setLogLevel
 import utility.NDutility4net as ND
 import os
 import time
+from threading import Thread
 
 scnode = ND.get_dict()
-def start_screens():
-    for cluster in scnode:
-        #print "Session: "+session+" "+str(node[session])
-        temp = scnode[cluster]
-        #if operate == "start":
+screens_ready = []
+def start_screens(temp, cluster):
         os.system("screen -d -m -S "+cluster+"")
         for d in temp:
                 print ("screen -t command "+str(cluster)+" for node "+d)
@@ -24,6 +22,7 @@ def start_screens():
                 os.system("screen -S "+cluster+" -p "+d+" -X stuff 'screen -X logfile /home/ubuntu/laspdev/utility/log/"+d+"_log.%n^M'")
                 os.system("screen -S "+cluster+" -p "+d+" -X stuff 'screen -X log on^M'")
                 time.sleep(2)
+                screens_ready.append("Ready")
         #elif operate == "stop":
         #    os.system("screen -S "+cluster+" -p 0 -X stuff 'screen -X quit^M'")
 
@@ -131,7 +130,13 @@ net.ping([d1, d2, d3, d4])
 net.ping([d5, d6, d7, d8])
 '''
 info('*** Starting Screen Sessions \n')
-start_screens()
+threads_screen = []
+for cluster in scnode:
+    threads_screen.append(Thread(target=start_screens, args=(scnode[cluster],cluster)))
+    threads_screen[-1].start()
+while screens_ready.count("Ready") != len(ND.get_allNodes()):
+    time.sleep(5)
+#start_screens()
 #d1.cmd("ip route del default via 172.17.0.1 dev eth0 && ip route add default dev d1-eth0")
 #d5.cmd("ip route del default via 172.17.0.1 dev eth0 && ip route add default dev d5-eth0")'''
 info('*** Running CLI\n')

@@ -89,6 +89,7 @@ def start_system(nodeName):
 def check_subscription(nodeName, logFile):
     time.sleep(10)
     sub=False
+    tmpchk = 0
     while sub==False:
         systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:get_members(peer_rates).', nodeName)
         time.sleep(10)
@@ -99,6 +100,10 @@ def check_subscription(nodeName, logFile):
                 sub=True
                 break
         print("Subscription not yet done at "+nodeName)
+        if tmpchk == 3:
+            sub=True
+            break
+        tmpchk = tmpchk + 1
 
 
 def exec_operation(nodeName):
