@@ -31,5 +31,5 @@ def update_container():
     child.close()
 
 update_container()
-os.system('docker commit mn.d3 vinayaktj/lasp:dev')
-os.system('docker push vinayaktj/lasp:dev')
+os.system('docker commit mn.d3 vinayaktj/lasp:devsquashed')
+os.system('docker push vinayaktj/lasp:devsquashed')

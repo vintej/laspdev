@@ -51,7 +51,7 @@ info('*** Adding controller\n')
 net.addController('c0')
 info('*** Adding docker containers\n')
 lasp_base="vinayaktj/lasp:base"
-lasp_dev="vinayaktj/lasp:dev"
+lasp_dev="vinayaktj/lasp:devsquashed"
 chosen_image = lasp_dev
 #chosen_image = lasp_base
 print("CHOSEN IMAGE "+chosen_image)
