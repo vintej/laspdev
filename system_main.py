@@ -56,6 +56,7 @@ def start_system(nodeName):
         else:
             #For nodes other edges than d1 and node_id= 'a'
             edgeToJoin = (ND.get_edge((ND.get_cluster(nodeName)[0:7])+str(int((ND.get_cluster(nodeName)[7:len(ND.get_cluster(nodeName))]))-1)))
+            edges_ready.append(nodeName)
             while edgeToJoin not in edges_ready: #d1_ready==False:
                 print('Waiting for edge '+edgeToJoin+' to be ready from:'+nodeName)
                 time.sleep(5)
@@ -65,7 +66,7 @@ def start_system(nodeName):
             join_system_overlay(edgeToJoin, nodeName, logFile)
             ready_to_join.append("Ready")
             node_status.append("Ready")
-            edges_ready.append(nodeName)
+            #edges_ready.append(nodeName)
     print("Node Status Ready count: "+str(node_status.count("Ready")))
     if ND.get_rate(nodeName) == 'c1':
         check_subscription(nodeName, logFile)
@@ -283,6 +284,8 @@ def stop_testing():
 
 #Start main here
 if __name__ == "__main__":
+    print ("Starting")
+    os.system("date")
     if len(sys.argv) > 1:
         if sys.argv[1] == "start":
             print ("Starting")
