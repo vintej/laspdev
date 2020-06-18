@@ -13,10 +13,20 @@ print("node:"+ND.get_id(nodeId))
 cont = "mn."+nodeId
 
 def start(ip, node, rate):
+    global nodeId
     child  = pexpect.spawn('docker exec -it '+cont+' /bin/bash')
     child.logfile_read = sys.stdout
     c_prompt = 'root@'
     child.expect (c_prompt)
+    child.sendline('service vnstat start')
+    child.expect(c_prompt)
+    time.sleep(1)
+    child.sendline('vnstat -u -i '+nodeId+'-eth0')
+    child.expect(c_prompt)
+    child.sendline('vnstat -u')
+    child.expect(c_prompt)
+    child.sendline('vnstat')
+    child.expect(c_prompt)
     child.sendline('export PEER_SERVICE=partisan_hyparview_peer_service_manager')
     child.expect(c_prompt)
     child.sendline('export RATE_CLASS='+rate)
@@ -42,16 +52,26 @@ def start(ip, node, rate):
     def exp():
         child.expect(node+'@'+ip, timeout=120)
     exp()
+    #child.sendline("partisan_config:set(max_active_size, 50).")
+    #exp()
+    #child.sendline("partisan_config:set(max_passive_size, 80).")
+    #exp()
+    #child.sendline("partisan_config:set(min_active_size, 9).")
+    #exp()
     child.sendline("erlang:set_cookie(node(),'RPJVCXYDYULBNZFEFPHJ').")
     exp()
     #child.sendline("lager:set_loglevel(lager_console_backend, '=debug').")
     #exp()
     child.sendline("application:get_env(partisan, max_active_size).")
     exp()
-    child.sendline("partisan_config:set(max_active_size, 50).")
+    child.sendline("application:get_env(partisan, max_passive_size).")
     exp()
-    child.sendline("application:get_env(partisan, max_active_size).")
+    child.sendline("application:get_env(partisan, min_active_size).")
     exp()
+    #child.sendline("partisan_config:set(max_active_size, 50).")
+    #exp()
+    #child.sendline("application:get_env(partisan, max_active_size).")
+    #exp()
     child.logfile_read = None
     child.interact()
     #child.logfile_read = None

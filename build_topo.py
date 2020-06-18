@@ -11,6 +11,7 @@ import utility.NDutility4net as ND
 import os
 import time
 from threading import Thread
+import sys
 
 scnode = ND.get_dict()
 screens_ready = []
@@ -52,8 +53,13 @@ net.addController('c0')
 info('*** Adding docker containers\n')
 lasp_base="vinayaktj/lasp:base"
 lasp_dev="vinayaktj/lasp:devsquashed"
-chosen_image = lasp_dev
-#chosen_image = lasp_base
+#chosen_image = lasp_dev
+#Default
+chosen_image = lasp_base
+if sys.argv[1] == 'dev':
+    chosen_image=lasp_dev
+else:
+    chosen_image=lasp_base
 print("CHOSEN IMAGE "+chosen_image)
 node_objects = {}
 edgeNodes = []
