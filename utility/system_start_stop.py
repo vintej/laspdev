@@ -8,12 +8,12 @@ import NDutility as ND
 
 def start_node(node):
     os.system('screen -S '+ND.get_cluster(node)+' -p '+node+' -X stuff "python /home/ubuntu/laspdev/utility/setup_lasp.py '+node+'^M"')
-    print("Started on session:"+ND.get_cluster(node)+" Terminal:"+node)
+    #print("Started on session:"+ND.get_cluster(node)+" Terminal:"+node)
 
 def stop_node(node):
     e = ND.get_cluster(node)
     i = node
-    print("Stopping node:"+i+" in session:"+e)
+    #print("Stopping node:"+i+" in session:"+e)
     os.system('screen -S '+e+' -p '+i+' -X stuff "^M"')
     os.system('screen -S '+e+' -p '+i+' -X stuff "^M"')
     time.sleep(2)

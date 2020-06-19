@@ -45,7 +45,7 @@ def start_system(nodeName):
     files = os.listdir('/home/ubuntu/laspdev/utility/log/')
     for name in files:
             if fnmatch.fnmatch(name, nodeName+"_log*"):
-                print("Found match")
+                #print("Found match")
                 logFile = name
     print("Logfile: "+logFile)
     os.system('echo "" > /home/ubuntu/laspdev/utility/log/'+logFile)
@@ -59,7 +59,7 @@ def start_system(nodeName):
     if ND.get_id(nodeName) != 'a':
         #For every other node
         while (ready_to_join.count("Ready")) != len(ND.get_allEdges()):
-            print('Waiting ready_to_join from:'+nodeName+" EdgesReady:"+str(ready_to_join))
+            #print('Waiting ready_to_join from:'+nodeName+" EdgesReady:"+str(ready_to_join))
             time.sleep(30)
         print("Joining internal network in 20 sec from:"+nodeName)
         time.sleep(20)
@@ -78,7 +78,7 @@ def start_system(nodeName):
             edgeToJoin = (ND.get_edge((ND.get_cluster(nodeName)[0:7])+str(int((ND.get_cluster(nodeName)[7:len(ND.get_cluster(nodeName))]))-1)))
             edges_ready.append(nodeName)
             while edgeToJoin not in edges_ready: #d1_ready==False:
-                print('Waiting for edge '+edgeToJoin+' to be ready from:'+nodeName)
+                #print('Waiting for edge '+edgeToJoin+' to be ready from:'+nodeName)
                 time.sleep(5)
             #systemFun.exec_com("ping -c 2 "+ND.get_ip('d1'), nodeName)
             print (nodeName+" Joining to edge in 10 sec"+edgeToJoin)
@@ -104,7 +104,7 @@ def start_system(nodeName):
     tmpchk = 0
     delta_waiting.append(nodeName)
     while deltaRecv == False and not sub_fail and jobId != 'start':
-        print ('Waiting deltaRecv '+nodeName+' '+str(tmpchk))
+        #print ('Waiting deltaRecv '+nodeName+' '+str(tmpchk))
         with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
             if 'Received delta' in f.read():
                 print(str(tmpchk)+"Delta Received at Node "+nodeName)
@@ -116,8 +116,10 @@ def start_system(nodeName):
         tmpchk = tmpchk + 1
         if tmpchk > 20:
             print(str(tmpchk)+"Delta not yet Recevied at "+nodeName)
-        if tmpchk >= 30:
-            print ("MaxCheck expired, delta not received even after 10 mins at "+nodeName)
+        if tmpchk >= 40:
+            print ("MaxCheck expired, delta not received even after 20 mins at "+nodeName)
+            if testFor == 'dev':
+                check_subscription(nodeName, logFile)
             delta_fail.append(nodeName)
             deltaRcvSys.append("True")
             deltaRecv = True
@@ -127,8 +129,8 @@ def start_system(nodeName):
             tmpchk = tmpchk - 1
     print("\t ***********Test Completed at "+nodeName+"*********")
     time.sleep(5)
-    while deltaRcvSys.count("True") != len(allNodes) and not sub_fail and not delta_fail:
-        print(nodeName+" Waiting to close on Bandwidth")
+    while deltaRcvSys.count("True") != len(allNodes) and not sub_fail and len(delta_fail) < len(allNodes)/10 and jobId != 'start':
+        #print(nodeName+" Waiting to close on Bandwidth")
         time.sleep(10)
     os.system('docker exec mn.'+nodeName+' bash -c "vnstat -u"')
     os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogs"')
@@ -139,20 +141,21 @@ def check_subscription(nodeName, logFile):
     time.sleep(10)
     sub=False
     tmpchk = 0
-    while sub==False and not sub_fail and not delta_fail:
-        print ('Waiting subscription '+nodeName)
+    while sub==False and not sub_fail and len(delta_fail) < len(allNodes)/10:
+        if tmpchk % 4 == 0:
+            print (str(tmpchk)+' Subscription not yet done at '+nodeName)
         systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:get_members(peer_rates).', nodeName)
         time.sleep(30)
         with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
             temp = f.read()
             if '{"subscription",' in temp:
-                print ("Subscription done at "+nodeName)
+                print (str(tmpchk)+" Subscription done at "+nodeName)
                 sub=True
                 break
-        print(str(tmpchk)+"Subscription not yet done at "+nodeName)
+        #print(str(tmpchk)+"Subscription not yet done at "+nodeName)
         if tmpchk > 50:
             sub=True
-            print(str(tmpchk)+"Max sub check exceeded for "+nodeName)
+            print(str(tmpchk)+" Max sub check exceeded for "+nodeName)
             sub_fail.append(nodeName)
             break
         tmpchk = tmpchk + 1
@@ -187,7 +190,7 @@ def exec_operation(nodeName):
     systemFun.exec_spec_com( '{ok, {AwMap1, _, _, _}} = lasp:update(AwMap, {apply, Key1, {set, Timestamp(), AwMapVal}}, self()).', nodeName)
     systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:time_stamp().', nodeName)
     time.sleep(2)
-    print("Operation completed")
+    print("Operation execution completed")
     delta_changed = True
 
 
@@ -200,8 +203,9 @@ def join_system_overlay(ToNode, FromNode, logFile):
     time.sleep(5)
     tempCheck = 0
     tempConnection = 0
-    while execCom == False and tempCheck <= 20 and not sub_fail and not delta_fail:
-        print('Waiting overlay '+FromNode)
+    while execCom == False and tempCheck <= 20 and not sub_fail and len(delta_fail) < len(allNodes)/10:
+        if tempCheck % 4 == 0:
+            print(str(tempCheck)+' Waiting overlay '+FromNode)
         with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
             temp = f.read()
             if 'lasp_peer_service:join(' in temp and 'CRASH REPORT' not in temp:
@@ -230,7 +234,8 @@ def join_system_overlay(ToNode, FromNode, logFile):
                             break
                         time.sleep(20)
                         f3.close()
-                    print(str(tempCheck)+" "+FromNode+" Not found Peer:"+ToNode)
+                    if tempCheck % 4 == 0:
+                        print(str(tempCheck)+" "+FromNode+" Not found Peer:"+ToNode)
                     systemFun.exec_com("lasp_peer_service:join('"+ND.get_id(ToNode)+"@"+ND.get_ip(ToNode)+"').", FromNode)
                     time.sleep(5)
                     systemFun.exec_com("lasp_peer_service:members().", FromNode)
@@ -241,7 +246,8 @@ def join_system_overlay(ToNode, FromNode, logFile):
                 systemFun.exec_com("lasp_peer_service:members().", FromNode)
                 time.sleep(20)
                 if 'CRASH REPORT' in temp:
-                    print (FromNode+" Crashed...")
+                    if tempCheck % 4 == 0:
+                        print (FromNode+" Crashed..."+str(tempCheck))
                     f.close()
                     with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'r') as f2:
                         lines = f2.readlines()
@@ -251,7 +257,8 @@ def join_system_overlay(ToNode, FromNode, logFile):
                             if 'CRASH REPORT' not in line.strip("\n"):
                                 f3.write(line)
                     f3.close()
-                print (FromNode+" Retrying")
+                if tempCheck % 4 == 0:
+                    print (FromNode+" Retrying")
         time.sleep(5)
         if tempCheck >= 20:
             execCom = True
@@ -267,8 +274,9 @@ def join_system_internal(nodeName, logFile):
     time.sleep(5)
     tempCheck = 0
     tempConnection = 0
-    while execCom == False and tempCheck <= 20 and not sub_fail and not delta_fail:
-        print ("Checking from "+nodeName)
+    while execCom == False and tempCheck <= 20 and not sub_fail and len(delta_fail) < len(allNodes)/10:
+        if tempCheck % 4 == 0:
+            print (str(tempCheck)+" Checking from "+nodeName)
         with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
             temp = f.read()
             if 'lasp_peer_service:join(' in temp and 'CRASH REPORT' not in temp:
@@ -296,7 +304,8 @@ def join_system_internal(nodeName, logFile):
                             break
                         time.sleep(20)
                         f3.close()
-                    print(str(tempCheck)+" "+nodeName+"Not found edge Peer in "+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName))))
+                    if tempCheck % 4 == 0:
+                        print(str(tempCheck)+" "+nodeName+"Not found edge Peer in "+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName))))
                     systemFun.exec_com("lasp_peer_service:join('"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))+"').", nodeName)
                     time.sleep(5)
                     systemFun.exec_com("lasp_peer_service:members().", nodeName)
@@ -307,7 +316,8 @@ def join_system_internal(nodeName, logFile):
                 systemFun.exec_com("lasp_peer_service:members().", nodeName)
                 time.sleep(20)
                 if 'CRASH REPORT' in temp:
-                    print(nodeName+" Crashed...")
+                    if tempCheck % 4 == 0:
+                        print(nodeName+" Crashed...")
                     f.close()
                     with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'r') as f2:
                         lines = f2.readlines()
@@ -317,7 +327,8 @@ def join_system_internal(nodeName, logFile):
                             if "CRASH REPORT" not in line.strip("\n"):
                                 f3.write(line)
                     f3.close()
-                print(str(tempCheck)+" "+"Retrying from "+nodeName)
+                if tempCheck % 4 == 0:
+                    print(str(tempCheck)+" "+"Retrying from "+nodeName)
         time.sleep(5)
         if tempCheck >= 20:
             execCom = True
@@ -338,7 +349,7 @@ def stop_system(nodeName):
     #print("exit sleep 4")
     time.sleep(4)
     systemFun.exec_com("", nodeName)
-    print('Stopped Node:'+nodeName)
+    #print('Stopped Node:'+nodeName)
     stopped_node.append(nodeName)
 
 def bw_log(nodeName):
@@ -348,7 +359,7 @@ def bw_log(nodeName):
 def bw_threads_stop():
     tmp = 0
     while len(bw_collected) != len(allNodes): #and not sub_fail and not delta_fail:
-            print('Waiting For delta to be received by all')
+            #print('Waiting For delta to be received by all')
             if tmp % 4 == 0:
                 print("Delta Waiting for"+str(delta_waiting))
             #print("Waiting for Delta To be received by all")
@@ -357,7 +368,7 @@ def bw_threads_stop():
     time.sleep(10)
     #for thread in bw_threads:
     #    thread.terminate()
-    print("Threads stopped")
+    #print("Threads stopped")
     if sub_fail:
         print("******FAILED SUB "+str(sub_fail)+" ******")
     if delta_fail:
@@ -366,8 +377,9 @@ def bw_threads_stop():
 def start_testing():
     global jobId
     threads_main = []
+    print("AllNodes: "+str(allNodes))
     for node in allNodes:
-            print node
+            #print node
             threads_main.append(Thread(target=start_system, args=(node,)))
             #if jobId != 'start': #and jobId != 'deltaTest':
                 #bw_threads.append(multiprocessing.Process(target=bw_log, args=(node,)))
@@ -380,10 +392,10 @@ def stop_testing(jobId):
     global testFor
     threads_main=[]
     for node in allNodes:
-            print node
+            #print node
             threads_main.append(Thread(target=stop_system, args=(node,)))
             threads_main[-1].start()
-    print("Stopped")
+    #print("Stopped")
     mainfolder = jobId
     folder = testFor #str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
     if not (os.path.isdir("/home/ubuntu/laspdev/results/"+mainfolder)):
@@ -397,9 +409,10 @@ def stop_testing(jobId):
         #os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogs"')
         os.system("docker cp mn."+node+":/opt/"+node+"_bwLogs /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
     while len(stopped_node) != len(allNodes):
-        print('Waiting to stop')
+        #print('Waiting to stop')
         time.sleep(10)
-    print("*******JOB "+jobId+" FINISHED*******")
+    print("Stopped Nodes: "+str(stopped_node))
+    print("*******JOB "+jobId+" FINISHED at "+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))+"*******")
 
 #Start main here
 if __name__ == "__main__":
@@ -432,6 +445,7 @@ if __name__ == "__main__":
                 time.sleep(50)
             print ("*******JOB "+jobId+" FINISHED*******")
         else:
+            print("********STARTING "+jobId+" ***********")
             start_testing()
             stop_testing(jobId)
     #print("\t******AUTO TESTING COMPLETED*****")

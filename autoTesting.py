@@ -5,7 +5,8 @@ import datetime
 
 def wait_for(this):
     with open('/home/ubuntu/laspdev/containernet_log') as f:
-        if this in f.read():
+        lineList = f.readlines()
+        if this in lineList[len(lineList)-1]:
             return True
         else:
             return False
@@ -73,13 +74,40 @@ if len(sys.argv) > 1:
         start_bringup(jobId, 'dev')
     elif sys.argv[1] == 'deltaTest':
         jobId = 'deltaTest'
-        start_bringup(jobId, 'base')
+        stop_bringup()
+        start_bringup(jobId, 'dev')
     elif sys.argv[1] == "stop":
         stop_bringup()
     elif sys.argv[1] == "restart":
         stop_bringup()
         time.sleep(2)
         start_bringup(jobId, 'base')
+    elif sys.argv[1] == "regression":
+        i = 1
+        jIndex = 1
+        while i < 11:
+            jobId = 'Regression'+str(jIndex)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+            image = 'dev'
+            jIndex = jIndex + 1
+            time.sleep(0.5)
+            print (jobId+" | "+image)
+            time.sleep(2)
+            stop_bringup()
+            time.sleep(5)
+            start_bringup(jobId, image)
+            job_status = False
+            while job_status==False:
+                with open('/home/ubuntu/laspdev/mainTest_log') as f:
+                    temp = f.read()
+                    if ("JOB "+jobId+" FINISHED") in temp:
+                        print("Test execution completed ")
+                        job_status=True
+                        break
+                time.sleep(10)
+            os.system("cp /home/ubuntu/laspdev/*_log /home/ubuntu/laspdev/results/"+jobId+"/"+image+"/")
+            print("************FINISHED JOB "+jobId+" for "+image+" ***************")
+            i = i + 1
+            time.sleep(5)
     if sys.argv[1] != "stop":
         job_status = False
         while job_status==False:
@@ -93,7 +121,7 @@ if len(sys.argv) > 1:
 else:
     i = 1
     jIndex = 1
-    while i < 200:
+    while i < 201:
         if i % 2 == 1:
             jobId = 'AutoTest'+str(jIndex)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
             image = 'base'

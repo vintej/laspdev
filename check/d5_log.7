@@ -1,0 +1,552 @@
+
+
+root@csst-06:/home/ubuntu/laspdev# 
+root@csst-06:/home/ubuntu/laspdev# python /home/ubuntu/laspdev/utility/setup_laspp.py d5
+d5
+ip:10.0.0.15
+node:e
+root@d5:/# [Kroot@d5:/# service vnstat start
+[....] Starting vnStat daemon: vnstatd[?25l7[1G[[32m ok [39;49m8[?12l[?25h.
+root@d5:/# vnstat -u -i d5-eth0
+Error: Unable to read database "/var/lib/vnstat/d5-eth0": No such file or directory
+Info: -> A new database has been created.
+root@d5:/# vnstat -u
+root@d5:/# vnstat
+
+                      rx      /      tx      /     total    /   estimated
+ eth0: Not enough data available yet.
+ d5-eth0: Not enough data available yet.
+root@d5:/# export PEER_SERVICE=partisan_hyparview_peer_service_manager
+root@d5:/# export RATE_CLASS=c3
+root@d5:/# export RATE_C1=5000
+root@d5:/# export RATE_C2=22500
+root@d5:/# export RATE_C3=45500
+root@d5:/# export PROPAGATE_ON_UPDATE=false
+root@d5:/# export MAX_ACTIVE_SIZE=50
+root@d5:/# cd /opt/lasp
+root@d5:/opt/lasp# epmd -daemon
+root@d5:/opt/lasp# rebar3 shell --name e@10.0.0.15
+[0;32m===> Verifying dependencies...
+[0m[0;32m===> Compiling lasp
+[0mErlang/OTP 19 [erts-8.3] [source] [64-bit] [smp:24:24] [ds:24:24:10] [async-threads:0] [hipe] [kernel-poll:false]
+
+Eshell V8.3  (abort with ^G)
+(e@10.0.0.15)1> [0;35m===> The rebar3 shell is a development tool; to deploy applications in production, consider using releases (http://www.rebar3.org/docs/releases)
+[0m13:57:10.708 [info] Application lager started on node 'e@10.0.0.15'
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:10 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.253.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:10 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.252.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:10 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.254.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:10 ===
+         application: sasl
+          started_at: 'e@10.0.0.15'
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:10 ===
+         application: lasp_support
+          started_at: 'e@10.0.0.15'
+13:57:10.905 [info] Application sasl started on node 'e@10.0.0.15'
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:10 ===
+         application: acceptor_pool
+          started_at: 'e@10.0.0.15'
+13:57:10.905 [info] Application lasp_support started on node 'e@10.0.0.15'
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:10 ===
+         application: quickrand
+          started_at: 'e@10.0.0.15'
+13:57:10.906 [info] Application acceptor_pool started on node 'e@10.0.0.15'
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:10 ===
+         application: uuid
+          started_at: 'e@10.0.0.15'
+13:57:10.906 [info] Application quickrand started on node 'e@10.0.0.15'
+13:57:10.906 [info] Application uuid started on node 'e@10.0.0.15'
+13:57:10.934 [info] Using node name: 'e@10.0.0.15'
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:10 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.266.0>},
+                       {id,timer_server},
+                       {mfargs,{timer,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,1000},
+                       {child_type,worker}]
+13:57:10.959 [info] Resolving "10.0.0.15"...
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:10 ===
+          supervisor: {local,inet_gethost_native_sup}
+             started: [{pid,<0.268.0>},{mfa,{inet_gethost_native,init,[[]]}}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:10 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.267.0>},
+                       {id,inet_gethost_native_sup},
+                       {mfargs,{inet_gethost_native,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,1000},
+                       {child_type,worker}]
+13:57:10.971 [info] Resolved "e@10.0.0.15" to {10,0,0,15}
+13:57:10.971 [info] Resolved "10.0.0.15" to {10,0,0,15}
+13:57:11.446 [info] Partisan listening on {10,0,0,15}:42325 listen_addrs: [#{ip => {10,0,0,15},port => 42325}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:11 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.313.0>},
+                       {id,partisan_rpc_backend},
+                       {mfargs,{partisan_rpc_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:11 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.314.0>},
+                       {id,partisan_acknowledgement_backend},
+                       {mfargs,
+                           {partisan_acknowledgement_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:57:11.558 [info] Not using container orchestration; disabling.
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:11 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.315.0>},
+                       {id,partisan_orchestration_backend},
+                       {mfargs,{partisan_orchestration_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:57:11.719 [info] node 'e@10.0.0.15' choosing random seed: {122040744,-576460743805383030,-576460752303423417}
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:11 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.316.0>},
+                       {id,partisan_hyparview_peer_service_manager},
+                       {mfargs,
+                           {partisan_hyparview_peer_service_manager,
+                               start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:11 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.317.0>},
+                       {id,partisan_peer_service_events},
+                       {mfargs,{partisan_peer_service_events,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:57:11.802 [info] node 'e@10.0.0.15' choosing random seed: {122040744,-576460743805383030,-576460752303423417}
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:11 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.318.0>},
+                       {id,partisan_plumtree_backend},
+                       {mfargs,{partisan_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.319.0>},
+                       {id,partisan_plumtree_broadcast},
+                       {mfargs,{partisan_plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.320.0>},
+                       {id,partisan_monitor},
+                       {mfargs,{partisan_monitor,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.322.0>},
+                       {id,partisan_pool},
+                       {mfargs,{partisan_pool,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.323.0>},
+                       {id,{partisan_socket,{10,0,0,15},42325}},
+                       {mfargs,
+                           {partisan_socket,start_link,[{10,0,0,15},42325]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.321.0>},
+                       {id,partisan_pool_sup},
+                       {mfargs,{partisan_pool_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,20000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+         application: partisan
+          started_at: 'e@10.0.0.15'
+13:57:12.194 [info] Application partisan started on node 'e@10.0.0.15'
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+          supervisor: {local,plumtree_sup}
+             started: [{pid,<0.338.0>},
+                       {id,plumtree_broadcast},
+                       {mfargs,{plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+         application: plumtree
+          started_at: 'e@10.0.0.15'
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+         application: gen_fsm_compat
+          started_at: 'e@10.0.0.15'
+13:57:12.277 [info] Application plumtree started on node 'e@10.0.0.15'
+13:57:12.278 [info] Application gen_fsm_compat started on node 'e@10.0.0.15'
+13:57:12.283 [info] Setting jitter: false
+13:57:12.295 [info] Setting jitter percent: 1
+13:57:12.323 [info] Setting event interval: 0
+13:57:12.343 [info] Setting max events: 1000
+13:57:12.367 [info] Setting extended logging: false
+13:57:12.370 [info] Setting mailbox logging: false
+13:57:12.373 [info] Setting operation mode: delta_based
+13:57:12.375 [info] Setting set type: orset
+13:57:12.380 [info] Setting broadcast: false
+13:57:12.488 [info] Membership: false
+13:57:12.493 [info] Workflow: false
+13:57:12.505 [info] AdClientEnabled: false
+13:57:12.516 [info] AdServerEnabled: false
+13:57:12.520 [info] TournClientEnabled: false
+13:57:12.522 [info] TournServerEnabled: false
+13:57:12.523 [info] ThroughputType: gset
+13:57:12.525 [info] ThroughputClientEnabled: false
+13:57:12.527 [info] ThroughputServerEnabled: false
+13:57:12.529 [info] DivergenceType: gcounter
+13:57:12.531 [info] DivergenceClientEnabled: false
+13:57:12.533 [info] DivergenceServerEnabled: false
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.385.0>},
+                       {id,lasp_unique},
+                       {mfargs,{lasp_unique,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.386.0>},
+                       {id,lasp_plumtree_backend},
+                       {mfargs,{lasp_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.387.0>},
+                       {id,lasp_plumtree_memory_report},
+                       {mfargs,{lasp_plumtree_memory_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.388.0>},
+                       {id,lasp_memory_utilization_report},
+                       {mfargs,{lasp_memory_utilization_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:57:12.632 [info] Backend initialized with pid: <0.393.0>
+13:57:12.633 [info] Backend lasp_ets_storage_backend initialized: <0.393.0>
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.389.0>},
+                       {id,lasp_distribution_backend},
+                       {mfargs,{lasp_distribution_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.395.0>},
+                       {id,lasp_process_sup},
+                       {mfargs,{lasp_process_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 19-Jun-2020::13:57:12 ===
+         application: lasp
+          started_at: 'e@10.0.0.15'
+[0;32m===> Booted types
+[0m[0;32m===> Booted gen_flow
+[0m13:57:12.666 [info] Application lasp started on node 'e@10.0.0.15'
+[0;32m===> Booted syntax_tools
+[0m[0;32m===> Booted compiler
+[0m[0;32m===> Booted goldrush
+[0m[0;32m===> Booted lager
+[0m[0;32m===> Booted sasl
+[0m[0;32m===> Booted lasp_support
+[0m[0;32m===> Booted acceptor_pool
+[0m[0;32m===> Booted quickrand
+[0m[0;32m===> Booted uuid
+[0m[0;32m===> Booted partisan
+[0m[0;32m===> Booted plumtree
+[0m[0;32m===> Booted gen_fsm_compat
+[0m[0;32m===> Booted lasp
+[0m
+(e@10.0.0.15)1> erlang:set_cookie(node(),'RPJVCXYDYULBNZFEFPHJ').
+true
+(e@10.0.0.15)2> application:get_env(partisan, max_active_size).
+{ok,50}
+(e@10.0.0.15)3> application:get_env(partisan, max_passive_size).
+{ok,10}
+(e@10.0.0.15)4> application:get_env(partisan, min_active_size).
+{ok,9}
+(e@10.0.0.15)5> )5> lasp_peer_service:join('a@10.0.0.11').
+ok
+(e@10.0.0.15)6> lasp_peer_service:members().
+{ok,['e@10.0.0.15']}
+node Was not connectedlasp_peer_service:join('a@10.0.0.11').
+ok
+(e@10.0.0.15)8> 13:59:23.921 [error] Sending rate "c3" to 'a@10.0.0.11' 
+13:59:23.921 [error] Sending rate "c3" to 'g@10.0.0.17' 
+lasp_peer_service:members().
+{ok,['j@10.0.0.20','a@10.0.0.11','f@10.0.0.16',
+     'e@10.0.0.15','i@10.0.0.19','g@10.0.0.17']}
+(e@10.0.0.15)9> 13:59:28.270 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'g@10.0.0.17' Hop:5 
+13:59:28.270 [error] At receiving Id "c@18.0.0.13c1" find_sub: [] 
+13:59:28.273 [error] Checking sub_exists for Id:"c@18.0.0.13c1" From:'g@10.0.0.17' Hop:5 
+13:59:28.378 [error] Id is not get_connections(): ['j@10.0.0.20','a@10.0.0.11','f@10.0.0.16','i@10.0.0.19','g@10.0.0.17'] 
+13:59:28.378 [error] find_sub after Id not get_connections(): [{"c1","c@18.0.0.13c1",'g@10.0.0.17',5}] 
+13:59:28.378 [error] Forwarding Req Id "c@18.0.0.13c1" to Peers RcvHop:5 IncHop:6 
+13:59:28.491 [error] Forwarding ReqId "c@18.0.0.13c1" to Peer:'j@10.0.0.20' Hop:6 
+13:59:28.491 [error] Forwarding ReqId "c@18.0.0.13c1" to Peer:'a@10.0.0.11' Hop:6 
+13:59:28.491 [error] Forwarding ReqId "c@18.0.0.13c1" to Peer:'f@10.0.0.16' Hop:6 
+13:59:28.492 [error] Forwarding ReqId "c@18.0.0.13c1" to Peer:'i@10.0.0.19' Hop:6 
+13:59:28.492 [error] LASPVIN Request forwarded~n
+13:59:28.965 [error] Sending rate "c3" to 'j@10.0.0.20' 
+13:59:28.965 [error] Sending rate "c3" to 'a@10.0.0.11' 
+13:59:28.965 [error] Sending rate "c3" to 'f@10.0.0.16' 
+13:59:28.965 [error] Sending rate "c3" to 'i@10.0.0.19' 
+13:59:28.965 [error] Subscribing to ~p case2 ~n
+13:59:28.967 [error] LASPVIN received find_sub Id: "c@14.0.0.13c1" From: 'j@10.0.0.20' Hop:4 
+13:59:28.968 [error] At receiving Id "c@14.0.0.13c1" find_sub: [{"c1","c@18.0.0.13c1",'g@10.0.0.17',5}] 
+13:59:28.970 [error] Checking sub_exists for Id:"c@14.0.0.13c1" From:'j@10.0.0.20' Hop:4 
+13:59:29.043 [error] Id is not get_connections(): ['j@10.0.0.20','a@10.0.0.11','f@10.0.0.16','i@10.0.0.19','g@10.0.0.17'] 
+13:59:29.043 [error] find_sub after Id not get_connections(): [{"c1","c@18.0.0.13c1",'g@10.0.0.17',5},{"c1","c@14.0.0.13c1",'j@10.0.0.20',4}] 
+13:59:29.043 [error] Forwarding Req Id "c@14.0.0.13c1" to Peers RcvHop:4 IncHop:5 
+13:59:29.068 [error] Forwarding ReqId "c@14.0.0.13c1" to Peer:'a@10.0.0.11' Hop:5 
+13:59:29.069 [error] Forwarding ReqId "c@14.0.0.13c1" to Peer:'f@10.0.0.16' Hop:5 
+13:59:29.069 [error] Forwarding ReqId "c@14.0.0.13c1" to Peer:'i@10.0.0.19' Hop:5 
+13:59:29.069 [error] LASPVIN Request forwarded~n
+13:59:29.069 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'i@10.0.0.19' Hop:4 
+13:59:29.070 [error] At receiving Id "c@18.0.0.13c1" find_sub: [{"c1","c@18.0.0.13c1",'g@10.0.0.17',5},{"c1","c@14.0.0.13c1",'j@10.0.0.20',4}] 
+13:59:29.072 [error] Checking sub_exists for Id:"c@18.0.0.13c1" From:'i@10.0.0.19' Hop:4 
+13:59:29.075 [error] Find_sub request id "c@18.0.0.13c1" exists but Rcv hopcount 4 is lower than existing 5 
+13:59:29.228 [error] Id is not get_connections(): ['j@10.0.0.20','a@10.0.0.11','f@10.0.0.16','i@10.0.0.19','g@10.0.0.17'] 
+13:59:29.228 [error] find_sub after Id not get_connections(): [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4}] 
+13:59:29.228 [error] Deleted rqeuest id, updated it with lower hopcount [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4}] 
+13:59:29.228 [error] LASPVIN Request forwarded~n
+13:59:29.577 [error] Forwarding find_sub:[{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4}] to 'f@10.0.0.16' on join 
+13:59:29.577 [error] LASPVIN sent find_sub on join req Id:"c@14.0.0.13c1", Hop:5 
+13:59:29.728 [error] LASPVIN found the peer at "2020-06-19T13:59:29.728" for ID: "c@14.0.0.13c1" ToNode: 'a@10.0.0.11' Via:'e@10.0.0.15' 
+13:59:29.728 [error] LASPVINDEBUGERROR find_sub [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4}] 
+13:59:29.731 [error] LASPVINERROR here [['j@10.0.0.20']] 
+13:59:29.731 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@14.0.0.13c1" ToNode:'a@10.0.0.11' From:'e@10.0.0.15' to 'j@10.0.0.20' HopCount:1 
+13:59:29.732 [error] LASPVIN found the peer at "2020-06-19T13:59:29.731" for ID: "c@18.0.0.13c1" ToNode: 'a@10.0.0.11' Via:'e@10.0.0.15' 
+13:59:29.732 [error] LASPVINDEBUGERROR find_sub [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4}] 
+13:59:29.734 [error] LASPVINERROR here [['i@10.0.0.19']] 
+13:59:29.734 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@18.0.0.13c1" ToNode:'a@10.0.0.11' From:'e@10.0.0.15' to 'i@10.0.0.19' HopCount:1 
+13:59:29.734 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'a@10.0.0.11' Hop:3 
+13:59:29.735 [error] At receiving Id "c@18.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4}] 
+13:59:29.735 [error] LASPVIN find_sub_aq exists for this find_sub "c@18.0.0.13c1" 
+13:59:29.735 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'a@10.0.0.11' Hop:3 
+13:59:29.735 [error] At receiving Id "c@18.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4}] 
+13:59:29.735 [error] LASPVIN find_sub_aq exists for this find_sub "c@18.0.0.13c1" 
+13:59:30.268 [error] Forwarding find_sub:[{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4}] to 'i@10.0.0.19' on join 
+13:59:31.559 [error] LASPVIN sent find_sub on join req Id:"c@14.0.0.13c1", Hop:5 
+13:59:31.791 [error] LASPVIN received find_sub_aq for Id:"c@18.0.0.13c1" ToNode:'a@10.0.0.11' Via:'f@10.0.0.16' From:'f@10.0.0.16' HopCount:1 
+13:59:31.791 [error] At receving find_sub_aq for Id "c@18.0.0.13c1", find_sub_aq:[{"c@18.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@14.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0}] 
+13:59:31.791 [error] LASPVIN path ToNode: 'a@10.0.0.11' exists find_sub_aq:[[0],[0]] 
+13:59:31.791 [error] HopCount is more than existing, skipping.....
+13:59:32.997 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,16},port => 60227}],name => 'f@10.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 38247}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,20},port => 44419}],name => 'j@11.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,17},port => 38023}],name => 'g@16.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,19},port => 50835}],name => 'i@17.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,14},port => 43371}],name => 'd@18.0.0.14',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 48961}],name => 'b@11.0.0.12',parallelism => 1} from 'e@10.0.0.15'!
+13:59:38.999 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,11},port => 53067}],name => 'a@10.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,16},port => 60227}],name => 'f@10.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,17},port => 54255}],name => 'g@10.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 48961}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,14},port => 37829}],name => 'd@14.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,12},port => 51239}],name => 'b@18.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,14},port => 43371}],name => 'd@18.0.0.14',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {11,0,0,20},port => 44419}],name => 'j@11.0.0.20',parallelism => 1} from 'e@10.0.0.15'!
+13:59:45.001 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,16},port => 60227}],name => 'f@10.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,17},port => 54255}],name => 'g@10.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 38247}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 48961}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,20},port => 44419}],name => 'j@11.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,17},port => 38023}],name => 'g@16.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,19},port => 34021}],name => 'i@18.0.0.19',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {11,0,0,20},port => 44419}],name => 'j@11.0.0.20',parallelism => 1} from 'e@10.0.0.15'!
+13:59:51.003 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,11},port => 53067}],name => 'a@10.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,16},port => 60227}],name => 'f@10.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,20},port => 34225}],name => 'j@10.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,14},port => 37829}],name => 'd@14.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,12},port => 45019}],name => 'b@15.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,12},port => 51239}],name => 'b@18.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,14},port => 43371}],name => 'd@18.0.0.14',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {17,0,0,19},port => 50835}],name => 'i@17.0.0.19',parallelism => 1} from 'e@10.0.0.15'!
+13:59:57.005 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,17},port => 54255}],name => 'g@10.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 38247}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,20},port => 34225}],name => 'j@10.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 48961}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,17},port => 38023}],name => 'g@16.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,19},port => 50835}],name => 'i@17.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,14},port => 45933}],name => 'd@19.0.0.14',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,19},port => 34021}],name => 'i@18.0.0.19',parallelism => 1} from 'e@10.0.0.15'!
+14:00:01.834 [error] LASPVIN received find_sub Id: "c@15.0.0.13c1" From: 'a@10.0.0.11' Hop:7 
+14:00:01.834 [error] At receiving Id "c@15.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4}] 
+14:00:01.904 [error] Checking sub_exists for Id:"c@15.0.0.13c1" From:'a@10.0.0.11' Hop:7 
+14:00:03.007 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,16},port => 60227}],name => 'f@10.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,20},port => 34225}],name => 'j@10.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,12},port => 45019}],name => 'b@15.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,18},port => 47171}],name => 'h@16.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,13},port => 36971}],name => 'c@18.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,18},port => 58089}],name => 'h@18.0.0.18',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {19,0,0,13},port => 57279}],name => 'c@19.0.0.13',parallelism => 1} from 'e@10.0.0.15'!
+14:00:03.013 [error] Id is not get_connections(): ['g@10.0.0.17','j@10.0.0.20','i@10.0.0.19','f@10.0.0.16','a@10.0.0.11'] 
+14:00:03.013 [error] find_sub after Id not get_connections(): [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7}] 
+14:00:03.013 [error] Forwarding Req Id "c@15.0.0.13c1" to Peers RcvHop:7 IncHop:8 
+14:00:03.197 [error] Forwarding ReqId "c@15.0.0.13c1" to Peer:'g@10.0.0.17' Hop:8 
+14:00:03.198 [error] Forwarding ReqId "c@15.0.0.13c1" to Peer:'f@10.0.0.16' Hop:8 
+14:00:03.198 [error] LASPVIN Request forwarded~n
+14:00:03.198 [error] LASPVIN received find_sub Id: "c@15.0.0.13c1" From: 'g@10.0.0.17' Hop:8 
+14:00:03.200 [error] At receiving Id "c@15.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7}] 
+14:00:03.203 [error] Checking sub_exists for Id:"c@15.0.0.13c1" From:'g@10.0.0.17' Hop:8 
+14:00:03.206 [error] Hop 8 for Id "c@15.0.0.13c1" is more than existing 7...Skipping
+14:00:03.206 [error] LASPVIN Request forwarded~n
+14:00:03.206 [error] LASPVIN received find_sub Id: "c@15.0.0.13c1" From: 'j@10.0.0.20' Hop:8 
+14:00:03.206 [error] At receiving Id "c@15.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7}] 
+14:00:03.209 [error] Checking sub_exists for Id:"c@15.0.0.13c1" From:'j@10.0.0.20' Hop:8 
+14:00:03.212 [error] Hop 8 for Id "c@15.0.0.13c1" is more than existing 7...Skipping
+14:00:03.212 [error] LASPVIN Request forwarded~n
+14:00:03.213 [error] LASPVIN received find_sub Id: "c@15.0.0.13c1" From: 'i@10.0.0.19' Hop:8 
+14:00:03.213 [error] At receiving Id "c@15.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7}] 
+14:00:03.215 [error] Checking sub_exists for Id:"c@15.0.0.13c1" From:'i@10.0.0.19' Hop:8 
+14:00:03.218 [error] Hop 8 for Id "c@15.0.0.13c1" is more than existing 7...Skipping
+14:00:03.218 [error] LASPVIN Request forwarded~n
+14:00:04.846 [error] LASPVIN received find_sub Id: "c@16.0.0.13c1" From: 'a@10.0.0.11' Hop:6 
+14:00:04.846 [error] At receiving Id "c@16.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7}] 
+14:00:04.922 [error] Checking sub_exists for Id:"c@16.0.0.13c1" From:'a@10.0.0.11' Hop:6 
+14:00:05.142 [error] Id is not get_connections(): ['g@10.0.0.17','j@10.0.0.20','i@10.0.0.19','f@10.0.0.16','a@10.0.0.11'] 
+14:00:05.142 [error] find_sub after Id not get_connections(): [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6}] 
+14:00:05.143 [error] Forwarding Req Id "c@16.0.0.13c1" to Peers RcvHop:6 IncHop:7 
+14:00:05.331 [error] Forwarding ReqId "c@16.0.0.13c1" to Peer:'g@10.0.0.17' Hop:7 
+14:00:05.332 [error] Forwarding ReqId "c@16.0.0.13c1" to Peer:'f@10.0.0.16' Hop:7 
+14:00:05.332 [error] LASPVIN Request forwarded~n
+14:00:05.333 [error] LASPVIN received find_sub Id: "c@16.0.0.13c1" From: 'j@10.0.0.20' Hop:7 
+14:00:05.339 [error] At receiving Id "c@16.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6}] 
+14:00:05.447 [error] Checking sub_exists for Id:"c@16.0.0.13c1" From:'j@10.0.0.20' Hop:7 
+14:00:05.606 [error] Hop 7 for Id "c@16.0.0.13c1" is more than existing 6...Skipping
+14:00:05.606 [error] LASPVIN Request forwarded~n
+14:00:05.607 [error] LASPVIN received find_sub Id: "c@16.0.0.13c1" From: 'i@10.0.0.19' Hop:7 
+14:00:05.607 [error] At receiving Id "c@16.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6}] 
+14:00:05.733 [error] Checking sub_exists for Id:"c@16.0.0.13c1" From:'i@10.0.0.19' Hop:7 
+14:00:05.809 [error] Hop 7 for Id "c@16.0.0.13c1" is more than existing 6...Skipping
+14:00:05.809 [error] LASPVIN Request forwarded~n
+14:00:05.809 [error] LASPVIN received find_sub Id: "c@16.0.0.13c1" From: 'g@10.0.0.17' Hop:7 
+14:00:05.809 [error] At receiving Id "c@16.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6}] 
+14:00:05.958 [error] Checking sub_exists for Id:"c@16.0.0.13c1" From:'g@10.0.0.17' Hop:7 
+14:00:06.101 [error] Hop 7 for Id "c@16.0.0.13c1" is more than existing 6...Skipping
+14:00:06.101 [error] LASPVIN Request forwarded~n
+14:00:09.009 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 38247}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,20},port => 34225}],name => 'j@10.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,12},port => 45019}],name => 'b@15.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,12},port => 51239}],name => 'b@18.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,20},port => 39085}],name => 'j@18.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,16},port => 56101}],name => 'f@19.0.0.16',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,20},port => 39085}],name => 'j@18.0.0.20',parallelism => 1} from 'e@10.0.0.15'!
+14:00:09.378 [error] LASPVIN received find_sub Id: "c@14.0.0.13c1" From: 'g@10.0.0.17' Hop:5 
+14:00:09.378 [error] At receiving Id "c@14.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6}] 
+14:00:09.378 [error] LASPVIN find_sub_aq exists for this find_sub "c@14.0.0.13c1" 
+14:00:15.011 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,16},port => 60227}],name => 'f@10.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,17},port => 54255}],name => 'g@10.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 38247}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,12},port => 45019}],name => 'b@15.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,11},port => 55867}],name => 'a@18.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,13},port => 36971}],name => 'c@18.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,19},port => 34021}],name => 'i@18.0.0.19',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,19},port => 34021}],name => 'i@18.0.0.19',parallelism => 1} from 'e@10.0.0.15'!
+14:00:18.316 [error] LASPVIN found the peer at "2020-06-19T14:00:18.315" for ID: "c@14.0.0.13c1" ToNode: 'c@10.0.0.13' Via:'e@10.0.0.15' 
+14:00:18.316 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+14:00:18.316 [error] Sub_aq exists for Id:"c@14.0.0.13c1" but HopCount:1 is lower than existing hopcount:4 .. Forwarding request 
+14:00:18.316 [error] LASPVIN found the peer at "2020-06-19T14:00:18.316" for ID: "c@18.0.0.13c1" ToNode: 'c@10.0.0.13' Via:'e@10.0.0.15' 
+14:00:18.316 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+14:00:18.316 [error] Sub_aq exists for Id:"c@18.0.0.13c1" but HopCount:1 is lower than existing hopcount:4 .. Forwarding request 
+14:00:18.316 [error] LASPVIN found the peer at "2020-06-19T14:00:18.316" for ID: "c@15.0.0.13c1" ToNode: 'c@10.0.0.13' Via:'e@10.0.0.15' 
+14:00:18.317 [error] LASPVINDEBUGERROR find_sub [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6}] 
+14:00:18.319 [error] LASPVINERROR here [['a@10.0.0.11']] 
+14:00:18.319 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@15.0.0.13c1" ToNode:'c@10.0.0.13' From:'e@10.0.0.15' to 'a@10.0.0.11' HopCount:1 
+14:00:18.319 [error] LASPVIN found the peer at "2020-06-19T14:00:18.319" for ID: "c@16.0.0.13c1" ToNode: 'c@10.0.0.13' Via:'e@10.0.0.15' 
+14:00:18.320 [error] LASPVINDEBUGERROR find_sub [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6}] 
+14:00:18.322 [error] LASPVINERROR here [['a@10.0.0.11']] 
+14:00:18.322 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@16.0.0.13c1" ToNode:'c@10.0.0.13' From:'e@10.0.0.15' to 'a@10.0.0.11' HopCount:1 
+14:00:21.014 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,17},port => 54255}],name => 'g@10.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,20},port => 34225}],name => 'j@10.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 53165}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {13,0,0,15},port => 56579}],name => 'e@13.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,11},port => 58957}],name => 'a@14.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,11},port => 55867}],name => 'a@18.0.0.11',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {16,0,0,18},port => 47171}],name => 'h@16.0.0.18',parallelism => 1} from 'e@10.0.0.15'!
+14:00:21.015 [error] Sending rate "c3" to 'c@10.0.0.13' 
+14:00:21.015 [error] Sending rate "c3" to 'd@10.0.0.14' 
+14:00:21.016 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'c@10.0.0.13' Hop:1 
+14:00:21.016 [error] At receiving Id "c@10.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6}] 
+14:00:21.019 [error] Checking sub_exists for Id:"c@10.0.0.13c1" From:'c@10.0.0.13' Hop:1 
+14:00:21.054 [error] Request Id "c@10.0.0.13c1" is from a Peer directly connected
+14:00:21.055 [error] find_sub with Id in get_connections(): [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6},{"c1","c@10.0.0.13c1",'c@10.0.0.13',1}] 
+14:00:21.055 [error] LASPVIN found the peer at "2020-06-19T14:00:21.552" for ID: "c@10.0.0.13c1" ToNode: 'a@10.0.0.11' Via:'e@10.0.0.15' 
+14:00:21.055 [error] LASPVINDEBUGERROR find_sub [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6},{"c1","c@10.0.0.13c1",'c@10.0.0.13',1}] 
+14:00:21.058 [error] LASPVINERROR here [['c@10.0.0.13']] 
+14:00:21.058 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'a@10.0.0.11' From:'e@10.0.0.15' to 'c@10.0.0.13' HopCount:1 
+14:00:21.058 [error] Forwarding Req Id "c@10.0.0.13c1" to Peers RcvHop:1 IncHop:2 
+14:00:21.064 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'g@10.0.0.17' Hop:2 
+14:00:21.064 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'f@10.0.0.16' Hop:2 
+14:00:21.064 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'d@10.0.0.14' Hop:2 
+14:00:21.065 [error] LASPVIN received find_sub Id: "c@14.0.0.13c1" From: 'd@10.0.0.14' Hop:5 
+14:00:21.065 [error] At receiving Id "c@14.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6},{"c1","c@10.0.0.13c1",'c@10.0.0.13',1}] 
+14:00:21.065 [error] LASPVIN find_sub_aq exists for this find_sub "c@14.0.0.13c1" 
+14:00:21.225 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNode:'a@10.0.0.11' Via:'g@10.0.0.17' From:'g@10.0.0.17' HopCount:1 
+14:00:21.225 [error] At receving find_sub_aq for Id "c@10.0.0.13c1", find_sub_aq:[{"c@15.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',0},{"c@10.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@18.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@18.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',1},{"c@14.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@14.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',1},{"c@16.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',0}] 
+14:00:21.225 [error] LASPVIN path ToNode: 'a@10.0.0.11' exists find_sub_aq:[[0],[0],[0]] 
+14:00:21.225 [error] HopCount is more than existing, skipping.....
+14:00:21.233 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNode:'a@10.0.0.11' Via:'d@10.0.0.14' From:'d@10.0.0.14' HopCount:1 
+14:00:21.234 [error] At receving find_sub_aq for Id "c@10.0.0.13c1", find_sub_aq:[{"c@15.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',0},{"c@10.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@18.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@18.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',1},{"c@14.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@14.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',1},{"c@16.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',0}] 
+14:00:21.234 [error] LASPVIN path ToNode: 'a@10.0.0.11' exists find_sub_aq:[[0],[0],[0]] 
+14:00:21.234 [error] HopCount is more than existing, skipping.....
+14:00:21.492 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNode:'a@10.0.0.11' Via:'f@10.0.0.16' From:'f@10.0.0.16' HopCount:1 
+14:00:22.683 [error] At receving find_sub_aq for Id "c@10.0.0.13c1", find_sub_aq:[{"c@15.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',0},{"c@10.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@18.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@18.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',1},{"c@14.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@14.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',1},{"c@16.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',0}] 
+14:00:22.683 [error] LASPVIN path ToNode: 'a@10.0.0.11' exists find_sub_aq:[[0],[0],[0]] 
+14:00:22.683 [error] HopCount is more than existing, skipping.....
+14:00:22.683 [error] Forwarding find_sub:[{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6},{"c1","c@10.0.0.13c1",'c@10.0.0.13',1}] to 'd@10.0.0.14' on join 
+14:00:22.684 [error] LASPVIN sent find_sub on join req Id:"c@14.0.0.13c1", Hop:5 
+14:00:27.017 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,11},port => 53067}],name => 'a@10.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,16},port => 60227}],name => 'f@10.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,20},port => 34225}],name => 'j@10.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 33881}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 53165}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,14},port => 43371}],name => 'd@18.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,19},port => 54597}],name => 'i@19.0.0.19',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 33881}],name => 'f@11.0.0.16',parallelism => 1} from 'e@10.0.0.15'!
+14:00:33.020 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,14},port => 55277}],name => 'd@10.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,16},port => 60227}],name => 'f@10.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,20},port => 34225}],name => 'j@10.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,15},port => 57567}],name => 'e@11.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,12},port => 51239}],name => 'b@18.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,16},port => 47957}],name => 'f@18.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,19},port => 34021}],name => 'i@18.0.0.19',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,16},port => 47957}],name => 'f@18.0.0.16',parallelism => 1} from 'e@10.0.0.15'!
+14:00:39.023 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,14},port => 55277}],name => 'd@10.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,16},port => 60227}],name => 'f@10.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 38247}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 48961}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,15},port => 57567}],name => 'e@11.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,19},port => 34021}],name => 'i@18.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,14},port => 45933}],name => 'd@19.0.0.14',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 48961}],name => 'b@11.0.0.12',parallelism => 1} from 'e@10.0.0.15'!
+14:00:45.025 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,13},port => 47605}],name => 'c@10.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 38247}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,20},port => 34225}],name => 'j@10.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,14},port => 51059}],name => 'd@17.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 40765}],name => 'e@18.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,19},port => 34021}],name => 'i@18.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,14},port => 45933}],name => 'd@19.0.0.14',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,19},port => 34021}],name => 'i@18.0.0.19',parallelism => 1} from 'e@10.0.0.15'!
+14:00:51.027 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,14},port => 55277}],name => 'd@10.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 42325}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,17},port => 54255}],name => 'g@10.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,12},port => 48335}],name => 'b@14.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,18},port => 39365}],name => 'h@15.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 40765}],name => 'e@18.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,13},port => 57279}],name => 'c@19.0.0.13',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {12,0,0,11},port => 38825}],name => 'a@12.0.0.11',parallelism => 1} from 'e@10.0.0.15'!
+14:00:56.030 [error] Sending rate "c3" to 'b@10.0.0.12' 
+14:00:56.060 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'b@10.0.0.12' Hop:4 
+14:00:56.060 [error] At receiving Id "c@18.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6},{"c1","c@10.0.0.13c1",'c@10.0.0.13',1}] 
+14:00:56.060 [error] LASPVIN find_sub_aq exists for this find_sub "c@18.0.0.13c1" 
+14:00:58.973 [error] Forwarding find_sub:[{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6},{"c1","c@10.0.0.13c1",'c@10.0.0.13',1}] to 'b@10.0.0.12' on join 
+14:00:58.973 [error] LASPVIN sent find_sub on join req Id:"c@14.0.0.13c1", Hop:5 
+14:01:16.039 [error] Sending rate "c3" to 'h@10.0.0.18' 
+14:01:16.040 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'h@10.0.0.18' Hop:4 
+14:01:16.041 [error] At receiving Id "c@18.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6},{"c1","c@10.0.0.13c1",'c@10.0.0.13',1}] 
+14:01:16.042 [error] LASPVIN find_sub_aq exists for this find_sub "c@18.0.0.13c1" 
+14:01:17.082 [error] Forwarding find_sub:[{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6},{"c1","c@10.0.0.13c1",'c@10.0.0.13',1}] to 'h@10.0.0.18' on join 
+14:01:17.082 [error] LASPVIN sent find_sub on join req Id:"c@14.0.0.13c1", Hop:5 
+14:03:11.537 [error] LASPVIN Received delta From='g@10.0.0.17' at TimeStamp="2020-06-19T14:03:11.536" Took=83959 microseconds 
+14:03:16.098 [error] LASPVIN Sending delta to 'a@10.0.0.11' 
+14:03:16.101 [error] LASPVIN Sending delta to 'c@10.0.0.13' 
+14:03:34.688 [error] LASPVIN received find_sub_aq for Id:"c@18.0.0.13c1" ToNode:'c@10.0.0.13' Via:'f@10.0.0.16' From:'f@10.0.0.16' HopCount:1 
+14:03:34.688 [error] At receving find_sub_aq for Id "c@18.0.0.13c1", find_sub_aq:[{"c@15.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',0},{"c@10.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@18.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@18.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',1},{"c@14.0.0.13c1",'a@10.0.0.11','e@10.0.0.15',0},{"c@14.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',1},{"c@16.0.0.13c1",'c@10.0.0.13','e@10.0.0.15',0}] 
+14:03:34.688 [error] LASPVIN path ToNode: 'c@10.0.0.13' exists find_sub_aq:[[0],[1],[1],[0]] 
+14:03:34.703 [error] HopCount is more than existing, skipping.....
+14:04:00.316 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'j@10.0.0.20' Hop:2 
+14:04:00.316 [error] At receiving Id "c@10.0.0.13c1" find_sub: [{"c1","c@14.0.0.13c1",'j@10.0.0.20',4},{"c1","c@18.0.0.13c1",'i@10.0.0.19',4},{"c1","c@15.0.0.13c1",'a@10.0.0.11',7},{"c1","c@16.0.0.13c1",'a@10.0.0.11',6},{"c1","c@10.0.0.13c1",'c@10.0.0.13',1}] 
+14:04:00.316 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
