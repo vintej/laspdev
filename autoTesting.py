@@ -102,6 +102,7 @@ else:
             jIndex = jIndex + 1 
         time.sleep(0.5)
         print (jobId+" | "+image)
+        time.sleep(2)
         stop_bringup()
         time.sleep(2)
         start_bringup(jobId, image)
