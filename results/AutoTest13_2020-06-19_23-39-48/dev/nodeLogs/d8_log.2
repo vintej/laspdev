@@ -1,0 +1,731 @@
+
+
+root@csst-06:/home/ubuntu/laspdev# 
+root@csst-06:/home/ubuntu/laspdev# python /home/ubuntu/laspdev/utility/setup_laspp.py d8
+d8
+ip:10.0.0.18
+node:h
+root@d8:/# service vnstat start
+[....] Starting vnStat daemon: vnstatd[?25l7[1G[[32m ok [39;49m8[?12l[?25h.
+root@d8:/# vnstat -u -i d8-eth0
+Error: Unable to read database "/var/lib/vnstat/d8-eth0": No such file or directory
+Info: -> A new database has been created.
+root@d8:/# vnstat -u
+root@d8:/# vnstat
+
+                      rx      /      tx      /     total    /   estimated
+ eth0:
+       Jun '20         4 KiB  /      13 KiB  /      17 KiB  /       0 KiB
+         today         4 KiB  /      13 KiB  /      17 KiB  /      --    
+
+ d8-eth0: Not enough data available yet.
+root@d8:/# export PEER_SERVICE=partisan_hyparview_peer_service_manager
+root@d8:/# export RATE_CLASS=c2
+root@d8:/# export RATE_C1=5000
+root@d8:/# export RATE_C2=22500
+root@d8:/# export RATE_C3=45500
+root@d8:/# export PROPAGATE_ON_UPDATE=false
+root@d8:/# export MAX_ACTIVE_SIZE=50
+root@d8:/# cd /opt/lasp
+root@d8:/opt/lasp# epmd -daemon
+root@d8:/opt/lasp# rebar3 shell --name h@10.0.0.18
+[0;32m===> Verifying dependencies...
+[0m[0;32m===> Compiling lasp
+[0mErlang/OTP 19 [erts-8.3] [source] [64-bit] [smp:24:24] [ds:24:24:10] [async-threads:0] [hipe] [kernel-poll:false]
+
+Eshell V8.3  (abort with ^G)
+(h@10.0.0.18)1> [0;35m===> The rebar3 shell is a development tool; to deploy applications in production, consider using releases (http://www.rebar3.org/docs/releases)
+[0m23:52:27.247 [info] Application lager started on node 'h@10.0.0.18'
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.253.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.252.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.254.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+         application: sasl
+          started_at: 'h@10.0.0.18'
+23:52:27.328 [info] Application sasl started on node 'h@10.0.0.18'
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+         application: lasp_support
+          started_at: 'h@10.0.0.18'
+23:52:27.328 [info] Application lasp_support started on node 'h@10.0.0.18'
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+         application: acceptor_pool
+          started_at: 'h@10.0.0.18'
+23:52:27.328 [info] Application acceptor_pool started on node 'h@10.0.0.18'
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+         application: quickrand
+          started_at: 'h@10.0.0.18'
+23:52:27.329 [info] Application quickrand started on node 'h@10.0.0.18'
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+         application: uuid
+          started_at: 'h@10.0.0.18'
+23:52:27.333 [info] Application uuid started on node 'h@10.0.0.18'
+23:52:27.359 [info] Using node name: 'h@10.0.0.18'
+23:52:27.387 [info] Resolving "10.0.0.18"...
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.266.0>},
+                       {id,timer_server},
+                       {mfargs,{timer,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,1000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,inet_gethost_native_sup}
+             started: [{pid,<0.268.0>},{mfa,{inet_gethost_native,init,[[]]}}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.267.0>},
+                       {id,inet_gethost_native_sup},
+                       {mfargs,{inet_gethost_native,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,1000},
+                       {child_type,worker}]
+23:52:27.399 [info] Resolved "h@10.0.0.18" to {10,0,0,18}
+23:52:27.399 [info] Resolved "10.0.0.18" to {10,0,0,18}
+23:52:27.622 [info] Partisan listening on {10,0,0,18}:49389 listen_addrs: [#{ip => {10,0,0,18},port => 49389}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.313.0>},
+                       {id,partisan_rpc_backend},
+                       {mfargs,{partisan_rpc_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.314.0>},
+                       {id,partisan_acknowledgement_backend},
+                       {mfargs,
+                           {partisan_acknowledgement_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+23:52:27.655 [info] Not using container orchestration; disabling.
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.315.0>},
+                       {id,partisan_orchestration_backend},
+                       {mfargs,{partisan_orchestration_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+23:52:27.711 [info] node 'h@10.0.0.18' choosing random seed: {89188703,-576460744272700168,-576460752303423423}
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.316.0>},
+                       {id,partisan_hyparview_peer_service_manager},
+                       {mfargs,
+                           {partisan_hyparview_peer_service_manager,
+                               start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.317.0>},
+                       {id,partisan_peer_service_events},
+                       {mfargs,{partisan_peer_service_events,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+23:52:27.721 [info] node 'h@10.0.0.18' choosing random seed: {89188703,-576460744272700168,-576460752303423423}
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.318.0>},
+                       {id,partisan_plumtree_backend},
+                       {mfargs,{partisan_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.319.0>},
+                       {id,partisan_plumtree_broadcast},
+                       {mfargs,{partisan_plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.320.0>},
+                       {id,partisan_monitor},
+                       {mfargs,{partisan_monitor,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.322.0>},
+                       {id,partisan_pool},
+                       {mfargs,{partisan_pool,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.323.0>},
+                       {id,{partisan_socket,{10,0,0,18},49389}},
+                       {mfargs,
+                           {partisan_socket,start_link,[{10,0,0,18},49389]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.321.0>},
+                       {id,partisan_pool_sup},
+                       {mfargs,{partisan_pool_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,20000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+         application: partisan
+          started_at: 'h@10.0.0.18'
+23:52:27.866 [info] Application partisan started on node 'h@10.0.0.18'
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+          supervisor: {local,plumtree_sup}
+             started: [{pid,<0.338.0>},
+                       {id,plumtree_broadcast},
+                       {mfargs,{plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+         application: plumtree
+          started_at: 'h@10.0.0.18'
+23:52:27.882 [info] Application plumtree started on node 'h@10.0.0.18'
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:27 ===
+         application: gen_fsm_compat
+          started_at: 'h@10.0.0.18'
+23:52:27.883 [info] Application gen_fsm_compat started on node 'h@10.0.0.18'
+23:52:27.890 [info] Setting jitter: false
+23:52:27.919 [info] Setting jitter percent: 1
+23:52:27.942 [info] Setting event interval: 0
+23:52:27.947 [info] Setting max events: 1000
+23:52:27.950 [info] Setting extended logging: false
+23:52:27.953 [info] Setting mailbox logging: false
+23:52:27.956 [info] Setting operation mode: delta_based
+23:52:27.962 [info] Setting set type: orset
+23:52:27.967 [info] Setting broadcast: false
+23:52:28.027 [info] Membership: false
+23:52:28.030 [info] Workflow: false
+23:52:28.041 [info] AdClientEnabled: false
+23:52:28.046 [info] AdServerEnabled: false
+23:52:28.049 [info] TournClientEnabled: false
+23:52:28.052 [info] TournServerEnabled: false
+23:52:28.055 [info] ThroughputType: gset
+23:52:28.058 [info] ThroughputClientEnabled: false
+23:52:28.060 [info] ThroughputServerEnabled: false
+23:52:28.063 [info] DivergenceType: gcounter
+23:52:28.066 [info] DivergenceClientEnabled: false
+23:52:28.068 [info] DivergenceServerEnabled: false
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:28 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.385.0>},
+                       {id,lasp_unique},
+                       {mfargs,{lasp_unique,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:28 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.386.0>},
+                       {id,lasp_plumtree_backend},
+                       {mfargs,{lasp_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:28 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.387.0>},
+                       {id,lasp_plumtree_memory_report},
+                       {mfargs,{lasp_plumtree_memory_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:28 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.388.0>},
+                       {id,lasp_memory_utilization_report},
+                       {mfargs,{lasp_memory_utilization_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+23:52:28.165 [info] Backend initialized with pid: <0.393.0>
+23:52:28.165 [info] Backend lasp_ets_storage_backend initialized: <0.393.0>
+23:52:28.180 [error] C1 propagation "2020-06-19T23:52:28.180" 
+23:52:28.181 [error] C2 propagation "2020-06-19T23:52:28.181" 
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:28 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.389.0>},
+                       {id,lasp_distribution_backend},
+                       {mfargs,{lasp_distribution_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+23:52:28.182 [error] C3 propagation "2020-06-19T23:52:28.182" 
+
+=PROGRESS REPORT==== 19-Jun-2020::23:52:28 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.395.0>},
+                       {id,lasp_process_sup},
+                       {mfargs,{lasp_process_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+[0;32m===> Booted types
+[0m[0;32m===> Booted gen_flow
+[0m[0;32m===> Booted syntax_tools
+[0m[0;32m===> Booted compiler
+[0m[0;32m===> Booted goldrush
+[0m[0;32m===> Booted lager
+[0m[0;32m===> Booted sasl
+[0m[0;32m===> Booted lasp_support
+[0m[0;32m===> Booted acceptor_pool
+[0m[0;32m===> Booted quickrand
+[0m[0;32m===> Booted uuid
+[0m[0;32m===> Booted partisan
+[0m[0;32m===> Booted plumtree
+[0m[0;32m===> Booted gen_fsm_compat
+[0m[0;32m===> Booted lasp
+[0m
+=PROGRESS REPORT==== 19-Jun-2020::23:52:28 ===
+         application: lasp
+          started_at: 'h@10.0.0.18'
+23:52:28.219 [info] Application lasp started on node 'h@10.0.0.18'
+
+(h@10.0.0.18)1> erlang:set_cookie(node(),'RPJVCXYDYULBNZFEFPHJ').
+true
+(h@10.0.0.18)2> application:get_env(partisan, max_active_size).
+{ok,50}
+(h@10.0.0.18)3> application:get_env(partisan, max_passive_size).
+{ok,10}
+(h@10.0.0.18)4> application:get_env(partisan, min_active_size).
+{ok,9}
+(h@10.0.0.18)5> )5> 23:52:33.186 [error] C1 propagation "2020-06-19T23:52:33.186" 
+23:52:38.188 [error] C1 propagation "2020-06-19T23:52:38.188" 
+23:52:43.191 [error] C1 propagation "2020-06-19T23:52:43.191" 
+23:52:48.195 [error] C1 propagation "2020-06-19T23:52:48.194" 
+23:52:50.682 [error] C2 propagation "2020-06-19T23:52:50.682" 
+23:52:53.196 [error] C1 propagation "2020-06-19T23:52:53.196" 
+23:52:58.198 [error] C1 propagation "2020-06-19T23:52:58.198" 
+23:53:03.200 [error] C1 propagation "2020-06-19T23:53:03.200" 
+23:53:08.201 [error] C1 propagation "2020-06-19T23:53:08.201" 
+23:53:13.184 [error] C2 propagation "2020-06-19T23:53:13.184" 
+23:53:13.203 [error] C1 propagation "2020-06-19T23:53:13.203" 
+23:53:13.683 [error] C3 propagation "2020-06-19T23:53:13.683" 
+23:53:18.206 [error] C1 propagation "2020-06-19T23:53:18.206" 
+23:53:23.208 [error] C1 propagation "2020-06-19T23:53:23.208" 
+23:53:28.235 [error] C1 propagation "2020-06-19T23:53:28.235" 
+23:53:33.238 [error] C1 propagation "2020-06-19T23:53:33.238" 
+23:53:35.686 [error] C2 propagation "2020-06-19T23:53:35.686" 
+23:53:38.240 [error] C1 propagation "2020-06-19T23:53:38.240" 
+23:53:43.242 [error] C1 propagation "2020-06-19T23:53:43.242" 
+23:53:48.246 [error] C1 propagation "2020-06-19T23:53:48.246" 
+23:53:53.247 [error] C1 propagation "2020-06-19T23:53:53.247" 
+23:53:58.188 [error] C2 propagation "2020-06-19T23:53:58.188" 
+23:53:58.249 [error] C1 propagation "2020-06-19T23:53:58.249" 
+23:53:59.184 [error] C3 propagation "2020-06-19T23:53:59.184" 
+23:54:03.254 [error] C1 propagation "2020-06-19T23:54:03.254" 
+23:54:08.255 [error] C1 propagation "2020-06-19T23:54:08.255" 
+lasp_peer_service:join('a@10.0.0.11').
+ok
+(h@10.0.0.18)6> 23:54:13.259 [error] C1 propagation "2020-06-19T23:54:13.259" 
+lasp_peer_service:members().
+{ok,['h@10.0.0.18']}
+(h@10.0.0.18)7> 23:54:17.660 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'd@10.0.0.14' Hop:4 
+23:54:17.682 [error] Checking sub_exists for Id:"c@10.0.0.13c1" From:'d@10.0.0.14' Hop:4 
+23:54:17.903 [error] Id is not get_connections(): ['e@10.0.0.15','a@10.0.0.11','d@10.0.0.14'] 
+23:54:17.903 [error] Forwarding Req Id "c@10.0.0.13c1" to Peers RcvHop:4 IncHop:5 
+23:54:18.904 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'e@10.0.0.15' Hop:5 
+23:54:18.904 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'a@10.0.0.11' Hop:5 
+23:54:18.904 [error] LASPVIN Request forwarded~n
+23:54:18.904 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'e@10.0.0.15' Hop:5 
+23:54:18.966 [error] Checking sub_exists for Id:"c@10.0.0.13c1" From:'e@10.0.0.15' Hop:5 
+23:54:19.013 [error] Hop 5 for Id "c@10.0.0.13c1" is more than existing 4...Skipping
+23:54:19.013 [error] LASPVIN Request forwarded~n
+23:54:19.046 [error] Sending rate "c2" to 'i@10.0.0.19' 
+lasp_peer_service:join('a@10.0.0.11').
+23:54:19.047 [error] Sending rate "c2" to 'b@10.0.0.12' 
+23:54:19.047 [error] Sending rate "c2" to 'e@10.0.0.15' 
+23:54:19.047 [error] Sending rate "c2" to 'a@10.0.0.11' 
+23:54:19.047 [error] Sending rate "c2" to 'd@10.0.0.14' 
+23:54:19.048 [error] C1 propagation "2020-06-19T23:54:19.479" 
+23:54:19.049 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'b@10.0.0.12' Hop:3 
+23:54:19.051 [error] Checking sub_exists for Id:"c@10.0.0.13c1" From:'b@10.0.0.12' Hop:3 
+23:54:19.054 [error] Find_sub request id "c@10.0.0.13c1" exists but Rcv hopcount 3 is lower than existing 4 
+ok
+(h@10.0.0.18)8> 23:54:20.018 [error] Id is not get_connections(): ['i@10.0.0.19','b@10.0.0.12','e@10.0.0.15','a@10.0.0.11','d@10.0.0.14'] 
+23:54:20.018 [error] Deleted rqeuest id, updated it with lower hopcount [{"c1","c@10.0.0.13c1",'b@10.0.0.12',3}] 
+23:54:20.018 [error] LASPVIN Request forwarded~n
+23:54:20.019 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'd@10.0.0.14' Hop:3 
+23:54:20.021 [error] Checking sub_exists for Id:"c@10.0.0.13c1" From:'d@10.0.0.14' Hop:3 
+23:54:20.024 [error] Hop 3 for Id "c@10.0.0.13c1" is more than existing 3...Skipping
+23:54:20.024 [error] LASPVIN Request forwarded~n
+23:54:20.024 [error] LASPVIN sent find_sub on join req Id:"c@10.0.0.13c1", Hop:4 
+23:54:20.024 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'e@10.0.0.15' Hop:2 
+23:54:20.027 [error] Checking sub_exists for Id:"c@10.0.0.13c1" From:'e@10.0.0.15' Hop:2 
+23:54:20.030 [error] Find_sub request id "c@10.0.0.13c1" exists but Rcv hopcount 2 is lower than existing 3 
+23:54:20.084 [error] Id is not get_connections(): ['i@10.0.0.19','b@10.0.0.12','e@10.0.0.15','a@10.0.0.11','d@10.0.0.14'] 
+23:54:20.084 [error] Deleted rqeuest id, updated it with lower hopcount [{"c1","c@10.0.0.13c1",'e@10.0.0.15',2}] 
+23:54:20.084 [error] LASPVIN Request forwarded~n
+23:54:20.689 [error] C2 propagation "2020-06-19T23:54:20.689" 
+23:54:21.668 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'i@10.0.0.19' Hop:5 
+23:54:21.704 [error] Checking sub_exists for Id:"c@10.0.0.13c1" From:'i@10.0.0.19' Hop:5 
+23:54:21.754 [error] Hop 5 for Id "c@10.0.0.13c1" is more than existing 2...Skipping
+23:54:21.754 [error] LASPVIN Request forwarded~n
+23:54:21.754 [error] LASPVIN sent find_sub on join req Id:"c@10.0.0.13c1", Hop:3 
+23:54:22.791 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'i@10.0.0.19' Hop:4 
+23:54:22.857 [error] Checking sub_exists for Id:"c@10.0.0.13c1" From:'i@10.0.0.19' Hop:4 
+23:54:22.906 [error] Hop 4 for Id "c@10.0.0.13c1" is more than existing 2...Skipping
+23:54:22.906 [error] LASPVIN Request forwarded~n
+23:54:23.006 [error] LASPVIN sent find_sub on join req Id:"c@10.0.0.13c1", Hop:3 
+23:54:23.941 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'a@10.0.0.11' Hop:3 
+23:54:24.000 [error] Checking sub_exists for Id:"c@11.0.0.13c1" From:'a@10.0.0.11' Hop:3 
+lasp_peer_service:members().
+{ok,['i@10.0.0.19','b@10.0.0.12','c@10.0.0.13',
+     'e@10.0.0.15','a@10.0.0.11','h@10.0.0.18','d@10.0.0.14']}
+(h@10.0.0.18)9> 23:54:25.122 [error] Id is not get_connections(): ['i@10.0.0.19','b@10.0.0.12','c@10.0.0.13','e@10.0.0.15','a@10.0.0.11','d@10.0.0.14'] 
+23:54:25.122 [error] Forwarding Req Id "c@11.0.0.13c1" to Peers RcvHop:3 IncHop:4 
+23:54:25.263 [error] Forwarding ReqId "c@11.0.0.13c1" to Peer:'i@10.0.0.19' Hop:4 
+23:54:25.263 [error] Forwarding ReqId "c@11.0.0.13c1" to Peer:'b@10.0.0.12' Hop:4 
+23:54:25.263 [error] Forwarding ReqId "c@11.0.0.13c1" to Peer:'c@10.0.0.13' Hop:4 
+23:54:25.264 [error] Forwarding ReqId "c@11.0.0.13c1" to Peer:'d@10.0.0.14' Hop:4 
+23:54:25.264 [error] LASPVIN Request forwarded~n
+23:54:25.480 [error] Sending rate "c2" to 'c@10.0.0.13' 
+23:54:25.480 [error] Sending rate "c2" to 'a@10.0.0.11' 
+23:54:25.480 [error] C1 propagation "2020-06-19T23:54:25.480" 
+23:54:25.480 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'b@10.0.0.12' Hop:4 
+23:54:25.483 [error] Checking sub_exists for Id:"c@11.0.0.13c1" From:'b@10.0.0.12' Hop:4 
+23:54:25.486 [error] Hop 4 for Id "c@11.0.0.13c1" is more than existing 3...Skipping
+23:54:25.486 [error] LASPVIN Request forwarded~n
+23:54:25.486 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'e@10.0.0.15' Hop:4 
+23:54:25.489 [error] Checking sub_exists for Id:"c@11.0.0.13c1" From:'e@10.0.0.15' Hop:4 
+23:54:25.492 [error] Hop 4 for Id "c@11.0.0.13c1" is more than existing 3...Skipping
+23:54:25.492 [error] LASPVIN Request forwarded~n
+23:54:25.492 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'd@10.0.0.14' Hop:4 
+23:54:25.495 [error] Checking sub_exists for Id:"c@11.0.0.13c1" From:'d@10.0.0.14' Hop:4 
+23:54:25.498 [error] Hop 4 for Id "c@11.0.0.13c1" is more than existing 3...Skipping
+23:54:25.498 [error] LASPVIN Request forwarded~n
+23:54:25.498 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'i@10.0.0.19' Hop:4 
+23:54:25.501 [error] Checking sub_exists for Id:"c@11.0.0.13c1" From:'i@10.0.0.19' Hop:4 
+23:54:25.504 [error] Hop 4 for Id "c@11.0.0.13c1" is more than existing 3...Skipping
+23:54:25.504 [error] LASPVIN Request forwarded~n
+23:54:26.124 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'a@10.0.0.11' Hop:2 
+23:54:26.127 [error] Checking sub_exists for Id:"c@10.0.0.13c1" From:'a@10.0.0.11' Hop:2 
+23:54:26.199 [error] Hop 2 for Id "c@10.0.0.13c1" is more than existing 2...Skipping
+23:54:26.200 [error] LASPVIN Request forwarded~n
+23:54:26.432 [error] Received new rate from 'a@10.0.0.11' with new rate "c1"
+23:54:26.433 [error] LASPVIN found the peer at "2020-06-19T23:54:26.432" for ID: "c@10.0.0.13c1" ToNode: 'a@10.0.0.11' Via:'h@10.0.0.18' 
+23:54:26.435 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'a@10.0.0.11' From:'h@10.0.0.18' to 'e@10.0.0.15' HopCount:1 
+23:54:26.435 [error] LASPVIN found the peer at "2020-06-19T23:54:26.435" for ID: "c@11.0.0.13c1" ToNode: 'a@10.0.0.11' Via:'h@10.0.0.18' 
+23:54:26.438 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@11.0.0.13c1" ToNode:'a@10.0.0.11' From:'h@10.0.0.18' to 'a@10.0.0.11' HopCount:1 
+23:54:29.122 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,13},port => 50223}],name => 'c@10.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 60311}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,17},port => 36105}],name => 'g@10.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 54975}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 45933}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,11},port => 51783}],name => 'a@16.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,11},port => 35725}],name => 'a@18.0.0.11',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,13},port => 59727}],name => 'c@18.0.0.13',parallelism => 1} from 'h@10.0.0.18'!
+23:54:30.485 [error] Sending rate "c2" to 'c@10.0.0.13' 
+23:54:30.485 [error] Sending Subscription to 'a@10.0.0.11' case1 
+23:54:30.486 [error] C1 propagation "2020-06-19T23:54:30.486" 
+23:54:30.650 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'a@10.0.0.11' Hop:2 
+23:54:30.650 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+23:54:30.799 [error] Rate_subscribe_ack received from 'a@10.0.0.11' for rate "c2" 
+23:54:33.161 [error] LASPVIN sent find_sub on join req Id:"c@10.0.0.13c1", Hop:3 
+23:54:35.124 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,12},port => 39415}],name => 'b@10.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,14},port => 46169}],name => 'd@10.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,20},port => 49625}],name => 'j@10.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,11},port => 51783}],name => 'a@16.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,11},port => 35725}],name => 'a@18.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,13},port => 59727}],name => 'c@18.0.0.13',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 54565}],name => 'e@18.0.0.15',parallelism => 1} from 'h@10.0.0.18'!
+23:54:35.488 [error] Sending rate "c2" to 'c@10.0.0.13' 
+23:54:35.488 [error] Sending rate "c2" to 'f@10.0.0.16' 
+23:54:35.550 [error] C1 propagation "2020-06-19T23:54:35.550" 
+23:54:35.726 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'f@10.0.0.16' Hop:2 
+23:54:35.726 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+23:54:38.154 [error] LASPVIN received find_sub Id: "c@16.0.0.13c1" From: 'a@10.0.0.11' Hop:5 
+23:54:38.386 [error] Checking sub_exists for Id:"c@16.0.0.13c1" From:'a@10.0.0.11' Hop:5 
+23:54:38.532 [error] Id is not get_connections(): ['i@10.0.0.19','b@10.0.0.12','c@10.0.0.13','e@10.0.0.15','a@10.0.0.11','f@10.0.0.16','d@10.0.0.14'] 
+23:54:38.532 [error] Forwarding Req Id "c@16.0.0.13c1" to Peers RcvHop:5 IncHop:6 
+23:54:38.679 [error] Forwarding ReqId "c@16.0.0.13c1" to Peer:'i@10.0.0.19' Hop:6 
+23:54:38.679 [error] Forwarding ReqId "c@16.0.0.13c1" to Peer:'b@10.0.0.12' Hop:6 
+23:54:38.679 [error] Forwarding ReqId "c@16.0.0.13c1" to Peer:'c@10.0.0.13' Hop:6 
+23:54:38.682 [error] Forwarding ReqId "c@16.0.0.13c1" to Peer:'f@10.0.0.16' Hop:6 
+23:54:38.682 [error] Forwarding ReqId "c@16.0.0.13c1" to Peer:'d@10.0.0.14' Hop:6 
+23:54:38.682 [error] LASPVIN Request forwarded~n
+23:54:38.771 [error] LASPVIN received find_sub Id: "c@16.0.0.13c1" From: 'e@10.0.0.15' Hop:6 
+23:54:38.917 [error] Checking sub_exists for Id:"c@16.0.0.13c1" From:'e@10.0.0.15' Hop:6 
+23:54:39.108 [error] Hop 6 for Id "c@16.0.0.13c1" is more than existing 5...Skipping
+23:54:39.108 [error] LASPVIN Request forwarded~n
+23:54:39.108 [error] LASPVIN received find_sub Id: "c@16.0.0.13c1" From: 'd@10.0.0.14' Hop:6 
+23:54:39.281 [error] Checking sub_exists for Id:"c@16.0.0.13c1" From:'d@10.0.0.14' Hop:6 
+23:54:39.339 [error] Hop 6 for Id "c@16.0.0.13c1" is more than existing 5...Skipping
+23:54:39.339 [error] LASPVIN Request forwarded~n
+23:54:39.339 [error] LASPVIN received find_sub Id: "c@16.0.0.13c1" From: 'i@10.0.0.19' Hop:6 
+23:54:39.414 [error] Checking sub_exists for Id:"c@16.0.0.13c1" From:'i@10.0.0.19' Hop:6 
+23:54:39.522 [error] Hop 6 for Id "c@16.0.0.13c1" is more than existing 5...Skipping
+23:54:39.522 [error] LASPVIN Request forwarded~n
+23:54:39.523 [error] LASPVIN received find_sub Id: "c@16.0.0.13c1" From: 'f@10.0.0.16' Hop:6 
+23:54:39.525 [error] Checking sub_exists for Id:"c@16.0.0.13c1" From:'f@10.0.0.16' Hop:6 
+23:54:39.528 [error] Hop 6 for Id "c@16.0.0.13c1" is more than existing 5...Skipping
+23:54:39.528 [error] LASPVIN Request forwarded~n
+23:54:39.528 [error] LASPVIN received find_sub Id: "c@16.0.0.13c1" From: 'b@10.0.0.12' Hop:6 
+23:54:39.531 [error] Checking sub_exists for Id:"c@16.0.0.13c1" From:'b@10.0.0.12' Hop:6 
+23:54:39.534 [error] Hop 6 for Id "c@16.0.0.13c1" is more than existing 5...Skipping
+23:54:39.534 [error] LASPVIN Request forwarded~n
+23:54:41.306 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,13},port => 50223}],name => 'c@10.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 60311}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,17},port => 36105}],name => 'g@10.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,20},port => 49625}],name => 'j@10.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {13,0,0,17},port => 59453}],name => 'g@13.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,13},port => 59727}],name => 'c@18.0.0.13',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {15,0,0,11},port => 35179}],name => 'a@15.0.0.11',parallelism => 1} from 'h@10.0.0.18'!
+23:54:41.308 [error] Sending rate "c2" to 'c@10.0.0.13' 
+23:54:41.308 [error] C1 propagation "2020-06-19T23:54:41.308" 
+23:54:41.308 [error] LASPVIN received find_sub Id: "c@19.0.0.13c1" From: 'a@10.0.0.11' Hop:4 
+23:54:41.311 [error] Checking sub_exists for Id:"c@19.0.0.13c1" From:'a@10.0.0.11' Hop:4 
+23:54:41.415 [error] Id is not get_connections(): ['i@10.0.0.19','b@10.0.0.12','c@10.0.0.13','e@10.0.0.15','a@10.0.0.11','f@10.0.0.16','d@10.0.0.14'] 
+23:54:41.415 [error] Forwarding Req Id "c@19.0.0.13c1" to Peers RcvHop:4 IncHop:5 
+23:54:41.547 [error] Forwarding ReqId "c@19.0.0.13c1" to Peer:'i@10.0.0.19' Hop:5 
+23:54:41.547 [error] Forwarding ReqId "c@19.0.0.13c1" to Peer:'b@10.0.0.12' Hop:5 
+23:54:41.547 [error] Forwarding ReqId "c@19.0.0.13c1" to Peer:'c@10.0.0.13' Hop:5 
+23:54:41.550 [error] Forwarding ReqId "c@19.0.0.13c1" to Peer:'f@10.0.0.16' Hop:5 
+23:54:41.550 [error] Forwarding ReqId "c@19.0.0.13c1" to Peer:'d@10.0.0.14' Hop:5 
+23:54:41.550 [error] LASPVIN Request forwarded~n
+23:54:41.551 [error] LASPVIN received find_sub Id: "c@19.0.0.13c1" From: 'b@10.0.0.12' Hop:5 
+23:54:41.553 [error] Checking sub_exists for Id:"c@19.0.0.13c1" From:'b@10.0.0.12' Hop:5 
+23:54:41.556 [error] Hop 5 for Id "c@19.0.0.13c1" is more than existing 4...Skipping
+23:54:41.556 [error] LASPVIN Request forwarded~n
+23:54:41.556 [error] LASPVIN received find_sub Id: "c@19.0.0.13c1" From: 'f@10.0.0.16' Hop:5 
+23:54:41.559 [error] Checking sub_exists for Id:"c@19.0.0.13c1" From:'f@10.0.0.16' Hop:5 
+23:54:41.562 [error] Hop 5 for Id "c@19.0.0.13c1" is more than existing 4...Skipping
+23:54:41.562 [error] LASPVIN Request forwarded~n
+23:54:41.562 [error] LASPVIN received find_sub Id: "c@19.0.0.13c1" From: 'i@10.0.0.19' Hop:5 
+23:54:41.565 [error] Checking sub_exists for Id:"c@19.0.0.13c1" From:'i@10.0.0.19' Hop:5 
+23:54:41.568 [error] Hop 5 for Id "c@19.0.0.13c1" is more than existing 4...Skipping
+23:54:41.568 [error] LASPVIN Request forwarded~n
+23:54:41.568 [error] LASPVIN received find_sub Id: "c@19.0.0.13c1" From: 'd@10.0.0.14' Hop:5 
+23:54:41.571 [error] Checking sub_exists for Id:"c@19.0.0.13c1" From:'d@10.0.0.14' Hop:5 
+23:54:41.574 [error] Hop 5 for Id "c@19.0.0.13c1" is more than existing 4...Skipping
+23:54:41.574 [error] LASPVIN Request forwarded~n
+23:54:41.574 [error] LASPVIN received find_sub Id: "c@19.0.0.13c1" From: 'e@10.0.0.15' Hop:5 
+23:54:41.577 [error] Checking sub_exists for Id:"c@19.0.0.13c1" From:'e@10.0.0.15' Hop:5 
+23:54:41.580 [error] Hop 5 for Id "c@19.0.0.13c1" is more than existing 4...Skipping
+23:54:41.580 [error] LASPVIN Request forwarded~n
+23:54:43.197 [error] C2 propagation "2020-06-19T23:54:43.197" 
+23:54:44.685 [error] C3 propagation "2020-06-19T23:54:44.685" 
+23:54:47.308 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,12},port => 39415}],name => 'b@10.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,13},port => 50223}],name => 'c@10.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 54975}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,14},port => 51393}],name => 'd@11.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,19},port => 44427}],name => 'i@14.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,12},port => 34687}],name => 'b@16.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,11},port => 35725}],name => 'a@18.0.0.11',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {11,0,0,14},port => 51393}],name => 'd@11.0.0.14',parallelism => 1} from 'h@10.0.0.18'!
+23:54:47.310 [error] Sending rate "c2" to 'c@10.0.0.13' 
+23:54:47.311 [error] C1 propagation "2020-06-19T23:54:47.311" 
+23:54:48.458 [error] LASPVIN found the peer at "2020-06-19T23:54:48.458" for ID: "c@11.0.0.13c1" ToNode: 'c@10.0.0.13' Via:'h@10.0.0.18' 
+23:54:48.458 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+23:54:48.458 [error] Sub_aq exists for Id:"c@11.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+23:54:48.459 [error] LASPVIN found the peer at "2020-06-19T23:54:48.459" for ID: "c@16.0.0.13c1" ToNode: 'c@10.0.0.13' Via:'h@10.0.0.18' 
+23:54:48.523 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@16.0.0.13c1" ToNode:'c@10.0.0.13' From:'h@10.0.0.18' to 'a@10.0.0.11' HopCount:1 
+23:54:48.523 [error] LASPVIN found the peer at "2020-06-19T23:54:48.523" for ID: "c@19.0.0.13c1" ToNode: 'c@10.0.0.13' Via:'h@10.0.0.18' 
+23:54:48.687 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@19.0.0.13c1" ToNode:'c@10.0.0.13' From:'h@10.0.0.18' to 'a@10.0.0.11' HopCount:1 
+23:54:49.365 [error] LASPVIN received find_sub Id: "c@13.0.0.13c1" From: 'a@10.0.0.11' Hop:4 
+23:54:49.447 [error] Checking sub_exists for Id:"c@13.0.0.13c1" From:'a@10.0.0.11' Hop:4 
+23:54:49.544 [error] Id is not get_connections(): ['i@10.0.0.19','b@10.0.0.12','c@10.0.0.13','e@10.0.0.15','a@10.0.0.11','f@10.0.0.16','d@10.0.0.14'] 
+23:54:49.545 [error] LASPVIN found the peer at "2020-06-19T23:54:49.545" for ID: "c@13.0.0.13c1" ToNode: 'c@10.0.0.13' Via:'h@10.0.0.18' 
+23:54:49.549 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@13.0.0.13c1" ToNode:'c@10.0.0.13' From:'h@10.0.0.18' to 'a@10.0.0.11' HopCount:1 
+23:54:49.549 [error] Forwarding Req Id "c@13.0.0.13c1" to Peers RcvHop:4 IncHop:5 
+23:54:49.732 [error] Forwarding ReqId "c@13.0.0.13c1" to Peer:'i@10.0.0.19' Hop:5 
+23:54:49.734 [error] Forwarding ReqId "c@13.0.0.13c1" to Peer:'b@10.0.0.12' Hop:5 
+23:54:49.734 [error] Forwarding ReqId "c@13.0.0.13c1" to Peer:'c@10.0.0.13' Hop:5 
+23:54:49.734 [error] Forwarding ReqId "c@13.0.0.13c1" to Peer:'f@10.0.0.16' Hop:5 
+23:54:49.735 [error] Forwarding ReqId "c@13.0.0.13c1" to Peer:'d@10.0.0.14' Hop:5 
+23:54:49.735 [error] LASPVIN received find_sub Id: "c@13.0.0.13c1" From: 'e@10.0.0.15' Hop:5 
+23:54:49.735 [error] LASPVIN find_sub_aq exists for this find_sub "c@13.0.0.13c1" 
+23:54:49.735 [error] LASPVIN received find_sub Id: "c@13.0.0.13c1" From: 'b@10.0.0.12' Hop:5 
+23:54:49.735 [error] LASPVIN find_sub_aq exists for this find_sub "c@13.0.0.13c1" 
+23:54:49.735 [error] LASPVIN received find_sub Id: "c@13.0.0.13c1" From: 'i@10.0.0.19' Hop:5 
+23:54:49.735 [error] LASPVIN find_sub_aq exists for this find_sub "c@13.0.0.13c1" 
+23:54:49.742 [error] LASPVIN received find_sub Id: "c@13.0.0.13c1" From: 'd@10.0.0.14' Hop:5 
+23:54:49.742 [error] LASPVIN find_sub_aq exists for this find_sub "c@13.0.0.13c1" 
+23:54:49.791 [error] LASPVIN received find_sub Id: "c@13.0.0.13c1" From: 'f@10.0.0.16' Hop:5 
+23:54:49.791 [error] LASPVIN find_sub_aq exists for this find_sub "c@13.0.0.13c1" 
+23:54:53.311 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,11},port => 45509}],name => 'a@10.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 60311}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,16},port => 35417}],name => 'f@10.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,17},port => 36105}],name => 'g@10.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {13,0,0,17},port => 59453}],name => 'g@13.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,19},port => 44427}],name => 'i@14.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,18},port => 47085}],name => 'h@16.0.0.18',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {16,0,0,20},port => 60293}],name => 'j@16.0.0.20',parallelism => 1} from 'h@10.0.0.18'!
+23:54:53.313 [error] Sending rate "c2" to 'c@10.0.0.13' 
+23:54:53.314 [error] C1 propagation "2020-06-19T23:54:53.314" 
+23:54:59.314 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,14},port => 46169}],name => 'd@10.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,16},port => 35417}],name => 'f@10.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 54975}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,18},port => 47085}],name => 'h@16.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,14},port => 54507}],name => 'd@18.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,17},port => 37573}],name => 'g@18.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,15},port => 37101}],name => 'e@19.0.0.15',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {16,0,0,18},port => 47085}],name => 'h@16.0.0.18',parallelism => 1} from 'h@10.0.0.18'!
+23:54:59.316 [error] Sending rate "c2" to 'c@10.0.0.13' 
+23:54:59.316 [error] C1 propagation "2020-06-19T23:54:59.316" 
+23:54:59.316 [error] LASPVIN received find_sub_aq for Id:"c@11.0.0.13c1" ToNode:'c@10.0.0.13' Via:'c@10.0.0.13' From:'c@10.0.0.13' HopCount:1 
+23:54:59.316 [error] LASPVIN path ToNode: 'c@10.0.0.13' exists find_sub_aq:[[1],[0],[0],[0]] 
+23:54:59.317 [error] HopCount is more than existing, skipping.....
+23:54:59.317 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'c@10.0.0.13' Hop:1 
+23:54:59.317 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+23:55:05.317 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,11},port => 45509}],name => 'a@10.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,14},port => 46169}],name => 'd@10.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 42905}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,19},port => 44427}],name => 'i@14.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,18},port => 47085}],name => 'h@16.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,14},port => 54507}],name => 'd@18.0.0.14',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 42905}],name => 'h@11.0.0.18',parallelism => 1} from 'h@10.0.0.18'!
+23:55:05.318 [error] C1 propagation "2020-06-19T23:55:05.318" 
+23:55:05.698 [error] C2 propagation "2020-06-19T23:55:05.698" 
+23:55:11.318 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,11},port => 45509}],name => 'a@10.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,12},port => 39415}],name => 'b@10.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {13,0,0,17},port => 59453}],name => 'g@13.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,18},port => 47085}],name => 'h@16.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,13},port => 43997}],name => 'c@17.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,17},port => 37573}],name => 'g@18.0.0.17',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,14},port => 54507}],name => 'd@18.0.0.14',parallelism => 1} from 'h@10.0.0.18'!
+23:55:11.319 [error] C1 propagation "2020-06-19T23:55:11.319" 
+23:55:17.320 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,13},port => 50223}],name => 'c@10.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 54975}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 45933}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,20},port => 53693}],name => 'j@17.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,14},port => 54507}],name => 'd@18.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,17},port => 37573}],name => 'g@18.0.0.17',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,19},port => 60689}],name => 'i@18.0.0.19',parallelism => 1} from 'h@10.0.0.18'!
+23:55:17.321 [error] C1 propagation "2020-06-19T23:55:17.321" 
+23:55:23.323 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,14},port => 46169}],name => 'd@10.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 54975}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,20},port => 60107}],name => 'j@12.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,13},port => 43997}],name => 'c@17.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,20},port => 53693}],name => 'j@17.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,19},port => 60689}],name => 'i@18.0.0.19',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {12,0,0,20},port => 60107}],name => 'j@12.0.0.20',parallelism => 1} from 'h@10.0.0.18'!
+23:55:23.325 [error] C1 propagation "2020-06-19T23:55:23.325" 
+23:55:28.199 [error] C2 propagation "2020-06-19T23:55:28.199" 
+23:55:29.325 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,14},port => 46169}],name => 'd@10.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,16},port => 35417}],name => 'f@10.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 54975}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,15},port => 43013}],name => 'e@12.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,20},port => 60107}],name => 'j@12.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,20},port => 53693}],name => 'j@17.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,14},port => 54507}],name => 'd@18.0.0.14',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,19},port => 60689}],name => 'i@18.0.0.19',parallelism => 1} from 'h@10.0.0.18'!
+23:55:29.328 [error] C1 propagation "2020-06-19T23:55:29.328" 
+23:55:30.186 [error] C3 propagation "2020-06-19T23:55:30.186" 
+23:55:35.328 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,14},port => 46169}],name => 'd@10.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 54975}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,20},port => 49625}],name => 'j@10.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 42905}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {13,0,0,15},port => 46711}],name => 'e@13.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,20},port => 53693}],name => 'j@17.0.0.20',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 50247}],name => 'c@11.0.0.13',parallelism => 1} from 'h@10.0.0.18'!
+23:55:35.329 [error] C1 propagation "2020-06-19T23:55:35.329" 
+23:55:41.329 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,13},port => 50223}],name => 'c@10.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 54975}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 50247}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,18},port => 47085}],name => 'h@16.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,20},port => 53693}],name => 'j@17.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,14},port => 54507}],name => 'd@18.0.0.14',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {19,0,0,16},port => 50339}],name => 'f@19.0.0.16',parallelism => 1} from 'h@10.0.0.18'!
+23:55:41.331 [error] C1 propagation "2020-06-19T23:55:41.331" 
+23:55:47.331 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,11},port => 45509}],name => 'a@10.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,12},port => 39415}],name => 'b@10.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,13},port => 50223}],name => 'c@10.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,11},port => 37031}],name => 'a@12.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,12},port => 34537}],name => 'b@14.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,12},port => 60499}],name => 'b@17.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,15},port => 37101}],name => 'e@19.0.0.15',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 42905}],name => 'h@11.0.0.18',parallelism => 1} from 'h@10.0.0.18'!
+23:55:47.333 [error] C1 propagation "2020-06-19T23:55:47.333" 
+23:55:50.701 [error] C2 propagation "2020-06-19T23:55:50.701" 
+23:55:53.333 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,11},port => 45509}],name => 'a@10.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,12},port => 39415}],name => 'b@10.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,13},port => 50223}],name => 'c@10.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,15},port => 44089}],name => 'e@16.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,15},port => 37101}],name => 'e@19.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,17},port => 37625}],name => 'g@19.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,19},port => 39371}],name => 'i@19.0.0.19',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {13,0,0,15},port => 46711}],name => 'e@13.0.0.15',parallelism => 1} from 'h@10.0.0.18'!
+23:55:53.335 [error] C1 propagation "2020-06-19T23:55:53.335" 
+23:55:54.420 [error] LASPVIN received find_sub_aq for Id:"c@11.0.0.13c1" ToNode:'a@10.0.0.11' Via:'c@10.0.0.13' From:'c@10.0.0.13' HopCount:1 
+23:55:54.420 [error] LASPVIN path ToNode: 'a@10.0.0.11' exists find_sub_aq:[[0],[0]] 
+23:55:54.420 [error] HopCount is more than existing, skipping.....
+23:55:54.420 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'c@10.0.0.13' Hop:1 
+23:55:54.421 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+23:55:59.336 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,11},port => 45509}],name => 'a@10.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,15},port => 60311}],name => 'e@10.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 54975}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,19},port => 36279}],name => 'i@15.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 54565}],name => 'e@18.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,13},port => 48657}],name => 'c@19.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,17},port => 37625}],name => 'g@19.0.0.17',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 54565}],name => 'e@18.0.0.15',parallelism => 1} from 'h@10.0.0.18'!
+23:55:59.338 [error] C1 propagation "2020-06-19T23:55:59.338" 
+23:56:05.338 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,11},port => 45509}],name => 'a@10.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,13},port => 50223}],name => 'c@10.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,17},port => 36105}],name => 'g@10.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,11},port => 51783}],name => 'a@16.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,19},port => 51099}],name => 'i@16.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,19},port => 39371}],name => 'i@19.0.0.19',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {16,0,0,19},port => 51099}],name => 'i@16.0.0.19',parallelism => 1} from 'h@10.0.0.18'!
+23:56:05.339 [error] C1 propagation "2020-06-19T23:56:05.339" 
+23:56:11.340 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,14},port => 46169}],name => 'd@10.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,17},port => 36105}],name => 'g@10.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 49389}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,19},port => 54975}],name => 'i@10.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {13,0,0,13},port => 55577}],name => 'c@13.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,19},port => 36279}],name => 'i@15.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,19},port => 39371}],name => 'i@19.0.0.19',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {13,0,0,13},port => 55577}],name => 'c@13.0.0.13',parallelism => 1} from 'h@10.0.0.18'!
+23:56:11.342 [error] C1 propagation "2020-06-19T23:56:11.342" 
+23:56:13.202 [error] C2 propagation "2020-06-19T23:56:13.202" 
+23:56:15.687 [error] C3 propagation "2020-06-19T23:56:15.687" 
+23:56:16.354 [error] C1 propagation "2020-06-19T23:56:16.354" 
+23:56:21.360 [error] Sending rate "c2" to 'g@10.0.0.17' 
+23:56:21.361 [error] C1 propagation "2020-06-19T23:56:21.361" 
+23:56:21.372 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'g@10.0.0.17' Hop:2 
+23:56:21.373 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+23:56:22.993 [error] LASPVIN sent find_sub on join req Id:"c@10.0.0.13c1", Hop:3 
+23:56:26.362 [error] C1 propagation "2020-06-19T23:56:26.362" 
+23:56:31.365 [error] C1 propagation "2020-06-19T23:56:31.365" 
+23:56:34.514 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'c@10.0.0.13' Hop:1 
+23:56:34.514 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+23:56:34.608 [error] LASPVIN received find_sub_aq for Id:"c@16.0.0.13c1" ToNode:'c@10.0.0.13' Via:'c@10.0.0.13' From:'c@10.0.0.13' HopCount:1 
+23:56:34.608 [error] LASPVIN path ToNode: 'c@10.0.0.13' exists find_sub_aq:[[1],[0],[0],[0]] 
+23:56:34.619 [error] HopCount is more than existing, skipping.....
+23:56:35.336 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'c@10.0.0.13' Hop:1 
+23:56:35.336 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+23:56:35.423 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'c@10.0.0.13' Hop:1 
+23:56:35.423 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+23:56:35.704 [error] C2 propagation "2020-06-19T23:56:35.704" 
+23:56:35.922 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'c@10.0.0.13' Hop:1 
+23:56:35.922 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+23:56:35.995 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'c@10.0.0.13' Hop:1 
+23:56:35.995 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+23:56:36.367 [error] C1 propagation "2020-06-19T23:56:36.367" 
+23:56:41.369 [error] C1 propagation "2020-06-19T23:56:41.369" 
+23:56:46.372 [error] C1 propagation "2020-06-19T23:56:46.372" 
+23:56:51.374 [error] C1 propagation "2020-06-19T23:56:51.374" 
+23:56:56.376 [error] C1 propagation "2020-06-19T23:56:56.376" 
+23:56:58.206 [error] C2 propagation "2020-06-19T23:56:58.206" 
+23:57:01.189 [error] C3 propagation "2020-06-19T23:57:01.189" 
+23:57:01.378 [error] C1 propagation "2020-06-19T23:57:01.378" 
+23:57:06.381 [error] C1 propagation "2020-06-19T23:57:06.381" 
+23:57:11.383 [error] C1 propagation "2020-06-19T23:57:11.383" 
+23:57:16.385 [error] C1 propagation "2020-06-19T23:57:16.385" 
+23:57:20.708 [error] C2 propagation "2020-06-19T23:57:20.708" 
+23:57:21.387 [error] C1 propagation "2020-06-19T23:57:21.387" 
+23:57:26.389 [error] C1 propagation "2020-06-19T23:57:26.389" 
+23:57:31.391 [error] C1 propagation "2020-06-19T23:57:31.391" 
+23:57:36.393 [error] Sending rate "c2" to 'j@10.0.0.20' 
+23:57:36.393 [error] C1 propagation "2020-06-19T23:57:36.393" 
+23:57:36.420 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'j@10.0.0.20' Hop:3 
+23:57:36.420 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+23:57:39.383 [error] LASPVIN sent find_sub on join req Id:"c@10.0.0.13c1", Hop:3 
+23:57:41.395 [error] C1 propagation "2020-06-19T23:57:41.395" 
+23:57:43.209 [error] C2 propagation "2020-06-19T23:57:43.209" 
+23:57:46.397 [error] C1 propagation "2020-06-19T23:57:46.397" 
+23:57:46.690 [error] C3 propagation "2020-06-19T23:57:46.690" 
+23:57:51.400 [error] C1 propagation "2020-06-19T23:57:51.400" 
+23:57:56.403 [error] C1 propagation "2020-06-19T23:57:56.403" 
+23:58:01.404 [error] C1 propagation "2020-06-19T23:58:01.404" 
+23:58:05.711 [error] C2 propagation "2020-06-19T23:58:05.711" 
+23:58:06.405 [error] C1 propagation "2020-06-19T23:58:06.405" 
+23:58:11.408 [error] C1 propagation "2020-06-19T23:58:11.408" 
+23:58:15.866 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-06-19T23:58:15.866" Took=74402 microseconds 
+23:58:16.410 [error] C1 propagation "2020-06-19T23:58:16.410" 
+23:58:16.413 [error] LASPVIN Sending delta to 'a@10.0.0.11' 
+23:58:16.430 [error] LASPVIN Sending delta to 'c@10.0.0.13' 
+23:58:21.413 [error] C1 propagation "2020-06-19T23:58:21.413" 
+23:58:26.414 [error] C1 propagation "2020-06-19T23:58:26.414" 
+23:58:28.212 [error] C2 propagation "2020-06-19T23:58:28.212" 
+23:58:31.417 [error] C1 propagation "2020-06-19T23:58:31.417" 
+23:58:32.191 [error] C3 propagation "2020-06-19T23:58:32.191" 
+23:58:36.419 [error] C1 propagation "2020-06-19T23:58:36.419" 
+23:58:41.421 [error] C1 propagation "2020-06-19T23:58:41.421" 
+23:58:46.423 [error] C1 propagation "2020-06-19T23:58:46.423" 
+23:58:50.714 [error] C2 propagation "2020-06-19T23:58:50.714" 
+23:58:51.427 [error] C1 propagation "2020-06-19T23:58:51.426" 
+23:58:56.428 [error] C1 propagation "2020-06-19T23:58:56.428" 
+23:59:01.431 [error] C1 propagation "2020-06-19T23:59:01.431" 
+23:59:06.433 [error] C1 propagation "2020-06-19T23:59:06.433" 
+23:59:11.434 [error] C1 propagation "2020-06-19T23:59:11.434" 
+23:59:13.215 [error] C2 propagation "2020-06-19T23:59:13.215" 
+23:59:16.436 [error] C1 propagation "2020-06-19T23:59:16.436" 
+23:59:17.693 [error] C3 propagation "2020-06-19T23:59:17.693" 
+23:59:21.438 [error] C1 propagation "2020-06-19T23:59:21.438" 
+23:59:26.440 [error] C1 propagation "2020-06-19T23:59:26.440" 
+23:59:31.442 [error] C1 propagation "2020-06-19T23:59:31.442" 
+23:59:35.717 [error] C2 propagation "2020-06-19T23:59:35.717" 
+23:59:36.444 [error] C1 propagation "2020-06-19T23:59:36.444" 
+23:59:41.446 [error] C1 propagation "2020-06-19T23:59:41.446" 
+23:59:46.447 [error] C1 propagation "2020-06-19T23:59:46.447" 
+23:59:51.454 [error] C1 propagation "2020-06-19T23:59:51.454" 
+23:59:56.465 [error] C1 propagation "2020-06-19T23:59:56.465" 
+23:59:58.218 [error] C2 propagation "2020-06-19T23:59:58.218" 
+00:00:01.468 [error] C1 propagation "2020-06-20T00:00:01.468" 
+00:00:03.195 [error] C3 propagation "2020-06-20T00:00:03.195" 
+00:00:06.470 [error] C1 propagation "2020-06-20T00:00:06.470" 
+00:00:11.472 [error] C1 propagation "2020-06-20T00:00:11.472" 
+00:00:16.473 [error] C1 propagation "2020-06-20T00:00:16.473" 
+00:00:20.719 [error] C2 propagation "2020-06-20T00:00:20.719" 
+00:00:21.475 [error] C1 propagation "2020-06-20T00:00:21.475" 
+00:00:26.476 [error] C1 propagation "2020-06-20T00:00:26.476" 
+00:00:31.480 [error] C1 propagation "2020-06-20T00:00:31.480" 
+00:00:36.482 [error] C1 propagation "2020-06-20T00:00:36.482" 
+00:00:41.485 [error] C1 propagation "2020-06-20T00:00:41.485" 
+00:00:43.221 [error] C2 propagation "2020-06-20T00:00:43.221" 
+00:00:46.487 [error] C1 propagation "2020-06-20T00:00:46.487" 
+00:00:48.697 [error] C3 propagation "2020-06-20T00:00:48.697" 
+00:00:51.489 [error] C1 propagation "2020-06-20T00:00:51.489" 
+00:00:56.491 [error] C1 propagation "2020-06-20T00:00:56.491" 
