@@ -404,6 +404,7 @@ def stop_testing(jobId):
     os.system("mkdir /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/nodeLogs")
     os.system("mkdir /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
     os.system("cp /home/ubuntu/laspdev/utility/log/* /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/nodeLogs")
+    os.system("cp /home/ubuntu/laspdev/utility/NodeDirectory.txt /home/ubuntu/laspdev/results/"+mainfolder+"/")
     for node in allNodes:
         #os.system('docker exec mn.'+nodeName+' bash -c "vnstat -u"')
         #os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogs"')

@@ -1,0 +1,616 @@
+
+
+root@csst-06:/home/ubuntu/laspdev# 
+root@csst-06:/home/ubuntu/laspdev# python /home/ubuntu/laspdev/utility/setup_laspp.py d18
+d18
+ip:11.0.0.18
+node:h
+root@d18:/# service vnstat start
+[....] Starting vnStat daemon: vnstatd[?25l7[1G[[32m ok [39;49m8[?12l[?25h.
+root@d18:/# vnstat -u -i d18-eth0
+Error: Unable to read database "/var/lib/vnstat/d18-eth0": No such file or directory
+Info: -> A new database has been created.
+root@d18:/# vnstat -u
+root@d18:/# vnstat
+
+                      rx      /      tx      /     total    /   estimated
+ eth0:
+       Jun '20         4 KiB  /      13 KiB  /      17 KiB  /       0 KiB
+     yesterday         4 KiB  /      13 KiB  /      17 KiB
+         today         0 KiB  /       0 KiB  /       0 KiB  /      --    
+
+ d18-eth0: Not enough data available yet.
+root@d18:/# export PEER_SERVICE=partisan_hyparview_peer_service_manager
+root@d18:/# export RATE_CLASS=c2
+root@d18:/# export RATE_C1=5000
+root@d18:/# export RATE_C2=22500
+root@d18:/# export RATE_C3=45500
+root@d18:/# export PROPAGATE_ON_UPDATE=false
+root@d18:/# export MAX_ACTIVE_SIZE=50
+root@d18:/# cd /opt/lasp
+root@d18:/opt/lasp# epmd -daemon
+root@d18:/opt/lasp# rebar3 shell --name h@11.0.0.18
+[0;32m===> Verifying dependencies...
+[0m[0;32m===> Compiling lasp
+[0mErlang/OTP 19 [erts-8.3] [source] [64-bit] [smp:24:24] [ds:24:24:10] [async-threads:0] [hipe] [kernel-poll:false]
+
+Eshell V8.3  (abort with ^G)
+(h@11.0.0.18)1> [0;35m===> The rebar3 shell is a development tool; to deploy applications in production, consider using releases (http://www.rebar3.org/docs/releases)
+[0m14:26:43.891 [info] Application lager started on node 'h@11.0.0.18'
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:43 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.253.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:43 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.252.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:43 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.254.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:43 ===
+         application: sasl
+          started_at: 'h@11.0.0.18'
+14:26:43.979 [info] Application sasl started on node 'h@11.0.0.18'
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:43 ===
+         application: lasp_support
+          started_at: 'h@11.0.0.18'
+14:26:43.980 [info] Application lasp_support started on node 'h@11.0.0.18'
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:43 ===
+         application: acceptor_pool
+          started_at: 'h@11.0.0.18'
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:43 ===
+         application: quickrand
+          started_at: 'h@11.0.0.18'
+14:26:43.984 [info] Application acceptor_pool started on node 'h@11.0.0.18'
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:43 ===
+         application: uuid
+          started_at: 'h@11.0.0.18'
+14:26:43.992 [info] Application quickrand started on node 'h@11.0.0.18'
+14:26:43.992 [info] Application uuid started on node 'h@11.0.0.18'
+14:26:44.011 [info] Using node name: 'h@11.0.0.18'
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.266.0>},
+                       {id,timer_server},
+                       {mfargs,{timer,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,1000},
+                       {child_type,worker}]
+14:26:44.019 [info] Resolving "11.0.0.18"...
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,inet_gethost_native_sup}
+             started: [{pid,<0.268.0>},{mfa,{inet_gethost_native,init,[[]]}}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.267.0>},
+                       {id,inet_gethost_native_sup},
+                       {mfargs,{inet_gethost_native,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,1000},
+                       {child_type,worker}]
+14:26:44.027 [info] Resolved "h@11.0.0.18" to {11,0,0,18}
+14:26:44.027 [info] Resolved "11.0.0.18" to {11,0,0,18}
+14:26:44.211 [info] Partisan listening on {11,0,0,18}:47867 listen_addrs: [#{ip => {11,0,0,18},port => 47867}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.313.0>},
+                       {id,partisan_rpc_backend},
+                       {mfargs,{partisan_rpc_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.314.0>},
+                       {id,partisan_acknowledgement_backend},
+                       {mfargs,
+                           {partisan_acknowledgement_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+14:26:44.289 [info] Not using container orchestration; disabling.
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.315.0>},
+                       {id,partisan_orchestration_backend},
+                       {mfargs,{partisan_orchestration_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+14:26:44.382 [info] node 'h@11.0.0.18' choosing random seed: {18191431,-576460743956522868,-576460752303423410}
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.316.0>},
+                       {id,partisan_hyparview_peer_service_manager},
+                       {mfargs,
+                           {partisan_hyparview_peer_service_manager,
+                               start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.317.0>},
+                       {id,partisan_peer_service_events},
+                       {mfargs,{partisan_peer_service_events,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+14:26:44.396 [info] node 'h@11.0.0.18' choosing random seed: {18191431,-576460743956522868,-576460752303423410}
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.318.0>},
+                       {id,partisan_plumtree_backend},
+                       {mfargs,{partisan_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.319.0>},
+                       {id,partisan_plumtree_broadcast},
+                       {mfargs,{partisan_plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.320.0>},
+                       {id,partisan_monitor},
+                       {mfargs,{partisan_monitor,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.322.0>},
+                       {id,partisan_pool},
+                       {mfargs,{partisan_pool,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.323.0>},
+                       {id,{partisan_socket,{11,0,0,18},47867}},
+                       {mfargs,
+                           {partisan_socket,start_link,[{11,0,0,18},47867]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.321.0>},
+                       {id,partisan_pool_sup},
+                       {mfargs,{partisan_pool_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,20000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+         application: partisan
+          started_at: 'h@11.0.0.18'
+14:26:44.518 [info] Application partisan started on node 'h@11.0.0.18'
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,plumtree_sup}
+             started: [{pid,<0.338.0>},
+                       {id,plumtree_broadcast},
+                       {mfargs,{plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+         application: plumtree
+          started_at: 'h@11.0.0.18'
+14:26:44.565 [info] Application plumtree started on node 'h@11.0.0.18'
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+         application: gen_fsm_compat
+          started_at: 'h@11.0.0.18'
+14:26:44.565 [info] Application gen_fsm_compat started on node 'h@11.0.0.18'
+14:26:44.591 [info] Setting jitter: false
+14:26:44.595 [info] Setting jitter percent: 1
+14:26:44.598 [info] Setting event interval: 0
+14:26:44.600 [info] Setting max events: 1000
+14:26:44.602 [info] Setting extended logging: false
+14:26:44.605 [info] Setting mailbox logging: false
+14:26:44.607 [info] Setting operation mode: delta_based
+14:26:44.609 [info] Setting set type: orset
+14:26:44.612 [info] Setting broadcast: false
+14:26:44.675 [info] Membership: false
+14:26:44.677 [info] Workflow: false
+14:26:44.685 [info] AdClientEnabled: false
+14:26:44.688 [info] AdServerEnabled: false
+14:26:44.691 [info] TournClientEnabled: false
+14:26:44.693 [info] TournServerEnabled: false
+14:26:44.695 [info] ThroughputType: gset
+14:26:44.697 [info] ThroughputClientEnabled: false
+14:26:44.700 [info] ThroughputServerEnabled: false
+14:26:44.702 [info] DivergenceType: gcounter
+14:26:44.704 [info] DivergenceClientEnabled: false
+14:26:44.706 [info] DivergenceServerEnabled: false
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.385.0>},
+                       {id,lasp_unique},
+                       {mfargs,{lasp_unique,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.386.0>},
+                       {id,lasp_plumtree_backend},
+                       {mfargs,{lasp_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.387.0>},
+                       {id,lasp_plumtree_memory_report},
+                       {mfargs,{lasp_plumtree_memory_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.388.0>},
+                       {id,lasp_memory_utilization_report},
+                       {mfargs,{lasp_memory_utilization_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+14:26:44.785 [info] Backend initialized with pid: <0.393.0>
+14:26:44.786 [info] Backend lasp_ets_storage_backend initialized: <0.393.0>
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.389.0>},
+                       {id,lasp_distribution_backend},
+                       {mfargs,{lasp_distribution_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.395.0>},
+                       {id,lasp_process_sup},
+                       {mfargs,{lasp_process_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+[0;32m===> Booted types
+[0m
+=PROGRESS REPORT==== 20-Jun-2020::14:26:44 ===
+         application: lasp
+          started_at: 'h@11.0.0.18'
+[0;32m===> Booted gen_flow
+[0m[0;32m===> Booted syntax_tools
+[0m[0;32m===> Booted compiler
+[0m[0;32m===> Booted goldrush
+[0m[0;32m===> Booted lager
+[0m[0;32m===> Booted sasl
+[0m[0;32m===> Booted lasp_support
+[0m[0;32m===> Booted acceptor_pool
+[0m[0;32m===> Booted quickrand
+[0m[0;32m===> Booted uuid
+[0m[0;32m===> Booted partisan
+[0m[0;32m===> Booted plumtree
+[0m[0;32m===> Booted gen_fsm_compat
+[0m[0;32m===> Booted lasp
+[0m14:26:44.800 [error] C1 propagation "2020-06-20T14:26:44.800" 
+14:26:44.800 [error] C2 propagation "2020-06-20T14:26:44.800" 
+14:26:44.800 [error] C3 propagation "2020-06-20T14:26:44.800" 
+14:26:44.824 [info] Application lasp started on node 'h@11.0.0.18'
+
+(h@11.0.0.18)1> erlang:set_cookie(node(),'RPJVCXYDYULBNZFEFPHJ').
+true
+(h@11.0.0.18)2> application:get_env(partisan, max_active_size).
+{ok,50}
+(h@11.0.0.18)3> application:get_env(partisan, max_passive_size).
+{ok,10}
+(h@11.0.0.18)4> application:get_env(partisan, min_active_size).
+{ok,9}
+(h@11.0.0.18)5> )5> 14:26:49.805 [error] C1 propagation "2020-06-20T14:26:49.805" 
+14:26:54.808 [error] C1 propagation "2020-06-20T14:26:54.808" 
+14:26:59.809 [error] C1 propagation "2020-06-20T14:26:59.809" 
+14:27:04.812 [error] C1 propagation "2020-06-20T14:27:04.812" 
+14:27:07.301 [error] C2 propagation "2020-06-20T14:27:07.300" 
+14:27:09.813 [error] C1 propagation "2020-06-20T14:27:09.813" 
+14:27:14.816 [error] C1 propagation "2020-06-20T14:27:14.816" 
+14:27:19.818 [error] C1 propagation "2020-06-20T14:27:19.818" 
+14:27:24.821 [error] C1 propagation "2020-06-20T14:27:24.821" 
+14:27:29.802 [error] C2 propagation "2020-06-20T14:27:29.801" 
+14:27:29.823 [error] C1 propagation "2020-06-20T14:27:29.823" 
+14:27:30.302 [error] C3 propagation "2020-06-20T14:27:30.301" 
+14:27:34.825 [error] C1 propagation "2020-06-20T14:27:34.825" 
+14:27:39.827 [error] C1 propagation "2020-06-20T14:27:39.827" 
+14:27:44.829 [error] C1 propagation "2020-06-20T14:27:44.829" 
+14:27:49.830 [error] C1 propagation "2020-06-20T14:27:49.830" 
+14:27:52.303 [error] C2 propagation "2020-06-20T14:27:52.303" 
+14:27:54.834 [error] C1 propagation "2020-06-20T14:27:54.834" 
+lasp_peer_service:join('a@11.0.0.11').
+ok
+(h@11.0.0.18)6> 14:27:59.835 [error] Sending rate "c2" to 'a@11.0.0.11' 
+14:27:59.835 [error] Sending rate "c2" to 'c@11.0.0.13' 
+14:27:59.835 [error] Sending Subscription to 'c@11.0.0.13' case1 
+14:27:59.837 [error] C1 propagation "2020-06-20T14:27:59.837" 
+14:27:59.837 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'c@11.0.0.13' Hop:1 
+14:27:59.840 [error] Checking sub_exists for Id:"c@11.0.0.13c1" From:'c@11.0.0.13' Hop:1 
+14:27:59.868 [error] Request Id "c@11.0.0.13c1" is from a Peer directly connected
+14:27:59.868 [error] Forwarding Req Id "c@11.0.0.13c1" to Peers RcvHop:1 IncHop:2 
+14:27:59.976 [error] Forwarding ReqId "c@11.0.0.13c1" to Peer:'a@11.0.0.11' Hop:2 
+14:27:59.976 [error] LASPVIN Request forwarded~n
+14:27:59.976 [error] Rate_subscribe_ack received from 'c@11.0.0.13' for rate "c2" 
+lasp_peer_service:members().
+{ok,['h@11.0.0.18','a@11.0.0.11','c@11.0.0.13']}
+(h@11.0.0.18)7> 14:28:03.446 [error] LASPVIN sent find_sub on join req Id:"c@11.0.0.13c1", Hop:2 
+14:28:03.447 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'a@11.0.0.11' Hop:2 
+14:28:03.449 [error] Checking sub_exists for Id:"c@11.0.0.13c1" From:'a@11.0.0.11' Hop:2 
+14:28:03.452 [error] Hop 2 for Id "c@11.0.0.13c1" is more than existing 1...Skipping
+14:28:03.452 [error] LASPVIN Request forwarded~n
+14:28:04.840 [error] Sending rate "c2" to 'f@11.0.0.16' 
+14:28:04.840 [error] C1 propagation "2020-06-20T14:28:04.840" 
+lasp_peer_service:join('a@11.0.0.11').
+ok
+(h@11.0.0.18)8> 14:28:07.505 [error] LASPVIN sent find_sub on join req Id:"c@11.0.0.13c1", Hop:2 
+14:28:09.843 [error] C1 propagation "2020-06-20T14:28:09.843" 
+lasp_peer_service:members().
+{ok,['h@11.0.0.18','a@11.0.0.11','c@11.0.0.13',
+     'f@11.0.0.16']}
+(h@11.0.0.18)9> 14:28:14.804 [error] C2 propagation "2020-06-20T14:28:14.804" 
+14:28:14.934 [error] Sending rate "c2" to 'b@11.0.0.12' 
+14:28:14.934 [error] C1 propagation "2020-06-20T14:28:14.934" 
+14:28:14.935 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'b@11.0.0.12' Hop:3 
+14:28:14.937 [error] Checking sub_exists for Id:"c@11.0.0.13c1" From:'b@11.0.0.12' Hop:3 
+14:28:14.940 [error] Hop 3 for Id "c@11.0.0.13c1" is more than existing 1...Skipping
+14:28:14.940 [error] LASPVIN Request forwarded~n
+14:28:15.804 [error] C3 propagation "2020-06-20T14:28:15.804" 
+14:28:16.559 [error] Received new rate from 'a@11.0.0.11' with new rate "c1"
+14:28:16.559 [error] LASPVIN found the peer at "2020-06-20T14:28:16.559" for ID: "c@11.0.0.13c1" ToNode: 'a@11.0.0.11' Via:'h@11.0.0.18' 
+14:28:16.562 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@11.0.0.13c1" ToNode:'a@11.0.0.11' From:'h@11.0.0.18' to 'c@11.0.0.13' HopCount:1 
+14:28:17.522 [error] LASPVIN sent find_sub on join req Id:"c@11.0.0.13c1", Hop:2 
+14:28:19.937 [error] C1 propagation "2020-06-20T14:28:19.937" 
+14:28:23.949 [error] LASPVIN sent find_sub on join req Id:"c@11.0.0.13c1", Hop:2 
+14:28:25.665 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,13},port => 51609}],name => 'c@10.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 60625}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,11},port => 50029}],name => 'a@17.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 60125}],name => 'e@18.0.0.15',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 60125}],name => 'e@18.0.0.15',parallelism => 1} from 'h@11.0.0.18'!
+14:28:25.685 [error] Sending rate "c2" to 'd@11.0.0.14' 
+14:28:25.689 [error] C1 propagation "2020-06-20T14:28:25.689" 
+14:28:25.690 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'd@11.0.0.14' Hop:3 
+14:28:25.690 [error] LASPVIN find_sub_aq exists for this find_sub "c@11.0.0.13c1" 
+14:28:27.399 [error] LASPVIN received find_sub_aq for Id:"c@11.0.0.13c1" ToNode:'a@11.0.0.11' Via:'f@11.0.0.16' From:'f@11.0.0.16' HopCount:1 
+14:28:27.399 [error] LASPVIN path ToNode: 'a@11.0.0.11' exists find_sub_aq:[[0]] 
+14:28:27.399 [error] HopCount is more than existing, skipping.....
+14:28:31.925 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 60625}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,17},port => 36825}],name => 'g@15.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,12},port => 35539}],name => 'b@17.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,16},port => 53437}],name => 'f@18.0.0.16',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 60125}],name => 'e@18.0.0.15',parallelism => 1} from 'h@11.0.0.18'!
+14:28:31.926 [error] C1 propagation "2020-06-20T14:28:31.926" 
+14:28:37.927 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,14},port => 55585}],name => 'd@11.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,19},port => 44255}],name => 'i@11.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,12},port => 57895}],name => 'b@15.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,11},port => 50029}],name => 'a@17.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 60125}],name => 'e@18.0.0.15',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {17,0,0,12},port => 35539}],name => 'b@17.0.0.12',parallelism => 1} from 'h@11.0.0.18'!
+14:28:37.930 [error] C1 propagation "2020-06-20T14:28:37.930" 
+14:28:37.931 [error] C2 propagation "2020-06-20T14:28:37.931" 
+14:28:43.929 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,14},port => 51915}],name => 'd@12.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,17},port => 36825}],name => 'g@15.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,16},port => 41345}],name => 'f@16.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 60125}],name => 'e@18.0.0.15',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 60125}],name => 'e@18.0.0.15',parallelism => 1} from 'h@11.0.0.18'!
+14:28:43.931 [error] C1 propagation "2020-06-20T14:28:43.931" 
+14:28:49.931 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,20},port => 38721}],name => 'j@10.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,15},port => 51879}],name => 'e@11.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,20},port => 33527}],name => 'j@15.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,18},port => 54401}],name => 'h@16.0.0.18',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {17,0,0,11},port => 50029}],name => 'a@17.0.0.11',parallelism => 1} from 'h@11.0.0.18'!
+14:28:49.934 [error] C1 propagation "2020-06-20T14:28:49.934" 
+14:28:55.933 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,14},port => 51915}],name => 'd@12.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,11},port => 50029}],name => 'a@17.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,20},port => 48741}],name => 'j@17.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 60125}],name => 'e@18.0.0.15',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 60125}],name => 'e@18.0.0.15',parallelism => 1} from 'h@11.0.0.18'!
+14:28:55.937 [error] C1 propagation "2020-06-20T14:28:55.937" 
+14:29:00.432 [error] C2 propagation "2020-06-20T14:29:00.432" 
+14:29:01.935 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,11},port => 50029}],name => 'a@17.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,12},port => 35539}],name => 'b@17.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,20},port => 48741}],name => 'j@17.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,11},port => 39699}],name => 'a@19.0.0.11',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {17,0,0,15},port => 36993}],name => 'e@17.0.0.15',parallelism => 1} from 'h@11.0.0.18'!
+14:29:01.938 [error] C1 propagation "2020-06-20T14:29:01.937" 
+14:29:01.938 [error] C3 propagation "2020-06-20T14:29:01.938" 
+14:29:07.937 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,11},port => 41051}],name => 'a@16.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,11},port => 50029}],name => 'a@17.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,15},port => 36993}],name => 'e@17.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,11},port => 39699}],name => 'a@19.0.0.11',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {19,0,0,11},port => 39699}],name => 'a@19.0.0.11',parallelism => 1} from 'h@11.0.0.18'!
+14:29:07.940 [error] C1 propagation "2020-06-20T14:29:07.940" 
+14:29:13.939 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,14},port => 55585}],name => 'd@11.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {13,0,0,14},port => 56739}],name => 'd@13.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,15},port => 52751}],name => 'e@14.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,12},port => 57895}],name => 'b@15.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,11},port => 41051}],name => 'a@16.0.0.11',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {19,0,0,11},port => 39699}],name => 'a@19.0.0.11',parallelism => 1} from 'h@11.0.0.18'!
+14:29:13.941 [error] C1 propagation "2020-06-20T14:29:13.941" 
+14:29:19.941 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,15},port => 52751}],name => 'e@14.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,18},port => 36325}],name => 'h@14.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,12},port => 57895}],name => 'b@15.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,20},port => 33527}],name => 'j@15.0.0.20',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {16,0,0,16},port => 41345}],name => 'f@16.0.0.16',parallelism => 1} from 'h@11.0.0.18'!
+14:29:19.944 [error] C1 propagation "2020-06-20T14:29:19.944" 
+14:29:22.933 [error] C2 propagation "2020-06-20T14:29:22.933" 
+14:29:25.943 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,12},port => 57895}],name => 'b@15.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,15},port => 36993}],name => 'e@17.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,13},port => 56895}],name => 'c@19.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,20},port => 55227}],name => 'j@19.0.0.20',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {15,0,0,12},port => 57895}],name => 'b@15.0.0.12',parallelism => 1} from 'h@11.0.0.18'!
+14:29:25.946 [error] C1 propagation "2020-06-20T14:29:25.946" 
+14:29:31.945 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,12},port => 57895}],name => 'b@15.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,20},port => 33527}],name => 'j@15.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,13},port => 56895}],name => 'c@19.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,20},port => 55227}],name => 'j@19.0.0.20',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {12,0,0,19},port => 45789}],name => 'i@12.0.0.19',parallelism => 1} from 'h@11.0.0.18'!
+14:29:31.947 [error] C1 propagation "2020-06-20T14:29:31.947" 
+14:29:37.947 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,14},port => 55585}],name => 'd@11.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,19},port => 45789}],name => 'i@12.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,18},port => 44441}],name => 'h@15.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,20},port => 33527}],name => 'j@15.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,15},port => 36993}],name => 'e@17.0.0.15',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {14,0,0,15},port => 52751}],name => 'e@14.0.0.15',parallelism => 1} from 'h@11.0.0.18'!
+14:29:37.950 [error] C1 propagation "2020-06-20T14:29:37.950" 
+14:29:43.949 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,15},port => 52751}],name => 'e@14.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,20},port => 33527}],name => 'j@15.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,13},port => 38039}],name => 'c@17.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,13},port => 56895}],name => 'c@19.0.0.13',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {15,0,0,20},port => 33527}],name => 'j@15.0.0.20',parallelism => 1} from 'h@11.0.0.18'!
+14:29:43.951 [error] C1 propagation "2020-06-20T14:29:43.951" 
+14:29:45.435 [error] C2 propagation "2020-06-20T14:29:45.435" 
+14:29:47.439 [error] C3 propagation "2020-06-20T14:29:47.439" 
+14:29:49.951 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,11},port => 38353}],name => 'a@18.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 60125}],name => 'e@18.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,15},port => 57833}],name => 'e@19.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,20},port => 55227}],name => 'j@19.0.0.20',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {19,0,0,13},port => 56895}],name => 'c@19.0.0.13',parallelism => 1} from 'h@11.0.0.18'!
+14:29:49.952 [error] C1 propagation "2020-06-20T14:29:49.952" 
+14:29:55.953 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,11},port => 38353}],name => 'a@18.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,14},port => 54785}],name => 'd@18.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,12},port => 41205}],name => 'b@19.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,13},port => 56895}],name => 'c@19.0.0.13',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {18,0,0,15},port => 60125}],name => 'e@18.0.0.15',parallelism => 1} from 'h@11.0.0.18'!
+14:29:55.954 [error] C1 propagation "2020-06-20T14:29:55.954" 
+14:30:01.955 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,14},port => 55585}],name => 'd@11.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,15},port => 51879}],name => 'e@11.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,19},port => 44255}],name => 'i@11.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,18},port => 44441}],name => 'h@15.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,16},port => 35829}],name => 'f@17.0.0.16',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {19,0,0,11},port => 39699}],name => 'a@19.0.0.11',parallelism => 1} from 'h@11.0.0.18'!
+14:30:01.957 [error] C1 propagation "2020-06-20T14:30:01.957" 
+14:30:07.957 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,16},port => 47661}],name => 'f@12.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,19},port => 45789}],name => 'i@12.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,14},port => 54041}],name => 'd@16.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,12},port => 41205}],name => 'b@19.0.0.12',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {16,0,0,14},port => 54041}],name => 'd@16.0.0.14',parallelism => 1} from 'h@11.0.0.18'!
+14:30:07.958 [error] C1 propagation "2020-06-20T14:30:07.958" 
+14:30:07.958 [error] C2 propagation "2020-06-20T14:30:07.958" 
+14:30:13.959 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,14},port => 51915}],name => 'd@12.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,16},port => 47661}],name => 'f@12.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,16},port => 38227}],name => 'f@15.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,16},port => 35829}],name => 'f@17.0.0.16',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {17,0,0,16},port => 35829}],name => 'f@17.0.0.16',parallelism => 1} from 'h@11.0.0.18'!
+14:30:13.960 [error] C1 propagation "2020-06-20T14:30:13.960" 
+14:30:19.961 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 60625}],name => 'h@10.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,14},port => 55585}],name => 'd@11.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,19},port => 42537}],name => 'i@17.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,12},port => 41205}],name => 'b@19.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,15},port => 57833}],name => 'e@19.0.0.15',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {10,0,0,18},port => 60625}],name => 'h@10.0.0.18',parallelism => 1} from 'h@11.0.0.18'!
+14:30:19.963 [error] C1 propagation "2020-06-20T14:30:19.963" 
+14:30:25.963 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,19},port => 35535}],name => 'i@15.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {17,0,0,19},port => 42537}],name => 'i@17.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,16},port => 53437}],name => 'f@18.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,15},port => 57833}],name => 'e@19.0.0.15',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {17,0,0,19},port => 42537}],name => 'i@17.0.0.19',parallelism => 1} from 'h@11.0.0.18'!
+14:30:25.965 [error] C1 propagation "2020-06-20T14:30:25.965" 
+14:30:28.340 [warning] global: 'h@11.0.0.18' failed to connect to 'a@12.0.0.11'
+14:30:28.340 [warning] global: 'h@11.0.0.18' failed to connect to 'a@13.0.0.11'
+14:30:28.340 [warning] global: 'h@11.0.0.18' failed to connect to 'a@15.0.0.11'
+14:30:28.341 [warning] global: 'h@11.0.0.18' failed to connect to 'a@14.0.0.11'
+14:30:28.343 [warning] global: 'h@11.0.0.18' failed to connect to 'a@16.0.0.11'
+14:30:28.343 [warning] global: 'h@11.0.0.18' failed to connect to 'a@17.0.0.11'
+14:30:28.343 [warning] global: 'h@11.0.0.18' failed to connect to 'a@18.0.0.11'
+14:30:28.343 [warning] global: 'h@11.0.0.18' failed to connect to 'a@19.0.0.11'
+14:30:28.344 [warning] global: 'h@11.0.0.18' failed to connect to 'a@10.0.0.11'
+14:30:30.460 [error] C2 propagation "2020-06-20T14:30:30.460" 
+14:30:31.965 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,17},port => 41217}],name => 'g@11.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,19},port => 33457}],name => 'i@14.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,16},port => 38227}],name => 'f@15.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,12},port => 41205}],name => 'b@19.0.0.12',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {19,0,0,19},port => 46555}],name => 'i@19.0.0.19',parallelism => 1} from 'h@11.0.0.18'!
+14:30:31.968 [error] C1 propagation "2020-06-20T14:30:31.968" 
+14:30:32.941 [error] C3 propagation "2020-06-20T14:30:32.941" 
+14:30:37.967 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,17},port => 41217}],name => 'g@11.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,13},port => 59609}],name => 'c@15.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,12},port => 41205}],name => 'b@19.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,20},port => 55227}],name => 'j@19.0.0.20',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {19,0,0,20},port => 55227}],name => 'j@19.0.0.20',parallelism => 1} from 'h@11.0.0.18'!
+14:30:37.969 [error] C1 propagation "2020-06-20T14:30:37.969" 
+14:30:43.969 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,14},port => 55585}],name => 'd@11.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,19},port => 33457}],name => 'i@14.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,19},port => 50063}],name => 'i@16.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,12},port => 41205}],name => 'b@19.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,19},port => 46555}],name => 'i@19.0.0.19',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {19,0,0,19},port => 46555}],name => 'i@19.0.0.19',parallelism => 1} from 'h@11.0.0.18'!
+14:30:43.972 [error] C1 propagation "2020-06-20T14:30:43.972" 
+14:30:49.971 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,14},port => 55585}],name => 'd@11.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,17},port => 41217}],name => 'g@11.0.0.17',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,16},port => 38227}],name => 'f@15.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,19},port => 35535}],name => 'i@15.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,19},port => 46555}],name => 'i@19.0.0.19',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {15,0,0,16},port => 38227}],name => 'f@15.0.0.16',parallelism => 1} from 'h@11.0.0.18'!
+14:30:49.973 [error] C1 propagation "2020-06-20T14:30:49.973" 
+14:30:52.961 [error] C2 propagation "2020-06-20T14:30:52.961" 
+14:30:55.973 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,12},port => 43335}],name => 'b@11.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,15},port => 42075}],name => 'e@12.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {16,0,0,19},port => 50063}],name => 'i@16.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,13},port => 56895}],name => 'c@19.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,19},port => 46555}],name => 'i@19.0.0.19',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {19,0,0,14},port => 33983}],name => 'd@19.0.0.14',parallelism => 1} from 'h@11.0.0.18'!
+14:30:55.977 [error] C1 propagation "2020-06-20T14:30:55.977" 
+14:31:01.976 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,14},port => 55585}],name => 'd@11.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,20},port => 39525}],name => 'j@14.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {18,0,0,20},port => 57259}],name => 'j@18.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,13},port => 56895}],name => 'c@19.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,20},port => 55227}],name => 'j@19.0.0.20',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {16,0,0,19},port => 50063}],name => 'i@16.0.0.19',parallelism => 1} from 'h@11.0.0.18'!
+14:31:01.978 [error] C1 propagation "2020-06-20T14:31:01.978" 
+14:31:07.979 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,14},port => 55585}],name => 'd@11.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,16},port => 50353}],name => 'f@11.0.0.16',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,12},port => 57895}],name => 'b@15.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,15},port => 57833}],name => 'e@19.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,19},port => 46555}],name => 'i@19.0.0.19',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,20},port => 55227}],name => 'j@19.0.0.20',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {19,0,0,15},port => 57833}],name => 'e@19.0.0.15',parallelism => 1} from 'h@11.0.0.18'!
+14:31:07.985 [error] C1 propagation "2020-06-20T14:31:07.985" 
+14:31:13.981 [info] Node not yet connected when sending {neighbor_request,#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},high,undefined,{1,0},[#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,11},port => 58211}],name => 'a@11.0.0.11',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,13},port => 35449}],name => 'c@11.0.0.13',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,14},port => 55585}],name => 'd@11.0.0.14',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {11,0,0,18},port => 47867}],name => 'h@11.0.0.18',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {12,0,0,15},port => 42075}],name => 'e@12.0.0.15',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {14,0,0,20},port => 39525}],name => 'j@14.0.0.20',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {15,0,0,12},port => 57895}],name => 'b@15.0.0.12',parallelism => 1},#{channels => [undefined],listen_addrs => [#{ip => {19,0,0,20},port => 55227}],name => 'j@19.0.0.20',parallelism => 1}]} to #{channels => [undefined],listen_addrs => [#{ip => {14,0,0,20},port => 39525}],name => 'j@14.0.0.20',parallelism => 1} from 'h@11.0.0.18'!
+14:31:13.985 [error] Sending rate "c2" to 'e@11.0.0.15' 
+14:31:13.987 [error] C1 propagation "2020-06-20T14:31:13.987" 
+14:31:14.014 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'e@11.0.0.15' Hop:3 
+14:31:14.014 [error] LASPVIN find_sub_aq exists for this find_sub "c@11.0.0.13c1" 
+14:31:15.463 [error] C2 propagation "2020-06-20T14:31:15.463" 
+14:31:16.075 [error] LASPVIN sent find_sub on join req Id:"c@11.0.0.13c1", Hop:2 
+14:31:18.442 [error] C3 propagation "2020-06-20T14:31:18.442" 
+14:31:18.995 [error] C1 propagation "2020-06-20T14:31:18.995" 
+14:31:22.058 [error] LASPVIN sent find_sub on join req Id:"c@11.0.0.13c1", Hop:2 
+14:31:24.010 [error] Sending rate "c2" to 'i@11.0.0.19' 
+14:31:24.011 [error] C1 propagation "2020-06-20T14:31:24.111" 
+14:31:24.045 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'i@11.0.0.19' Hop:2 
+14:31:24.045 [error] LASPVIN find_sub_aq exists for this find_sub "c@11.0.0.13c1" 
+14:31:27.141 [error] LASPVIN sent find_sub on join req Id:"c@11.0.0.13c1", Hop:2 
+14:31:29.013 [error] Sending rate "c2" to 'g@11.0.0.17' 
+14:31:29.013 [error] C1 propagation "2020-06-20T14:31:29.136" 
+14:31:29.023 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'g@11.0.0.17' Hop:4 
+14:31:29.023 [error] LASPVIN find_sub_aq exists for this find_sub "c@11.0.0.13c1" 
+14:31:34.015 [error] C1 propagation "2020-06-20T14:31:34.153" 
+14:31:37.965 [error] C2 propagation "2020-06-20T14:31:37.965" 
+14:31:39.017 [error] C1 propagation "2020-06-20T14:31:39.174" 
+14:31:44.018 [error] C1 propagation "2020-06-20T14:31:44.185" 
+14:31:49.022 [error] C1 propagation "2020-06-20T14:31:49.221" 
+14:31:54.024 [error] C1 propagation "2020-06-20T14:31:54.244" 
+14:31:59.027 [error] C1 propagation "2020-06-20T14:31:59.276" 
+14:32:00.466 [error] C2 propagation "2020-06-20T14:32:00.466" 
+14:32:03.944 [error] C3 propagation "2020-06-20T14:32:03.944" 
+14:32:04.030 [error] C1 propagation "2020-06-20T14:32:04.300" 
+14:32:09.031 [error] C1 propagation "2020-06-20T14:32:09.318" 
+14:32:14.034 [error] C1 propagation "2020-06-20T14:32:14.344" 
+14:32:19.037 [error] C1 propagation "2020-06-20T14:32:19.375" 
+14:32:22.968 [error] C2 propagation "2020-06-20T14:32:22.968" 
+14:32:24.039 [error] C1 propagation "2020-06-20T14:32:24.389" 
+14:32:29.041 [error] C1 propagation "2020-06-20T14:32:29.412" 
+14:32:34.044 [error] C1 propagation "2020-06-20T14:32:34.441" 
+14:32:39.046 [error] C1 propagation "2020-06-20T14:32:39.464" 
+14:32:44.048 [error] C1 propagation "2020-06-20T14:32:44.487" 
+14:32:45.470 [error] C2 propagation "2020-06-20T14:32:45.470" 
+14:32:49.051 [error] C1 propagation "2020-06-20T14:32:49.515" 
+14:32:49.446 [error] C3 propagation "2020-06-20T14:32:49.446" 
+14:32:54.053 [error] C1 propagation "2020-06-20T14:32:54.530" 
+14:32:59.055 [error] C1 propagation "2020-06-20T14:32:59.551" 
+14:33:04.057 [error] C1 propagation "2020-06-20T14:33:04.576" 
+14:33:07.971 [error] C2 propagation "2020-06-20T14:33:07.970" 
+14:33:09.059 [error] C1 propagation "2020-06-20T14:33:09.596" 
+14:33:14.061 [error] C1 propagation "2020-06-20T14:33:14.613" 
+14:33:19.063 [error] C1 propagation "2020-06-20T14:33:19.638" 
+14:33:24.065 [error] C1 propagation "2020-06-20T14:33:24.658" 
+14:33:29.069 [error] C1 propagation "2020-06-20T14:33:29.695" 
+14:33:30.472 [error] C2 propagation "2020-06-20T14:33:30.472" 
+14:33:34.070 [error] C1 propagation "2020-06-20T14:33:34.700" 
+14:33:34.947 [error] C3 propagation "2020-06-20T14:33:34.946" 
+14:33:39.072 [error] C1 propagation "2020-06-20T14:33:39.724" 
+14:33:44.074 [error] C1 propagation "2020-06-20T14:33:44.741" 
+14:33:49.076 [error] C1 propagation "2020-06-20T14:33:49.767" 
+14:33:52.973 [error] C2 propagation "2020-06-20T14:33:52.972" 
+14:33:54.078 [error] C1 propagation "2020-06-20T14:33:54.784" 
+14:33:59.082 [error] C1 propagation "2020-06-20T14:33:59.826" 
+14:34:04.084 [error] C1 propagation "2020-06-20T14:34:04.845" 
+14:34:09.087 [error] C1 propagation "2020-06-20T14:34:09.871" 
+14:34:14.088 [error] C1 propagation "2020-06-20T14:34:14.888" 
+14:34:15.474 [error] C2 propagation "2020-06-20T14:34:15.474" 
+14:34:19.090 [error] C1 propagation "2020-06-20T14:34:19.901" 
+14:34:20.448 [error] C3 propagation "2020-06-20T14:34:20.448" 
+14:34:24.092 [error] C1 propagation "2020-06-20T14:34:24.921" 
+14:34:29.094 [error] C1 propagation "2020-06-20T14:34:29.947" 
+14:34:34.096 [error] C1 propagation "2020-06-20T14:34:34.968" 
+14:34:37.976 [error] C2 propagation "2020-06-20T14:34:37.976" 
+14:34:39.099 [error] C1 propagation "2020-06-20T14:34:39.993" 
+14:34:44.100 [error] C1 propagation "2020-06-20T14:34:44.100" 
+14:34:49.101 [error] C1 propagation "2020-06-20T14:34:49.101" 
+14:34:54.104 [error] C1 propagation "2020-06-20T14:34:54.104" 
+14:34:59.108 [error] C1 propagation "2020-06-20T14:34:59.107" 
+14:35:00.477 [error] C2 propagation "2020-06-20T14:35:00.477" 
+14:35:04.109 [error] C1 propagation "2020-06-20T14:35:04.109" 
+14:35:05.950 [error] C3 propagation "2020-06-20T14:35:05.950" 
+14:35:09.112 [error] C1 propagation "2020-06-20T14:35:09.112" 
+14:35:14.115 [error] C1 propagation "2020-06-20T14:35:14.115" 
+14:35:19.117 [error] C1 propagation "2020-06-20T14:35:19.117" 
+14:35:22.978 [error] C2 propagation "2020-06-20T14:35:22.978" 
+14:35:24.119 [error] C1 propagation "2020-06-20T14:35:24.119" 
+14:35:29.121 [error] C1 propagation "2020-06-20T14:35:29.121" 
+14:35:34.124 [error] C1 propagation "2020-06-20T14:35:34.123" 
+14:35:39.125 [error] C1 propagation "2020-06-20T14:35:39.125" 
+14:35:44.129 [error] C1 propagation "2020-06-20T14:35:44.129" 
+14:35:45.480 [error] C2 propagation "2020-06-20T14:35:45.480" 
+14:35:49.134 [error] C1 propagation "2020-06-20T14:35:49.133" 
+14:35:51.447 [error] LASPVIN Received delta From='c@11.0.0.13' at TimeStamp="2020-06-20T14:35:51.447" Took=64236 microseconds 
+14:35:51.480 [error] C3 propagation "2020-06-20T14:35:51.480" 
+14:35:51.490 [error] LASPVIN Sending delta to 'f@11.0.0.16' 
+14:35:54.136 [error] C1 propagation "2020-06-20T14:35:54.135" 
+14:35:54.138 [error] LASPVIN Sending delta to 'c@11.0.0.13' 
+14:35:54.139 [error] LASPVIN Sending delta to 'a@11.0.0.11' 
+14:35:59.137 [error] C1 propagation "2020-06-20T14:35:59.137" 
+14:36:04.139 [error] C1 propagation "2020-06-20T14:36:04.139" 
+14:36:07.982 [error] C2 propagation "2020-06-20T14:36:07.982" 
+14:36:09.142 [error] C1 propagation "2020-06-20T14:36:09.142" 
+14:36:14.144 [error] C1 propagation "2020-06-20T14:36:14.144" 
+14:36:19.149 [error] C1 propagation "2020-06-20T14:36:19.148" 
+14:36:24.150 [error] C1 propagation "2020-06-20T14:36:24.150" 
+14:36:29.153 [error] C1 propagation "2020-06-20T14:36:29.153" 
+14:36:30.483 [error] C2 propagation "2020-06-20T14:36:30.483" 
+14:36:34.156 [error] C1 propagation "2020-06-20T14:36:34.155" 
+14:36:36.982 [error] C3 propagation "2020-06-20T14:36:36.982" 
+14:36:39.157 [error] C1 propagation "2020-06-20T14:36:39.157" 
+14:36:44.160 [error] C1 propagation "2020-06-20T14:36:44.159" 
+14:36:49.162 [error] C1 propagation "2020-06-20T14:36:49.162" 
+14:36:52.985 [error] C2 propagation "2020-06-20T14:36:52.985" 
+14:36:54.166 [error] C1 propagation "2020-06-20T14:36:54.166" 
+14:36:59.168 [error] C1 propagation "2020-06-20T14:36:59.168" 
+14:37:04.175 [error] C1 propagation "2020-06-20T14:37:04.175" 
+14:37:09.200 [error] C1 propagation "2020-06-20T14:37:09.200" 
+14:37:14.203 [error] C1 propagation "2020-06-20T14:37:14.202" 
+14:37:15.487 [error] C2 propagation "2020-06-20T14:37:15.487" 

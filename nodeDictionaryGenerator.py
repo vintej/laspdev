@@ -5,8 +5,8 @@ session = "cluster1"
 tempnode = 'd1'
 numberOfnodes = 100
 nodesPerCluster = 10
-c1_nodes = ['c']
-c3_nodes = ['d','e', 'f']
+c1_nodes = ['b','c', 'd', 'e', 'f']
+c3_nodes = ['g','h']
 
 nodename = 'a'
 network = 10
@@ -49,7 +49,7 @@ for i in range(1,numberOfnodes+1):
 for x in node:
         print ("\n "+(x)+ " " + str(node[x]))
 
-with open("utility/NodeDirectory.txt", 'wb') as fp:
+with open("/home/ubuntu/laspdev/utility/NodeDirectory.txt", 'wb') as fp:
     pickle.dump(node, fp)
 
 
