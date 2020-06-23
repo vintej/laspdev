@@ -138,6 +138,39 @@ if len(sys.argv) > 1:
             i = i + 1
             run_count = run_count + 1
             time.sleep(5)
+    elif sys.argv[1] == "varc1Edge":
+        i = 1
+        run_count = 1
+        jobId = 'Varc1Edge_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+        c1Edge = 2
+        while i < 26:
+            if i % 5 == 1:
+                run_count = 1
+                jobId1 = 'Varc1Edge_'+str(c1Edge) #+'_'+str(run_count)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%$
+                os.system("python /home/ubuntu/laspdev/nodesGen/"+str(i/10+2)+"c1generator.py")
+                print("python /home/ubuntu/laspdev/nodesGen/"+str(c1Edge)+"c1generator.py")
+                c1Edge = c1Edge + 2
+            image = 'dev'
+            jobId = jobId1+'_'+str(run_count)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+            print (jobId+" | "+image)
+            time.sleep(2)
+            stop_bringup()
+            time.sleep(5)
+            start_bringup(jobId, image)
+            job_status = False
+            while job_status==False:
+                with open('/home/ubuntu/laspdev/mainTest_log') as f:
+                    temp = f.read()
+                    if ("JOB "+jobId+" FINISHED") in temp:
+                        print("Test execution completed ")
+                        job_status=True
+                        break
+                time.sleep(10)
+            os.system("cp /home/ubuntu/laspdev/*_log /home/ubuntu/laspdev/results/"+jobId+"/"+image+"/")
+            print("************FINISHED JOB "+jobId+" for "+image+" ***************")
+            i = i + 1
+            run_count = run_count + 1
+            time.sleep(5)
     if sys.argv[1] != "stop":
         job_status = False
         while job_status==False:
