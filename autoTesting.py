@@ -83,9 +83,9 @@ if len(sys.argv) > 1:
         time.sleep(2)
         start_bringup(jobId, 'base')
     elif sys.argv[1] == "regression":
-        i = 1
-        jIndex = 1
-        while i < 11:
+        i = 11
+        jIndex = 11
+        while i < 21:
             jobId = 'Regression'+str(jIndex)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
             image = 'dev'
             jIndex = jIndex + 1
