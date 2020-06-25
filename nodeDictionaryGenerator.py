@@ -5,7 +5,7 @@ session = "cluster1"
 tempnode = 'd1'
 numberOfnodes = 100
 nodesPerCluster = 10
-c1_nodes = ['b','c', 'd', 'e', 'f']
+c1_nodes = ['c']#,'c', 'd', 'e', 'f']
 c3_nodes = ['g','h']
 
 nodename = 'a'
