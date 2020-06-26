@@ -5,7 +5,7 @@ import time
 import sys
 import utility.system_start_stop as systemFun
 import utility.NDutility as ND
-import datetime
+from datetime import datetime
 import fnmatch
 from random import randint
 
@@ -25,6 +25,7 @@ delta_waiting = []
 stopped_node = []
 test_completed = []
 bw_collected = []
+delta_val = ['TMP']
 delta_changed = False
 jobId = ''
 
@@ -106,13 +107,13 @@ def start_system(nodeName):
     while deltaRecv == False and not sub_fail and jobId != 'start':
         #print ('Waiting deltaRecv '+nodeName+' '+str(tmpchk))
         with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
-            if 'Received delta' in f.read():
+            if delta_val[-1] in f.read() and delta_changed == True:
                 print(str(tmpchk)+"Delta Received at Node "+nodeName)
                 deltaRcvSys.append("True")
                 deltaRecv = True
                 delta_waiting.remove(nodeName)
                 break
-        time.sleep(30)
+        time.sleep(34)
         tmpchk = tmpchk + 1
         if tmpchk > 20:
             print(str(tmpchk)+"Delta not yet Recevied at "+nodeName)
@@ -167,6 +168,7 @@ def exec_operation(nodeName):
         print("***********Waiting 10 secs for nodes to be ready*******")
         time.sleep(10)
     print("Executing operations after 20 secs")
+    valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])
     time.sleep(20)
     systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:time_stamp().', nodeName)
     systemFun.exec_spec_com( 'f().', nodeName)
@@ -181,15 +183,25 @@ def exec_operation(nodeName):
     time.sleep(2)
     systemFun.exec_spec_com( 'AwMapVarName = <<"awmap">>.', nodeName)
     time.sleep(2)
-    systemFun.exec_spec_com( 'AwMapVal = #{what => i_am_vin_tej1}.', nodeName)
+    systemFun.exec_spec_com( 'AwMapVal = #{what => '+valString+'}.', nodeName)
     time.sleep(2)
-    systemFun.exec_spec_com( 'AwMapVal2 = #{what => i_am_vin_tej2}.', nodeName)
-    time.sleep(2)
+    #systemFun.exec_spec_com( 'AwMapVal2 = #{what => i_am_vin_tej2}.', nodeName)
+    #time.sleep(2)
     systemFun.exec_spec_com( '{ok, {AwMap, _, _, _}} = lasp:declare({AwMapVarName, AwMapType}, AwMapType).', nodeName)
     time.sleep(2)
     systemFun.exec_spec_com( '{ok, {AwMap1, _, _, _}} = lasp:update(AwMap, {apply, Key1, {set, Timestamp(), AwMapVal}}, self()).', nodeName)
     systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:time_stamp().', nodeName)
+    delta_val.pop(-1)
+    delta_val.append(valString)
     time.sleep(2)
+    time.sleep(5)
+    for i in range(1, 60):
+        valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])
+        delta_val.append(valString)
+        systemFun.exec_spec_com( 'AwMapVal'+str(i)+' = #{what => '+valString+'}.', nodeName)
+        time.sleep(1)
+        systemFun.exec_spec_com( '{ok, _} = lasp:update(AwMap, {apply, Key1, {set, nil, AwMapVal'+str(i)+'}}, self()).', nodeName)
+        time.sleep(5)
     print("Operation execution completed")
     delta_changed = True
 
@@ -412,8 +424,9 @@ def stop_testing(jobId):
     while len(stopped_node) != len(allNodes):
         #print('Waiting to stop')
         time.sleep(10)
+    print("delta_vals: "+str(delta_val))
     print("Stopped Nodes: "+str(stopped_node))
-    print("*******JOB "+jobId+" FINISHED at "+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))+"*******")
+    print("*******JOB "+jobId+" FINISHED at "+str(datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3])+"*******")
 
 #Start main here
 if __name__ == "__main__":

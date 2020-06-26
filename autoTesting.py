@@ -184,9 +184,9 @@ if len(sys.argv) > 1:
 else:
     i = 1
     jIndex = 1
-    while i < 201:
+    while i < 41:
         if i % 2 == 1:
-            jobId = 'AutoTest'+str(jIndex)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+            jobId = 'DeltaTests'+str(jIndex)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
             image = 'base'
         else:
             image = 'dev'

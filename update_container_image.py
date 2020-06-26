@@ -37,5 +37,11 @@ def update_container():
     child.close()
 
 update_container()
-os.system('docker commit mn.d3 vinayaktj/lasp:devsquashed')
-os.system('docker push vinayaktj/lasp:devsquashed')
+with open('/home/ubuntu/laspdev/containernet_log') as f:
+        tempIm = f.read()
+        if 'vinayaktj/lasp:dev' in tempIm:
+            image = 'devsquashed'
+        elif 'vinayaktj/lasp:base' in tempIm:
+            image = 'base'
+os.system('docker commit mn.d3 vinayaktj/lasp:'+image)
+os.system('docker push vinayaktj/lasp:'+image)
