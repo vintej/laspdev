@@ -195,7 +195,7 @@ def exec_operation(nodeName):
     delta_val.append(valString)
     time.sleep(2)
     time.sleep(5)
-    for i in range(1, 60):
+    for i in range(1, 120):
         valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])
         delta_val.append(valString)
         systemFun.exec_spec_com( 'AwMapVal'+str(i)+' = #{what => '+valString+'}.', nodeName)

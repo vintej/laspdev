@@ -43,5 +43,6 @@ with open('/home/ubuntu/laspdev/containernet_log') as f:
             image = 'devsquashed'
         elif 'vinayaktj/lasp:base' in tempIm:
             image = 'base'
+print (image)
 os.system('docker commit mn.d3 vinayaktj/lasp:'+image)
 os.system('docker push vinayaktj/lasp:'+image)
