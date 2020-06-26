@@ -6,7 +6,7 @@ tempnode = 'd1'
 numberOfnodes = 100
 nodesPerCluster = 10
 c1_nodes = ['c']#,'c', 'd', 'e', 'f']
-c3_nodes = ['g','h']
+c3_nodes = ['g','h','i']
 
 nodename = 'a'
 network = 10
