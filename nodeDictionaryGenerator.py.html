@@ -1,0 +1,89 @@
+<html><head>
+<title>nodeDictionaryGenerator.py</title>
+<meta name="Generator" content="htmlizer/[Twisted, version 17.9.0]" />
+<link rel="alternate" href="nodeDictionaryGenerator.py" type="text/x-python" />
+
+</head>
+<body>
+<pre><span class="py-src-keyword">import</span> <span class="py-src-variable">pickle</span>
+
+<span class="py-src-variable">node</span> = {}
+<span class="py-src-variable">session</span> = <span class="py-src-string">&quot;cluster1&quot;</span>
+<span class="py-src-variable">tempnode</span> = <span class="py-src-string">&#x27;d1&#x27;</span>
+<span class="py-src-variable">numberOfnodes</span> = <span class="py-src-number">8</span>
+<span class="py-src-variable">nodesPerCluster</span> = <span class="py-src-number">4</span>
+<span class="py-src-variable">c1_nodes</span> = [<span class="py-src-string">&#x27;c&#x27;</span>]<span class="py-src-comment">#,&#x27;c&#x27;, &#x27;d&#x27;, &#x27;e&#x27;, &#x27;f&#x27;]</span>
+<span class="py-src-variable">c3_nodes</span> = [<span class="py-src-string">&#x27;g&#x27;</span>,<span class="py-src-string">&#x27;h&#x27;</span>,<span class="py-src-string">&#x27;i&#x27;</span>]
+
+<span class="py-src-variable">nodename</span> = <span class="py-src-string">&#x27;a&#x27;</span>
+<span class="py-src-variable">network</span> = <span class="py-src-number">10</span>
+<span class="py-src-variable">ip</span> = <span class="py-src-number">10</span>
+
+
+
+<span class="py-src-keyword">def</span> <span class="py-src-identifier">node_name</span>(<span class="py-src-parameter">nodename</span>, <span class="py-src-parameter">i</span>):
+    <span class="py-src-keyword">global</span> <span class="py-src-variable">nodesPerCluster</span>
+    <span class="py-src-keyword">if</span> <span class="py-src-variable">i</span>%<span class="py-src-variable">nodesPerCluster</span> == <span class="py-src-number">0</span>:
+        <span class="py-src-keyword">return</span> <span class="py-src-variable">str</span>(<span class="py-src-variable">chr</span>(<span class="py-src-variable">ord</span>(<span class="py-src-variable">nodename</span>)+<span class="py-src-variable">i</span>%<span class="py-src-variable">nodesPerCluster</span>+<span class="py-src-variable">nodesPerCluster</span>-<span class="py-src-number">1</span>))
+    <span class="py-src-keyword">else</span>:
+        <span class="py-src-keyword">return</span> <span class="py-src-variable">str</span>(<span class="py-src-variable">chr</span>(<span class="py-src-variable">ord</span>(<span class="py-src-variable">nodename</span>)+<span class="py-src-variable">i</span>%<span class="py-src-variable">nodesPerCluster</span>-<span class="py-src-number">1</span>))
+
+<span class="py-src-keyword">for</span> <span class="py-src-variable">i</span> <span class="py-src-keyword">in</span> <span class="py-src-variable">range</span>(<span class="py-src-number">1</span>,<span class="py-src-variable">numberOfnodes</span>+<span class="py-src-number">1</span>):
+    <span class="py-src-keyword">if</span> <span class="py-src-variable">i</span>%<span class="py-src-variable">nodesPerCluster</span> == <span class="py-src-number">1</span> <span class="py-src-keyword">and</span> <span class="py-src-variable">i</span>&gt;<span class="py-src-variable">nodesPerCluster</span>:
+                <span class="py-src-variable">session</span> = <span class="py-src-variable">session</span>[<span class="py-src-number">0</span>:<span class="py-src-number">7</span>] + <span class="py-src-variable">str</span>((<span class="py-src-variable">int</span>(<span class="py-src-variable">session</span>[<span class="py-src-number">7</span>:<span class="py-src-number">8</span>])+<span class="py-src-number">1</span>))
+                <span class="py-src-variable">nodename</span> = <span class="py-src-string">&#x27;a&#x27;</span>
+                <span class="py-src-variable">network</span> = <span class="py-src-variable">network</span> + <span class="py-src-number">1</span>
+                <span class="py-src-variable">ip</span> = <span class="py-src-number">10</span>
+    <span class="py-src-comment">#print(&quot;node at session &quot;+session+&quot;:&quot;+node_name(nodename, i))</span>
+    <span class="py-src-keyword">if</span> <span class="py-src-variable">session</span> <span class="py-src-keyword">in</span> <span class="py-src-variable">node</span>:
+        <span class="py-src-variable">nodetemp</span> = <span class="py-src-variable">node</span>[<span class="py-src-variable">session</span>]
+    <span class="py-src-keyword">else</span>:
+        <span class="py-src-variable">nodetemp</span> = {}
+    <span class="py-src-variable">ip</span> = <span class="py-src-variable">ip</span> + <span class="py-src-number">1</span>
+    <span class="py-src-variable">nodeinfo</span> = {}
+    <span class="py-src-variable">nodeinfo</span>[<span class="py-src-string">&#x27;ip&#x27;</span>] = <span class="py-src-variable">str</span>(<span class="py-src-variable">str</span>(<span class="py-src-variable">network</span>)+<span class="py-src-string">&quot;.0.0.&quot;</span>+<span class="py-src-variable">str</span>(<span class="py-src-variable">ip</span>))
+    <span class="py-src-variable">nodeinfo</span>[<span class="py-src-string">&#x27;node&#x27;</span>] = <span class="py-src-variable">node_name</span>(<span class="py-src-variable">nodename</span>, <span class="py-src-variable">i</span>)
+    <span class="py-src-keyword">if</span> <span class="py-src-variable">node_name</span>(<span class="py-src-variable">nodename</span>, <span class="py-src-variable">i</span>) <span class="py-src-keyword">in</span> <span class="py-src-variable">c1_nodes</span>:
+        <span class="py-src-variable">nodeinfo</span>[<span class="py-src-string">&#x27;rate&#x27;</span>] = <span class="py-src-string">&#x27;c1&#x27;</span>
+    <span class="py-src-keyword">elif</span> <span class="py-src-variable">node_name</span>(<span class="py-src-variable">nodename</span>, <span class="py-src-variable">i</span>) <span class="py-src-keyword">in</span> <span class="py-src-variable">c3_nodes</span>:
+        <span class="py-src-variable">nodeinfo</span>[<span class="py-src-string">&#x27;rate&#x27;</span>] = <span class="py-src-string">&#x27;c3&#x27;</span>
+    <span class="py-src-keyword">else</span>:
+        <span class="py-src-variable">nodeinfo</span>[<span class="py-src-string">&#x27;rate&#x27;</span>] = <span class="py-src-string">&#x27;c2&#x27;</span>
+    <span class="py-src-variable">nodetemp</span>[<span class="py-src-string">&quot;d&quot;</span>+<span class="py-src-variable">str</span>(<span class="py-src-variable">i</span>)] = <span class="py-src-variable">nodeinfo</span>
+    <span class="py-src-variable">node</span>.<span class="py-src-variable">update</span>({<span class="py-src-variable">session</span>:<span class="py-src-variable">nodetemp</span>})
+    <span class="py-src-comment">#print node[session]</span>
+
+<span class="py-src-keyword">for</span> <span class="py-src-variable">x</span> <span class="py-src-keyword">in</span> <span class="py-src-variable">node</span>:
+        <span class="py-src-variable">print</span> (<span class="py-src-string">&quot;\n &quot;</span>+(<span class="py-src-variable">x</span>)+ <span class="py-src-string">&quot; &quot;</span> + <span class="py-src-variable">str</span>(<span class="py-src-variable">node</span>[<span class="py-src-variable">x</span>]))
+
+<span class="py-src-keyword">with</span> <span class="py-src-variable">open</span>(<span class="py-src-string">&quot;/home/ubuntu/Vin/laspdev/utility/NodeDirectory.txt&quot;</span>, <span class="py-src-string">&#x27;wb&#x27;</span>) <span class="py-src-keyword">as</span> <span class="py-src-variable">fp</span>:
+    <span class="py-src-variable">pickle</span>.<span class="py-src-variable">dump</span>(<span class="py-src-variable">node</span>, <span class="py-src-variable">fp</span>)
+
+
+<span class="py-src-string">&#x27;&#x27;&#x27;
+def flattenList(data):
+        results = []
+        for rec in data:
+            if isinstance(rec, list):
+                results.extend(rec)
+                results = flattenList(results)
+            else:
+                results.append(rec)
+        return results
+
+#for x in node:
+#            print &quot;\n &quot;+(x)+ &quot; &quot; + str(node[x])
+
+print (node.keys())
+
+def get_allNodes():
+    with open(&quot;NodeDirectory.txt&quot;, &quot;rb&quot;) as fp:
+            node = pickle.load(fp)
+    allNodes = []
+    for cluster in node.keys():
+        allNodes.append(node[cluster].keys())
+    return flattenList(allNodes)
+&#x27;&#x27;&#x27;</span>
+<span class="py-src-comment">#print (get_allNodes())</span>
+</pre>
+</body>

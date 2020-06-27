@@ -49,7 +49,7 @@ for i in range(1,numberOfnodes+1):
 for x in node:
         print ("\n "+(x)+ " " + str(node[x]))
 
-with open("/home/ubuntu/laspdev/utility/NodeDirectory.txt", 'wb') as fp:
+with open("/home/ubuntu/Vin/laspdev/utility/NodeDirectory.txt", 'wb') as fp:
     pickle.dump(node, fp)
 
 

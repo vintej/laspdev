@@ -20,7 +20,7 @@ def start_screens(temp, cluster):
         for d in temp:
                 print ("screen -t command "+str(cluster)+" for node "+d)
                 os.system("screen -S "+cluster+" -X screen -t "+d)
-                os.system("screen -S "+cluster+" -p "+d+" -X stuff 'screen -X logfile /home/ubuntu/laspdev/utility/log/"+d+"_log.%n^M'")
+                os.system("screen -S "+cluster+" -p "+d+" -X stuff 'screen -X logfile /home/ubuntu/Vin/laspdev/utility/log/"+d+"_log.%n^M'")
                 os.system("screen -S "+cluster+" -p "+d+" -X stuff 'screen -X log on^M'")
                 time.sleep(2)
                 screens_ready.append("Ready")
@@ -30,7 +30,7 @@ def start_screens(temp, cluster):
 def stop_screens():
     for cluster in scnode:
         os.system("screen -S "+cluster+" -p 0 -X stuff 'screen -X quit^M'")
-    os.system("rm /home/ubuntu/laspdev/utility/log/*")
+    os.system("rm /home/ubuntu/Vin/laspdev/utility/log/*")
 
 setLogLevel('info')
 

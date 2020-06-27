@@ -31,7 +31,7 @@ delta_val = ['TMP']
 delta_changed = False
 jobId = ''
 start_time = ''
-with open('/home/ubuntu/laspdev/containernet_log') as f:
+with open('/home/ubuntu/Vin/laspdev/containernet_log') as f:
     tempIm = f.read()
     if 'vinayaktj/lasp:dev' in tempIm:
         testFor = 'dev'
@@ -45,13 +45,13 @@ def start_system(nodeName):
     logFile = ''
     deltaRecv = False
     time.sleep(randint(1,12))
-    files = os.listdir('/home/ubuntu/laspdev/utility/log/')
+    files = os.listdir('/home/ubuntu/Vin/laspdev/utility/log/')
     for name in files:
             if fnmatch.fnmatch(name, nodeName+"_log*"):
                 #print("Found match")
                 logFile = name
     print("Logfile: "+logFile)
-    os.system('echo "" > /home/ubuntu/laspdev/utility/log/'+logFile)
+    os.system('echo "" > /home/ubuntu/Vin/laspdev/utility/log/'+logFile)
     time.sleep(4)
     systemFun.exec_com("", nodeName)
     systemFun.exec_com("", nodeName)
@@ -112,7 +112,7 @@ def start_system(nodeName):
     os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogsControl"')
     while deltaRecv == False and not sub_fail and jobId != 'start':
         #print ('Waiting deltaRecv '+nodeName+' '+str(tmpchk))
-        with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
+        with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile) as f:
             if delta_val[-1] in f.read() and delta_changed == True:
                 print(str(tmpchk)+"Delta Received at Node "+nodeName)
                 deltaRcvSys.append("True")
@@ -153,7 +153,7 @@ def check_subscription(nodeName, logFile):
             print (str(tmpchk)+' Subscription not yet done at '+nodeName)
         systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:get_members(peer_rates).', nodeName)
         time.sleep(30)
-        with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
+        with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile) as f:
             temp = f.read()
             if '{"subscription",' in temp:
                 print (str(tmpchk)+" Subscription done at "+nodeName)
@@ -174,8 +174,8 @@ def exec_operation(nodeName):
         print("***********Waiting 10 secs for nodes to be ready*******")
         time.sleep(10)
     print("Executing operations after 20 secs")
-    #valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])
-    valString = str('timeis_')+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
+    valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])
+    #valString = str('timeis_')+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
     time.sleep(20)
     systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:time_stamp().', nodeName)
     systemFun.exec_spec_com( 'f().', nodeName)
@@ -200,11 +200,11 @@ def exec_operation(nodeName):
     systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:time_stamp().', nodeName)
     delta_val.pop(-1)
     delta_val.append(valString)
-    time.sleep(2)
-    time.sleep(2)
+    time.sleep(5)
+    time.sleep(5)
     for i in range(1, 60):
-        #valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
-        valString = str('timeis_')+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
+        valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
+        #valString = str('timeis_')+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
         delta_val.append(valString)
         systemFun.exec_spec_com( 'AwMapVal'+str(i)+' = #{what => '+valString+'}.', nodeName)
         time.sleep(1)
@@ -226,7 +226,7 @@ def join_system_overlay(ToNode, FromNode, logFile):
     while execCom == False and tempCheck <= 20 and not sub_fail and len(delta_fail) < len(allNodes)/10:
         if tempCheck % 4 == 0:
             print(str(tempCheck)+' Waiting overlay '+FromNode)
-        with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
+        with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile) as f:
             temp = f.read()
             if 'lasp_peer_service:join(' in temp and 'CRASH REPORT' not in temp:
                 #if "{ok,['d@14.0.0.14','c@14.0.0.13','b@14.0.0.12','a@14.0.0.11']}"
@@ -237,10 +237,10 @@ def join_system_overlay(ToNode, FromNode, logFile):
                 else:
                     if 'Node not yet connected' in temp:
                         f.close()
-                        with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'r') as f2:
+                        with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile, 'r') as f2:
                             lines = f2.readlines()
                         f2.close()
-                        with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'w') as f3:
+                        with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile, 'w') as f3:
                             for line in lines:
                                 if "Node not yet connected" not in line.strip("\n"):
                                     f3.write(line)
@@ -269,10 +269,10 @@ def join_system_overlay(ToNode, FromNode, logFile):
                     if tempCheck % 4 == 0:
                         print (FromNode+" Crashed..."+str(tempCheck))
                     f.close()
-                    with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'r') as f2:
+                    with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile, 'r') as f2:
                         lines = f2.readlines()
                     f2.close()
-                    with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'w') as f3:
+                    with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile, 'w') as f3:
                         for line in lines:
                             if 'CRASH REPORT' not in line.strip("\n"):
                                 f3.write(line)
@@ -297,7 +297,7 @@ def join_system_internal(nodeName, logFile):
     while execCom == False and tempCheck <= 20 and not sub_fail and len(delta_fail) < len(allNodes)/10:
         if tempCheck % 4 == 0:
             print (str(tempCheck)+" Checking from "+nodeName)
-        with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
+        with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile) as f:
             temp = f.read()
             if 'lasp_peer_service:join(' in temp and 'CRASH REPORT' not in temp:
                 if (",'"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))) in temp or ("'"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))+"',") in temp or ("'"+ND.get_id(ND.get_edge(ND.get_cluster(nodeName)))+"@"+ND.get_ip(ND.get_edge(ND.get_cluster(nodeName)))+"']}") in temp:
@@ -307,10 +307,10 @@ def join_system_internal(nodeName, logFile):
                 else:
                     if 'Node not yet connected' in temp:
                         f.close()
-                        with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'r') as f2:
+                        with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile, 'r') as f2:
                             lines = f2.readlines()
                         f2.close()
-                        with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'w') as f3:
+                        with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile, 'w') as f3:
                             for line in lines:
                                 if "Node not yet connected" not in line.strip("\n"):
                                     f3.write(line)
@@ -339,10 +339,10 @@ def join_system_internal(nodeName, logFile):
                     if tempCheck % 4 == 0:
                         print(nodeName+" Crashed...")
                     f.close()
-                    with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'r') as f2:
+                    with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile, 'r') as f2:
                         lines = f2.readlines()
                     f2.close()
-                    with open('/home/ubuntu/laspdev/utility/log/'+logFile, 'w') as f3:
+                    with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile, 'w') as f3:
                         for line in lines:
                             if "CRASH REPORT" not in line.strip("\n"):
                                 f3.write(line)
@@ -418,18 +418,18 @@ def stop_testing(jobId):
     #print("Stopped")
     mainfolder = jobId
     folder = testFor #str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
-    if not (os.path.isdir("/home/ubuntu/laspdev/results/"+mainfolder)):
-        os.system("mkdir /home/ubuntu/laspdev/results/"+mainfolder)
-    os.system("mkdir /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder)
-    os.system("mkdir /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/nodeLogs")
-    os.system("mkdir /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
-    os.system("cp /home/ubuntu/laspdev/utility/log/* /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/nodeLogs")
-    os.system("cp /home/ubuntu/laspdev/utility/NodeDirectory.txt /home/ubuntu/laspdev/results/"+mainfolder+"/")
+    if not (os.path.isdir("/home/ubuntu/Vin/laspdev/results/"+mainfolder)):
+        os.system("mkdir /home/ubuntu/Vin/laspdev/results/"+mainfolder)
+    os.system("mkdir /home/ubuntu/Vin/laspdev/results/"+mainfolder+"/"+folder)
+    os.system("mkdir /home/ubuntu/Vin/laspdev/results/"+mainfolder+"/"+folder+"/nodeLogs")
+    os.system("mkdir /home/ubuntu/Vin/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
+    os.system("cp /home/ubuntu/Vin/laspdev/utility/log/* /home/ubuntu/Vin/laspdev/results/"+mainfolder+"/"+folder+"/nodeLogs")
+    os.system("cp /home/ubuntu/Vin/laspdev/utility/NodeDirectory.txt /home/ubuntu/Vin/laspdev/results/"+mainfolder+"/")
     for node in allNodes:
         #os.system('docker exec mn.'+nodeName+' bash -c "vnstat -u"')
         #os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogs"')
-        os.system("docker cp mn."+node+":/opt/"+node+"_bwLogsControl /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
-        os.system("docker cp mn."+node+":/opt/"+node+"_bwLogsData /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
+        os.system("docker cp mn."+node+":/opt/"+node+"_bwLogsControl /home/ubuntu/Vin/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
+        os.system("docker cp mn."+node+":/opt/"+node+"_bwLogsData /home/ubuntu/Vin/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
     while len(stopped_node) != len(allNodes):
         #print('Waiting to stop')
         time.sleep(10)
@@ -491,8 +491,8 @@ if __name__ == "__main__":
         if operation == "stop":
             print("Stopped")
             folder = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
-            os.system("mkdir /home/ubuntu/laspdev/results/"+folder)
-            os.system("cp /home/ubuntu/laspdev/utility/log/* /home/ubuntu/laspdev/results/"+folder)
+            os.system("mkdir /home/ubuntu/Vin/laspdev/results/"+folder)
+            os.system("cp /home/ubuntu/Vin/laspdev/utility/log/* /home/ubuntu/Vin/laspdev/results/"+folder)
             for node in allNodes:
-                os.system("docker cp mn."+node+":/opt/"+node+"_bwLogs /home/ubuntu/laspdev/results/"+folder)
+                os.system("docker cp mn."+node+":/opt/"+node+"_bwLogs /home/ubuntu/Vin/laspdev/results/"+folder)
     '''

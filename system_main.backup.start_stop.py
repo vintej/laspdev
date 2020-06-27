@@ -28,13 +28,13 @@ def start_system(nodeName):
     logFile = ''
     deltaRecv = False
     time.sleep(randint(1,12))
-    files = os.listdir('/home/ubuntu/laspdev/utility/log/')
+    files = os.listdir('/home/ubuntu/Vin/laspdev/utility/log/')
     for name in files:
             if fnmatch.fnmatch(name, nodeName+"_log*"):
                 print("Found match")
                 logFile = name
     print("Logfile: "+logFile)
-    os.system('echo "" > /home/ubuntu/laspdev/utility/log/'+logFile)
+    os.system('echo "" > /home/ubuntu/Vin/laspdev/utility/log/'+logFile)
     time.sleep(2)
     time.sleep(2)
     systemFun.exec_com("", nodeName)
@@ -71,7 +71,7 @@ def start_system(nodeName):
     #    print("Executing operation")
     #    exec_operation('d3')
     #while deltaRecv == False:
-    #    with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
+    #    with open('/home/ubuntu/Vin/laspdev/utility/log/'+logFile) as f:
     #        if 'Received delta' in f.read():
     #            print("Delta Received at Node "+nodeName)
     #            deltaRcvSys.append("True")
@@ -172,10 +172,10 @@ if __name__ == "__main__":
         #    bw_threads_stop()
         #if operation == "stop":
             #folder = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
-            #os.system("mkdir /home/ubuntu/laspdev/utility/results/"+folder)
-            #os.system("cp /home/ubuntu/laspdev/utility/log/* /home/ubuntu/laspdev/utility/results/"+folder)
+            #os.system("mkdir /home/ubuntu/Vin/laspdev/utility/results/"+folder)
+            #os.system("cp /home/ubuntu/Vin/laspdev/utility/log/* /home/ubuntu/Vin/laspdev/utility/results/"+folder)
             #for node in allNodes:
-            #    os.system("docker cp mn."+node+":/opt/"+node+"_bwLogs /home/ubuntu/laspdev/utility/results/"+folder)
+            #    os.system("docker cp mn."+node+":/opt/"+node+"_bwLogs /home/ubuntu/Vin/laspdev/utility/results/"+folder)
 
         #tA = Thread(target=laspA_s, args=('Node A',))
         #tB = Thread(target=laspB_s, args=('Node B',))

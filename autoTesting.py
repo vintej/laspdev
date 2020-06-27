@@ -4,7 +4,7 @@ import sys
 import datetime
 
 def wait_for(this):
-    with open('/home/ubuntu/laspdev/containernet_log') as f:
+    with open('/home/ubuntu/Vin/laspdev/containernet_log') as f:
         lineList = f.readlines()
         if this in lineList[len(lineList)-1]:
             return True
@@ -12,7 +12,7 @@ def wait_for(this):
             return False
 
 def clean_log():
-    os.system("echo '' > /home/ubuntu/laspdev/containernet_log")
+    os.system("echo '' > /home/ubuntu/Vin/laspdev/containernet_log")
 
 def start_bringup(jobId, imgC):
         clean_log()
@@ -33,10 +33,10 @@ def start_bringup(jobId, imgC):
 
 def stop_bringup():
         #clean_log()
-        os.system("bash /home/ubuntu/laspdev/kill_lasp.sh")
+        os.system("bash /home/ubuntu/Vin/laspdev/kill_lasp.sh")
         print("Killed setup_lasp and system_main")
         time.sleep(2)
-        os.system("echo '' > /home/ubuntu/laspdev/mainTest_log")
+        os.system("echo '' > /home/ubuntu/Vin/laspdev/mainTest_log")
         time.sleep(2)
         if wait_for('containernet>'):
             clean_log()
@@ -45,7 +45,7 @@ def stop_bringup():
             print("Sent exit to containernet")
             while deltaRecv == False:
                 print("Containernet Exiting")
-                if wait_for('root@csst-06:/home/ubuntu/laspdev#'):
+                if wait_for('root@csst-11:/home/ubuntu/Vin/laspdev#'):
                     print("Containernet Stopped")
                     deltaRecv = True
                     break
@@ -54,11 +54,11 @@ def stop_bringup():
         os.system('screen -S containernet -p mininet -X stuff "mn --clean^M"')
         print("mn --clean")
         clean_log()
-        while wait_for('root@csst-06:/home/ubuntu/laspdev#') == False:
+        while wait_for('root@csst-11:/home/ubuntu/Vin/laspdev#') == False:
             print("Cleaning")
             time.sleep(5)
             'screen -S containernet -p mininet -X stuff "^M"'
-            if wait_for('root@csst-06:/home/ubuntu/laspdev#'):
+            if wait_for('root@csst-11:/home/ubuntu/Vin/laspdev#'):
                 break
         os.system('screen -S containernet -p mininet -X stuff "service docker restart^M"')
         print("Restarting Docker")
@@ -97,14 +97,14 @@ if len(sys.argv) > 1:
             start_bringup(jobId, image)
             job_status = False
             while job_status==False:
-                with open('/home/ubuntu/laspdev/mainTest_log') as f:
+                with open('/home/ubuntu/Vin/laspdev/mainTest_log') as f:
                     temp = f.read()
                     if ("JOB "+jobId+" FINISHED") in temp:
                         print("Test execution completed ")
                         job_status=True
                         break
                 time.sleep(10)
-            os.system("cp /home/ubuntu/laspdev/*_log /home/ubuntu/laspdev/results/"+jobId+"/"+image+"/")
+            os.system("cp /home/ubuntu/Vin/laspdev/*_log /home/ubuntu/Vin/laspdev/results/"+jobId+"/"+image+"/")
             print("************FINISHED JOB "+jobId+" for "+image+" ***************")
             i = i + 1
             time.sleep(5)
@@ -116,7 +116,7 @@ if len(sys.argv) > 1:
             if i % 20 == 1:
                 run_count = 1
                 jobId1 = 'Varc1_'+str(i/10+2) #+'_'+str(run_count)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
-                os.system("python /home/ubuntu/laspdev/nodesGen/"+str(i/10+2)+"c1generator.py")
+                os.system("python /home/ubuntu/Vin/laspdev/nodesGen/"+str(i/10+2)+"c1generator.py")
             image = 'dev'
             jobId = jobId1+'_'+str(run_count)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
             print (jobId+" | "+image)
@@ -126,14 +126,14 @@ if len(sys.argv) > 1:
             start_bringup(jobId, image)
             job_status = False
             while job_status==False:
-                with open('/home/ubuntu/laspdev/mainTest_log') as f:
+                with open('/home/ubuntu/Vin/laspdev/mainTest_log') as f:
                     temp = f.read()
                     if ("JOB "+jobId+" FINISHED") in temp:
                         print("Test execution completed ")
                         job_status=True
                         break
                 time.sleep(10)
-            os.system("cp /home/ubuntu/laspdev/*_log /home/ubuntu/laspdev/results/"+jobId+"/"+image+"/")
+            os.system("cp /home/ubuntu/Vin/laspdev/*_log /home/ubuntu/Vin/laspdev/results/"+jobId+"/"+image+"/")
             print("************FINISHED JOB "+jobId+" for "+image+" ***************")
             i = i + 1
             run_count = run_count + 1
@@ -147,8 +147,8 @@ if len(sys.argv) > 1:
             if i % 5 == 1:
                 run_count = 1
                 jobId1 = 'Varc1Edge_'+str(c1Edge) #+'_'+str(run_count)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%$
-                os.system("python /home/ubuntu/laspdev/nodesGen/"+str(i/10+2)+"c1generator.py")
-                print("python /home/ubuntu/laspdev/nodesGen/"+str(c1Edge)+"c1generator.py")
+                os.system("python /home/ubuntu/Vin/laspdev/nodesGen/"+str(i/10+2)+"c1generator.py")
+                print("python /home/ubuntu/Vin/laspdev/nodesGen/"+str(c1Edge)+"c1generator.py")
                 c1Edge = c1Edge + 2
             image = 'dev'
             jobId = jobId1+'_'+str(run_count)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
@@ -159,14 +159,14 @@ if len(sys.argv) > 1:
             start_bringup(jobId, image)
             job_status = False
             while job_status==False:
-                with open('/home/ubuntu/laspdev/mainTest_log') as f:
+                with open('/home/ubuntu/Vin/laspdev/mainTest_log') as f:
                     temp = f.read()
                     if ("JOB "+jobId+" FINISHED") in temp:
                         print("Test execution completed ")
                         job_status=True
                         break
                 time.sleep(10)
-            os.system("cp /home/ubuntu/laspdev/*_log /home/ubuntu/laspdev/results/"+jobId+"/"+image+"/")
+            os.system("cp /home/ubuntu/Vin/laspdev/*_log /home/ubuntu/Vin/laspdev/results/"+jobId+"/"+image+"/")
             print("************FINISHED JOB "+jobId+" for "+image+" ***************")
             i = i + 1
             run_count = run_count + 1
@@ -174,7 +174,7 @@ if len(sys.argv) > 1:
     if sys.argv[1] != "stop":
         job_status = False
         while job_status==False:
-            with open('/home/ubuntu/laspdev/mainTest_log') as f:
+            with open('/home/ubuntu/Vin/laspdev/mainTest_log') as f:
                 temp = f.read()
                 if ("JOB "+jobId+" FINISHED") in temp:
                     print("Test execution completed")
@@ -202,7 +202,7 @@ else:
         while job_status==False:
             if cTempX == 60:
                 print(jobId+" | "+image+" is running")
-            with open('/home/ubuntu/laspdev/mainTest_log') as f:
+            with open('/home/ubuntu/Vin/laspdev/mainTest_log') as f:
                 temp = f.read()
                 if ("JOB "+jobId+" FINISHED") in temp:
                     print("Test execution completed")
@@ -210,7 +210,7 @@ else:
                     break
             cTempX = cTempX + 1
             time.sleep(5)
-        os.system("cp /home/ubuntu/laspdev/*_log /home/ubuntu/laspdev/results/"+jobId+"/"+image+"/")
+        os.system("cp /home/ubuntu/Vin/laspdev/*_log /home/ubuntu/Vin/laspdev/results/"+jobId+"/"+image+"/")
         print("************FINISHED JOB "+jobId+" for "+image+" ***************")
         i = i + 1
         time.sleep(5)

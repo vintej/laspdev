@@ -37,7 +37,7 @@ def update_container():
     child.close()
 
 update_container()
-with open('/home/ubuntu/laspdev/containernet_log') as f:
+with open('/home/ubuntu/Vin/laspdev/containernet_log') as f:
         tempIm = f.read()
         if 'vinayaktj/lasp:dev' in tempIm:
             image = 'devsquashed'
