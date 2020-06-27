@@ -202,7 +202,7 @@ def exec_operation(nodeName):
     delta_val.append(valString)
     time.sleep(5)
     time.sleep(5)
-    for i in range(1, 60):
+    for i in range(1, 90):
         valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
         #valString = str('timeis_')+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
         delta_val.append(valString)

@@ -31,7 +31,7 @@ def start(ip, node, rate):
     child.expect(c_prompt)
     child.sendline('export RATE_CLASS='+rate)
     child.expect(c_prompt)
-    child.sendline('export RATE_C1=13000')
+    child.sendline('export RATE_C1=10000')
     child.expect(c_prompt)
     child.sendline('export RATE_C2=40000')
     child.expect(c_prompt)
