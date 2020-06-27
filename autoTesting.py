@@ -200,7 +200,7 @@ else:
         job_status = False
         cTempX = 1
         while job_status==False:
-            if cTempX == 60:
+            if cTempX % 60 == 1:
                 print(jobId+" | "+image+" is running")
             with open('/home/ubuntu/laspdev/mainTest_log') as f:
                 temp = f.read()

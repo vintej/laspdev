@@ -174,8 +174,8 @@ def exec_operation(nodeName):
         print("***********Waiting 10 secs for nodes to be ready*******")
         time.sleep(10)
     print("Executing operations after 20 secs")
-    #valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])
-    valString = str('timeis_')+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
+    valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])
+    #valString = str('timeis_')+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
     time.sleep(20)
     systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:time_stamp().', nodeName)
     systemFun.exec_spec_com( 'f().', nodeName)
@@ -201,15 +201,15 @@ def exec_operation(nodeName):
     delta_val.pop(-1)
     delta_val.append(valString)
     time.sleep(2)
-    time.sleep(2)
-    for i in range(1, 90):
-        #valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
-        valString = str('timeis_')+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(30)))
+    time.sleep(3)
+    for i in range(1, 300):
+        valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
+        #valString = str('timeis_')+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(30)))
         delta_val.append(valString)
         systemFun.exec_spec_com( 'AwMapVal'+str(i)+' = #{what => '+valString+'}.', nodeName)
         time.sleep(1)
         systemFun.exec_spec_com( '{ok, _} = lasp:update(AwMap, {apply, Key1, {set, nil, AwMapVal'+str(i)+'}}, self()).', nodeName)
-        time.sleep(9)
+        time.sleep(5)
     print("Operation execution completed")
     delta_changed = True
 
