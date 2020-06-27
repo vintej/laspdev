@@ -198,13 +198,17 @@ else:
         time.sleep(2)
         start_bringup(jobId, image)
         job_status = False
+        cTempX = 1
         while job_status==False:
+            if cTempX == 60:
+                print(jobId+" | "+image+" is running")
             with open('/home/ubuntu/laspdev/mainTest_log') as f:
                 temp = f.read()
                 if ("JOB "+jobId+" FINISHED") in temp:
                     print("Test execution completed")
                     job_status=True
                     break
+            cTempX = cTempX + 1
             time.sleep(5)
         os.system("cp /home/ubuntu/laspdev/*_log /home/ubuntu/laspdev/results/"+jobId+"/"+image+"/")
         print("************FINISHED JOB "+jobId+" for "+image+" ***************")
