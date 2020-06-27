@@ -2,6 +2,8 @@ from threading import Thread
 import multiprocessing
 import os
 import time
+import string
+import random
 import sys
 import utility.system_start_stop as systemFun
 import utility.NDutility as ND
@@ -28,7 +30,7 @@ bw_collected = []
 delta_val = ['TMP']
 delta_changed = False
 jobId = ''
-
+start_time = ''
 with open('/home/ubuntu/laspdev/containernet_log') as f:
     tempIm = f.read()
     if 'vinayaktj/lasp:dev' in tempIm:
@@ -104,6 +106,10 @@ def start_system(nodeName):
             print("Aborting as sub failed "+str(sub_fail))
     tmpchk = 0
     delta_waiting.append(nodeName)
+    while (node_status.count("Ready")) != len(allNodes) and not sub_fail:
+        time.sleep(10)
+    os.system('docker exec mn.'+nodeName+' bash -c "vnstat -u"')
+    os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogsControl"')
     while deltaRecv == False and not sub_fail and jobId != 'start':
         #print ('Waiting deltaRecv '+nodeName+' '+str(tmpchk))
         with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
@@ -134,7 +140,7 @@ def start_system(nodeName):
         #print(nodeName+" Waiting to close on Bandwidth")
         time.sleep(10)
     os.system('docker exec mn.'+nodeName+' bash -c "vnstat -u"')
-    os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogs"')
+    os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogsData"')
     bw_collected.append(nodeName)
     test_completed.append(nodeName)
 
@@ -195,8 +201,8 @@ def exec_operation(nodeName):
     delta_val.append(valString)
     time.sleep(2)
     time.sleep(2)
-    for i in range(1, 60):
-        valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])
+    for i in range(1, 90):
+        valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
         delta_val.append(valString)
         systemFun.exec_spec_com( 'AwMapVal'+str(i)+' = #{what => '+valString+'}.', nodeName)
         time.sleep(1)
@@ -401,7 +407,7 @@ def start_testing():
         bw_threads_stop()
 
 def stop_testing(jobId):
-    global testFor
+    global testFor, start_time
     threads_main=[]
     for node in allNodes:
             #print node
@@ -420,17 +426,20 @@ def stop_testing(jobId):
     for node in allNodes:
         #os.system('docker exec mn.'+nodeName+' bash -c "vnstat -u"')
         #os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogs"')
-        os.system("docker cp mn."+node+":/opt/"+node+"_bwLogs /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
+        os.system("docker cp mn."+node+":/opt/"+node+"_bwLogsControl /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
+        os.system("docker cp mn."+node+":/opt/"+node+"_bwLogsData /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
     while len(stopped_node) != len(allNodes):
         #print('Waiting to stop')
         time.sleep(10)
     print("delta_vals: "+str(delta_val))
     print("Stopped Nodes: "+str(stopped_node))
-    print("*******JOB "+jobId+" FINISHED at "+str(datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3])+"*******")
+    print("*******JOB "+jobId+" FINISHED at "+str(datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3])+" StartTime:"+start_time+"*******")
 
 #Start main here
 if __name__ == "__main__":
     print ("Starting")
+    global start_time
+    start_time = str(datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3])
     os.system("date")
     #if len(sys.argv) > 1:
     #    if sys.argv[1] == "start":
