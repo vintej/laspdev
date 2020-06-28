@@ -186,7 +186,7 @@ else:
     jIndex = 1
     while i < 41:
         if i % 2 == 1:
-            jobId = 'DeltaTests'+str(jIndex)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+            jobId = 'DeltaTest_c1_7_valTime_6_30min_Bw50ops_'+str(jIndex)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
             image = 'base'
         else:
             image = 'dev'

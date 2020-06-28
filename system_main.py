@@ -38,7 +38,7 @@ with open('/home/ubuntu/laspdev/containernet_log') as f:
     elif 'vinayaktj/lasp:base' in tempIm:
         testFor = 'base'
 
-
+OpsDone = []
 
 def start_system(nodeName):
     global testFor, delta_changed
@@ -109,9 +109,18 @@ def start_system(nodeName):
     while (node_status.count("Ready")) != len(allNodes) and not sub_fail:
         time.sleep(10)
     os.system('docker exec mn.'+nodeName+' bash -c "vnstat -u"')
+    time.sleep(5)
+    os.system('docker exec mn.'+nodeName+' bash -c "vnstat -u"')
+    time.sleep(5)
     os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogsControl"')
+    OpsCount = 1
     while deltaRecv == False and not sub_fail and jobId != 'start':
         #print ('Waiting deltaRecv '+nodeName+' '+str(tmpchk))
+        if len(OpsDone) == OpsCount and nodeName!='d3':
+            os.system('docker exec mn.'+nodeName+' bash -c "vnstat -u"')
+            time.sleep(5)
+            os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogs'+str(OpsDone[-1])+'Ops"')
+            OpsCount = OpsCount + 1
         with open('/home/ubuntu/laspdev/utility/log/'+logFile) as f:
             if delta_val[-1] in f.read() and delta_changed == True:
                 print(str(tmpchk)+"Delta Received at Node "+nodeName)
@@ -200,9 +209,15 @@ def exec_operation(nodeName):
     systemFun.exec_spec_com( 'lasp_delta_based_synchronization_backend:time_stamp().', nodeName)
     delta_val.pop(-1)
     delta_val.append(valString)
-    time.sleep(2)
+    time.sleep(3)
     time.sleep(3)
     for i in range(1, 300):
+        if i % 50 == 49:
+            print(str(i+1)+' updates done at '+nodeName)
+            OpsDone.append(str(i+1))
+            os.system('docker exec mn.'+nodeName+' bash -c "vnstat -u"')
+            time.sleep(5)
+            os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogs'+str(OpsDone[-1])+'Ops"')
         valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
         #valString = str('timeis_')+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(30)))
         delta_val.append(valString)
@@ -378,7 +393,7 @@ def bw_log(nodeName):
 
 def bw_threads_stop():
     tmp = 0
-    while len(bw_collected) != len(allNodes): #and not sub_fail and not delta_fail:
+    while len(bw_collected) != (len(allNodes)): #and not sub_fail and not delta_fail:
             #print('Waiting For delta to be received by all')
             if tmp % 4 == 0:
                 print("Delta Waiting for"+str(delta_waiting))
@@ -430,6 +445,9 @@ def stop_testing(jobId):
         #os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogs"')
         os.system("docker cp mn."+node+":/opt/"+node+"_bwLogsControl /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
         os.system("docker cp mn."+node+":/opt/"+node+"_bwLogsData /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
+        for ops in OpsDone:
+            #/opt/'+nodeName+'_bwLogs'+str(OpsDone[-1])+'Ops")
+            os.system("docker cp mn."+node+":/opt/"+node+"_bwLogs"+str(ops)+"Ops /home/ubuntu/laspdev/results/"+mainfolder+"/"+folder+"/BWLogs")
     while len(stopped_node) != len(allNodes):
         #print('Waiting to stop')
         time.sleep(10)
