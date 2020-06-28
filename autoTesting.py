@@ -186,7 +186,7 @@ else:
     jIndex = 1
     while i < 41:
         if i % 2 == 1:
-            jobId = 'DeltaTests'+str(jIndex)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+            jobId = 'DeltaTests_c1_7_val_6'+str(jIndex)+'_'+str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
             image = 'base'
         else:
             image = 'dev'
@@ -200,7 +200,7 @@ else:
         job_status = False
         cTempX = 1
         while job_status==False:
-            if cTempX == 60:
+            if cTempX % 120 == 1:
                 print(jobId+" | "+image+" is running")
             with open('/home/ubuntu/Vin/laspdev/mainTest_log') as f:
                 temp = f.read()

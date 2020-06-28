@@ -202,14 +202,14 @@ def exec_operation(nodeName):
     delta_val.append(valString)
     time.sleep(5)
     time.sleep(5)
-    for i in range(1, 90):
+    for i in range(1, 600):
         valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
         #valString = str('timeis_')+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
         delta_val.append(valString)
         systemFun.exec_spec_com( 'AwMapVal'+str(i)+' = #{what => '+valString+'}.', nodeName)
         time.sleep(1)
         systemFun.exec_spec_com( '{ok, _} = lasp:update(AwMap, {apply, Key1, {set, nil, AwMapVal'+str(i)+'}}, self()).', nodeName)
-        time.sleep(9)
+        time.sleep(5)
     print("Operation execution completed")
     delta_changed = True
 
