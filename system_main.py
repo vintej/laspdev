@@ -218,7 +218,7 @@ def exec_operation(nodeName):
             os.system('docker exec mn.'+nodeName+' bash -c "vnstat -u"')
             time.sleep(5)
             os.system('docker exec mn.'+nodeName+' bash -c "vnstat > /opt/'+nodeName+'_bwLogs'+str(OpsDone[-1])+'Ops"')
-        valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
+        valString = str(datetime.utcnow().strftime('timeis_%H_%M_%S_%f')[:-3])#+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20)))
         #valString = str('timeis_')+str(''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(30)))
         delta_val.append(valString)
         systemFun.exec_spec_com( 'AwMapVal'+str(i)+' = #{what => '+valString+'}.', nodeName)
