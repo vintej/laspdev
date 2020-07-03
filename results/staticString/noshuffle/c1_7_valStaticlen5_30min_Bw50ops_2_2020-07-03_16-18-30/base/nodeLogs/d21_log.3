@@ -1,0 +1,456 @@
+
+
+root@csst-06:/home/ubuntu/laspdev# 
+root@csst-06:/home/ubuntu/laspdev# python /home/ubuntu/laspdev/utility/setup_laspp.py d21
+d21
+ip:12.0.0.11
+node:a
+root@d21:/# [Kroot@d21:/# service vnstat start
+[....] Starting vnStat daemon: vnstatd[?25l7[1G[[32m ok [39;49m8[?12l[?25h.
+root@d21:/# vnstat -u -i d21-eth0
+Error: Unable to read database "/var/lib/vnstat/d21-eth0": No such file or directory
+Info: -> A new database has been created.
+root@d21:/# vnstat -u
+root@d21:/# vnstat
+
+                      rx      /      tx      /     total    /   estimated
+ eth0: Not enough data available yet.
+ d21-eth0: Not enough data available yet.
+root@d21:/# export PEER_SERVICE=partisan_hyparview_peer_service_manager
+root@d21:/# export RATE_CLASS=c2
+root@d21:/# export RATE_C1=10000
+root@d21:/# export RATE_C2=40000
+root@d21:/# export RATE_C3=70000
+root@d21:/# export PROPAGATE_ON_UPDATE=false
+root@d21:/# export MAX_ACTIVE_SIZE=50
+root@d21:/# cd /opt/lasp
+root@d21:/opt/lasp# epmd -daemon
+root@d21:/opt/lasp# rebar3 shell --name a@12.0.0.11
+[0;32m===> Verifying dependencies...
+[0m[0;32m===> Compiling lasp
+[0mErlang/OTP 19 [erts-8.3] [source] [64-bit] [smp:24:24] [ds:24:24:10] [async-threads:0] [hipe] [kernel-poll:false]
+
+Eshell V8.3  (abort with ^G)
+(a@12.0.0.11)1> [0;35m===> The rebar3 shell is a development tool; to deploy applications in production, consider using releases (http://www.rebar3.org/docs/releases)
+[0m16:22:05.261 [info] Application lager started on node 'a@12.0.0.11'
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.253.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.252.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.254.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+         application: sasl
+          started_at: 'a@12.0.0.11'
+16:22:05.436 [info] Application sasl started on node 'a@12.0.0.11'
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+         application: lasp_support
+          started_at: 'a@12.0.0.11'
+16:22:05.437 [info] Application lasp_support started on node 'a@12.0.0.11'
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+         application: acceptor_pool
+          started_at: 'a@12.0.0.11'
+16:22:05.437 [info] Application acceptor_pool started on node 'a@12.0.0.11'
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+         application: quickrand
+          started_at: 'a@12.0.0.11'
+16:22:05.437 [info] Application quickrand started on node 'a@12.0.0.11'
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+         application: uuid
+          started_at: 'a@12.0.0.11'
+16:22:05.437 [info] Application uuid started on node 'a@12.0.0.11'
+16:22:05.512 [info] Using node name: 'a@12.0.0.11'
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.266.0>},
+                       {id,timer_server},
+                       {mfargs,{timer,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,1000},
+                       {child_type,worker}]
+16:22:05.545 [info] Resolving "12.0.0.11"...
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+          supervisor: {local,inet_gethost_native_sup}
+             started: [{pid,<0.268.0>},{mfa,{inet_gethost_native,init,[[]]}}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.267.0>},
+                       {id,inet_gethost_native_sup},
+                       {mfargs,{inet_gethost_native,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,1000},
+                       {child_type,worker}]
+16:22:05.557 [info] Resolved "a@12.0.0.11" to {12,0,0,11}
+16:22:05.557 [info] Resolved "12.0.0.11" to {12,0,0,11}
+16:22:05.966 [info] Partisan listening on {12,0,0,11}:57883 listen_addrs: [#{ip => {12,0,0,11},port => 57883}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.313.0>},
+                       {id,partisan_rpc_backend},
+                       {mfargs,{partisan_rpc_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:05 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.314.0>},
+                       {id,partisan_acknowledgement_backend},
+                       {mfargs,
+                           {partisan_acknowledgement_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+16:22:06.036 [info] Not using container orchestration; disabling.
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.315.0>},
+                       {id,partisan_orchestration_backend},
+                       {mfargs,{partisan_orchestration_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+16:22:06.156 [info] node 'a@12.0.0.11' choosing random seed: {25948744,-576460745652196533,-576460752303423423}
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.316.0>},
+                       {id,partisan_hyparview_peer_service_manager},
+                       {mfargs,
+                           {partisan_hyparview_peer_service_manager,
+                               start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.317.0>},
+                       {id,partisan_peer_service_events},
+                       {mfargs,{partisan_peer_service_events,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+16:22:06.177 [info] node 'a@12.0.0.11' choosing random seed: {25948744,-576460745652196533,-576460752303423423}
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.318.0>},
+                       {id,partisan_plumtree_backend},
+                       {mfargs,{partisan_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.319.0>},
+                       {id,partisan_plumtree_broadcast},
+                       {mfargs,{partisan_plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.320.0>},
+                       {id,partisan_monitor},
+                       {mfargs,{partisan_monitor,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.322.0>},
+                       {id,partisan_pool},
+                       {mfargs,{partisan_pool,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.323.0>},
+                       {id,{partisan_socket,{12,0,0,11},57883}},
+                       {mfargs,
+                           {partisan_socket,start_link,[{12,0,0,11},57883]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.321.0>},
+                       {id,partisan_pool_sup},
+                       {mfargs,{partisan_pool_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,20000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+         application: partisan
+          started_at: 'a@12.0.0.11'
+16:22:06.691 [info] Application partisan started on node 'a@12.0.0.11'
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+          supervisor: {local,plumtree_sup}
+             started: [{pid,<0.338.0>},
+                       {id,plumtree_broadcast},
+                       {mfargs,{plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+         application: plumtree
+          started_at: 'a@12.0.0.11'
+16:22:06.776 [info] Application plumtree started on node 'a@12.0.0.11'
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:06 ===
+         application: gen_fsm_compat
+          started_at: 'a@12.0.0.11'
+16:22:06.776 [info] Application gen_fsm_compat started on node 'a@12.0.0.11'
+16:22:06.848 [info] Setting jitter: false
+16:22:06.895 [info] Setting jitter percent: 1
+16:22:06.905 [info] Setting event interval: 0
+16:22:06.919 [info] Setting max events: 1000
+16:22:06.930 [info] Setting extended logging: false
+16:22:06.934 [info] Setting mailbox logging: false
+16:22:06.944 [info] Setting operation mode: delta_based
+16:22:06.947 [info] Setting set type: orset
+16:22:06.958 [info] Setting broadcast: false
+16:22:07.161 [info] Membership: false
+16:22:07.162 [info] Workflow: false
+16:22:07.174 [info] AdClientEnabled: false
+16:22:07.209 [info] AdServerEnabled: false
+16:22:07.211 [info] TournClientEnabled: false
+16:22:07.213 [info] TournServerEnabled: false
+16:22:07.221 [info] ThroughputType: gset
+16:22:07.229 [info] ThroughputClientEnabled: false
+16:22:07.231 [info] ThroughputServerEnabled: false
+16:22:07.234 [info] DivergenceType: gcounter
+16:22:07.253 [info] DivergenceClientEnabled: false
+16:22:07.256 [info] DivergenceServerEnabled: false
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:07 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.385.0>},
+                       {id,lasp_unique},
+                       {mfargs,{lasp_unique,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:07 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.386.0>},
+                       {id,lasp_plumtree_backend},
+                       {mfargs,{lasp_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:07 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.387.0>},
+                       {id,lasp_plumtree_memory_report},
+                       {mfargs,{lasp_plumtree_memory_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:07 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.388.0>},
+                       {id,lasp_memory_utilization_report},
+                       {mfargs,{lasp_memory_utilization_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+16:22:07.523 [info] Backend initialized with pid: <0.393.0>
+16:22:07.523 [info] Backend lasp_ets_storage_backend initialized: <0.393.0>
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:07 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.389.0>},
+                       {id,lasp_distribution_backend},
+                       {mfargs,{lasp_distribution_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+16:22:07.553 [error] LASPVIN check timestamp: "2020-07-03T16:22:07.553" 
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:07 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.395.0>},
+                       {id,lasp_process_sup},
+                       {mfargs,{lasp_process_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 3-Jul-2020::16:22:07 ===
+         application: lasp
+          started_at: 'a@12.0.0.11'
+16:22:07.564 [info] Application lasp started on node 'a@12.0.0.11'
+[0;32m===> Booted types
+[0m[0;32m===> Booted gen_flow
+[0m[0;32m===> Booted syntax_tools
+[0m[0;32m===> Booted compiler
+[0m[0;32m===> Booted goldrush
+[0m[0;32m===> Booted lager
+[0m[0;32m===> Booted sasl
+[0m[0;32m===> Booted lasp_support
+[0m[0;32m===> Booted acceptor_pool
+[0m[0;32m===> Booted quickrand
+[0m[0;32m===> Booted uuid
+[0m[0;32m===> Booted partisan
+[0m[0;32m===> Booted plumtree
+[0m[0;32m===> Booted gen_fsm_compat
+[0m[0;32m===> Booted lasp
+[0m
+(a@12.0.0.11)1> erlang:set_cookie(node(),'RPJVCXYDYULBNZFEFPHJ').
+true
+(a@12.0.0.11)2> application:get_env(partisan, max_active_size).
+{ok,50}
+(a@12.0.0.11)3> application:get_env(partisan, max_passive_size).
+{ok,80}
+(a@12.0.0.11)4> application:get_env(partisan, min_active_size).
+{ok,3}
+(a@12.0.0.11)5> partisan_config:get(passive_view_shuffle_period).
+10000
+(a@12.0.0.11)6> )6> lasp_peer_service:join('a@11.0.0.11').
+ok
+(a@12.0.0.11)7> lasp_peer_service:members().
+{ok,['a@13.0.0.11','a@12.0.0.11','a@11.0.0.11']}
+(a@12.0.0.11)8> lasp_peer_service:join('a@11.0.0.11').
+ok
+(a@12.0.0.11)9> lasp_peer_service:members().
+{ok,['a@13.0.0.11','a@12.0.0.11','a@11.0.0.11']}
+(a@12.0.0.11)10> 16:24:59.527 [warning] global: 'a@12.0.0.11' failed to connect to 'h@10.0.0.18'
+16:25:27.544 [warning] global: 'a@12.0.0.11' failed to connect to 'f@10.0.0.16'
+16:26:01.272 [error] LASPVIN Received delta From='a@11.0.0.11' at TimeStamp="2020-07-03T16:26:01.272" microseconds=153606 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_gurnu}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:01.272 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",1,0},{"delta_send",0,1},{"send_backend",0,0}] 
+16:26:02.565 [warning] global: 'a@12.0.0.11' failed to connect to 'e@10.0.0.15'
+16:26:02.566 [warning] global: 'a@12.0.0.11' failed to connect to 'j@10.0.0.20'
+16:26:07.619 [error] LASPVIN Sending delta to 'g@12.0.0.17' at "2020-07-03T16:26:07.619" 
+16:26:07.619 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_gurnu}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+16:26:07.635 [error] LASPVIN Sending delta to 'c@12.0.0.13' at "2020-07-03T16:26:07.635" 
+16:26:07.635 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_gurnu}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+16:26:07.635 [error] LASPVIN Sending delta to 'b@12.0.0.12' at "2020-07-03T16:26:07.635" 
+16:26:07.636 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_gurnu}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+16:26:07.636 [error] LASPVIN Sending delta to 'f@12.0.0.16' at "2020-07-03T16:26:07.636" 
+16:26:07.636 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_gurnu}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+16:26:07.636 [error] LASPVIN Sending delta to 'j@12.0.0.20' at "2020-07-03T16:26:07.636" 
+16:26:07.636 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_gurnu}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+16:26:07.637 [error] LASPVIN Sending delta to 'a@13.0.0.11' at "2020-07-03T16:26:07.637" 
+16:26:07.637 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_gurnu}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+16:26:07.637 [error] LASPVIN Sending delta to 'h@12.0.0.18' at "2020-07-03T16:26:07.637" 
+16:26:07.637 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_gurnu}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+16:26:07.637 [error] LASPVIN Sending delta to 'd@12.0.0.14' at "2020-07-03T16:26:07.637" 
+16:26:07.638 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_gurnu}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+16:26:07.638 [error] LASPVIN Sending delta to 'a@11.0.0.11' at "2020-07-03T16:26:07.638" 
+16:26:07.638 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:1 
+16:26:07.638 [error] LASPVIN Sending delta to 'e@12.0.0.15' at "2020-07-03T16:26:07.638" 
+16:26:07.638 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_gurnu}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+16:26:07.639 [error] LASPVIN Sending delta to 'i@12.0.0.19' at "2020-07-03T16:26:07.639" 
+16:26:07.639 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_gurnu}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+16:26:08.166 [error] LASPVIN Received delta From='i@12.0.0.19' at TimeStamp="2020-07-03T16:26:08.165" microseconds=1695 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_gurnu}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:08.166 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",2,11},{"delta_send",11,2},{"send_backend",12,0}] 
+16:26:08.324 [error] LASPVIN Received delta From='h@12.0.0.18' at TimeStamp="2020-07-03T16:26:08.324" microseconds=386 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_gurnu}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:08.324 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",3,11},{"delta_send",11,3},{"send_backend",13,0}] 
+16:26:09.232 [error] LASPVIN Received delta From='e@12.0.0.15' at TimeStamp="2020-07-03T16:26:09.232" microseconds=328 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_gurnu}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:09.232 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",4,11},{"delta_send",11,4},{"send_backend",14,0}] 
+16:26:10.069 [error] LASPVIN Received delta From='b@12.0.0.12' at TimeStamp="2020-07-03T16:26:10.692" microseconds=287 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_gurnu}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:10.069 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",5,11},{"delta_send",11,5},{"send_backend",15,0}] 
+16:26:10.521 [error] LASPVIN Received delta From='c@12.0.0.13' at TimeStamp="2020-07-03T16:26:10.520" microseconds=309 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_gurnu}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:10.521 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",6,11},{"delta_send",11,6},{"send_backend",16,0}] 
+16:26:10.674 [error] LASPVIN Received delta From='j@12.0.0.20' at TimeStamp="2020-07-03T16:26:10.674" microseconds=258 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_gurnu}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:10.721 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",7,11},{"delta_send",11,7},{"send_backend",17,0}] 
+16:26:10.831 [error] LASPVIN Received delta From='d@12.0.0.14' at TimeStamp="2020-07-03T16:26:10.831" microseconds=297 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_gurnu}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:10.832 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",8,11},{"delta_send",11,8},{"send_backend",18,0}] 
+16:26:11.134 [error] LASPVIN Received delta From='a@11.0.0.11' at TimeStamp="2020-07-03T16:26:11.134" microseconds=23489 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:11.134 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",9,11},{"delta_send",11,9},{"send_backend",19,0}] 
+16:26:13.033 [error] LASPVIN Received delta From='f@12.0.0.16' at TimeStamp="2020-07-03T16:26:13.332" microseconds=297 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:13.033 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",10,11},{"delta_send",11,10},{"send_backend",20,0}] 
+16:26:13.268 [error] LASPVIN Received delta From='a@13.0.0.11' at TimeStamp="2020-07-03T16:26:13.268" microseconds=280 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:13.268 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",11,11},{"delta_send",11,11},{"send_backend",21,0}] 
+16:26:14.161 [error] LASPVIN Received delta From='g@12.0.0.17' at TimeStamp="2020-07-03T16:26:14.161" microseconds=254 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:14.162 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",12,11},{"delta_send",11,12},{"send_backend",22,0}] 
+16:26:17.621 [error] LASPVIN Sending delta to 'g@12.0.0.17' at "2020-07-03T16:26:17.621" 
+16:26:17.622 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_wadhw}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+16:26:17.624 [error] LASPVIN Sending delta to 'c@12.0.0.13' at "2020-07-03T16:26:17.624" 
+16:26:17.624 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_wadhw}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+16:26:17.625 [error] LASPVIN Sending delta to 'b@12.0.0.12' at "2020-07-03T16:26:17.625" 
+16:26:17.625 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_wadhw}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+16:26:17.625 [error] LASPVIN Sending delta to 'f@12.0.0.16' at "2020-07-03T16:26:17.625" 
+16:26:17.626 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_wadhw}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+16:26:17.626 [error] LASPVIN Sending delta to 'j@12.0.0.20' at "2020-07-03T16:26:17.626" 
+16:26:17.626 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_wadhw}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+16:26:17.626 [error] LASPVIN Sending delta to 'a@13.0.0.11' at "2020-07-03T16:26:17.626" 
+16:26:17.627 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_wadhw}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+16:26:17.627 [error] LASPVIN Sending delta to 'h@12.0.0.18' at "2020-07-03T16:26:17.627" 
+16:26:17.627 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_wadhw}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+16:26:17.628 [error] LASPVIN Sending delta to 'd@12.0.0.14' at "2020-07-03T16:26:17.628" 
+16:26:17.628 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_wadhw}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+16:26:17.629 [error] LASPVIN Sending delta to 'a@11.0.0.11' at "2020-07-03T16:26:17.629" 
+16:26:17.629 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:2 
+16:26:17.631 [error] LASPVIN Sending delta to 'e@12.0.0.15' at "2020-07-03T16:26:17.629" 
+16:26:17.631 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_wadhw}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+16:26:17.632 [error] LASPVIN Sending delta to 'i@12.0.0.19' at "2020-07-03T16:26:17.632" 
+16:26:17.632 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<121,36,19,145,244,89,199,88,198,212,175,70,13,212,221,41,223,69,210,9>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_wadhw}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+16:26:18.174 [error] LASPVIN Received delta From='i@12.0.0.19' at TimeStamp="2020-07-03T16:26:18.173" microseconds=352 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:18.174 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",13,22},{"delta_send",22,13},{"send_backend",34,0}] 
+16:26:18.249 [error] LASPVIN Received delta From='h@12.0.0.18' at TimeStamp="2020-07-03T16:26:18.249" microseconds=240 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:18.249 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",14,22},{"delta_send",22,14},{"send_backend",35,0}] 
+16:26:19.233 [error] LASPVIN Received delta From='e@12.0.0.15' at TimeStamp="2020-07-03T16:26:19.233" microseconds=591 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:19.233 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",15,22},{"delta_send",22,15},{"send_backend",36,0}] 
+16:26:20.058 [error] LASPVIN Received delta From='b@12.0.0.12' at TimeStamp="2020-07-03T16:26:20.586" microseconds=357 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:20.058 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",16,22},{"delta_send",22,16},{"send_backend",37,0}] 
+16:26:20.523 [error] LASPVIN Received delta From='c@12.0.0.13' at TimeStamp="2020-07-03T16:26:20.523" microseconds=437 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:20.523 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",17,22},{"delta_send",22,17},{"send_backend",38,0}] 
+16:26:20.755 [error] LASPVIN Received delta From='j@12.0.0.20' at TimeStamp="2020-07-03T16:26:20.754" microseconds=398 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:20.755 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",18,22},{"delta_send",22,18},{"send_backend",39,0}] 
+16:26:20.970 [error] LASPVIN Received delta From='d@12.0.0.14' at TimeStamp="2020-07-03T16:26:20.970" microseconds=461 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:20.970 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",19,22},{"delta_send",22,19},{"send_backend",40,0}] 
+16:26:23.084 [error] LASPVIN Received delta From='f@12.0.0.16' at TimeStamp="2020-07-03T16:26:23.842" microseconds=452 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:23.084 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",20,22},{"delta_send",22,20},{"send_backend",41,0}] 
+16:26:23.262 [error] LASPVIN Received delta From='a@13.0.0.11' at TimeStamp="2020-07-03T16:26:23.262" microseconds=420 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:23.262 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",21,22},{"delta_send",22,21},{"send_backend",42,0}] 
+16:26:24.167 [error] LASPVIN Received delta From='g@12.0.0.17' at TimeStamp="2020-07-03T16:26:24.167" microseconds=313 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_wadhw}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+16:26:24.167 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",22,22},{"delta_send",22,22},{"send_backend",43,0}] 
+16:27:05.738 [warning] global: 'a@12.0.0.11' failed to connect to 'f@19.0.0.16'
