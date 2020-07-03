@@ -1,0 +1,858 @@
+
+
+root@csst-06:/home/ubuntu/laspdev# 
+root@csst-06:/home/ubuntu/laspdev# python /home/ubuntu/laspdev/utility/setup_laspp.py d4
+d4
+ip:10.0.0.14
+node:d
+root@d4:/# [Kroot@d4:/# service vnstat start
+[....] Starting vnStat daemon: vnstatd[?25l7[1G[[32m ok [39;49m8[?12l[?25h.
+root@d4:/# vnstat -u -i d4-eth0
+Error: Unable to read database "/var/lib/vnstat/d4-eth0": No such file or directory
+Info: -> A new database has been created.
+root@d4:/# vnstat -u
+root@d4:/# vnstat
+
+                      rx      /      tx      /     total    /   estimated
+ eth0: Not enough data available yet.
+ d4-eth0: Not enough data available yet.
+root@d4:/# export PEER_SERVICE=partisan_hyparview_peer_service_manager
+root@d4:/# export RATE_CLASS=c3
+root@d4:/# export RATE_C1=10000
+root@d4:/# export RATE_C2=40000
+root@d4:/# export RATE_C3=70000
+root@d4:/# export PROPAGATE_ON_UPDATE=false
+root@d4:/# export MAX_ACTIVE_SIZE=50
+root@d4:/# cd /opt/lasp
+root@d4:/opt/lasp# epmd -daemon
+root@d4:/opt/lasp# rebar3 shell --name d@10.0.0.14
+[0;32m===> Verifying dependencies...
+[0m[0;32m===> Compiling lasp
+[0mErlang/OTP 19 [erts-8.3] [source] [64-bit] [smp:24:24] [ds:24:24:10] [async-threads:0] [hipe] [kernel-poll:false]
+
+Eshell V8.3  (abort with ^G)
+(d@10.0.0.14)1> [0;35m===> The rebar3 shell is a development tool; to deploy applications in production, consider using releases (http://www.rebar3.org/docs/releases)
+[0m11:54:06.962 [info] Application lager started on node 'd@10.0.0.14'
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.253.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.252.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.254.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+         application: sasl
+          started_at: 'd@10.0.0.14'
+11:54:07.094 [info] Application sasl started on node 'd@10.0.0.14'
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+         application: lasp_support
+          started_at: 'd@10.0.0.14'
+11:54:07.094 [info] Application lasp_support started on node 'd@10.0.0.14'
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+         application: acceptor_pool
+          started_at: 'd@10.0.0.14'
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+         application: quickrand
+          started_at: 'd@10.0.0.14'
+11:54:07.101 [info] Application acceptor_pool started on node 'd@10.0.0.14'
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+         application: uuid
+          started_at: 'd@10.0.0.14'
+11:54:07.104 [info] Application quickrand started on node 'd@10.0.0.14'
+11:54:07.104 [info] Application uuid started on node 'd@10.0.0.14'
+11:54:07.114 [info] Using node name: 'd@10.0.0.14'
+11:54:07.122 [info] Resolving "10.0.0.14"...
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.266.0>},
+                       {id,timer_server},
+                       {mfargs,{timer,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,1000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+          supervisor: {local,inet_gethost_native_sup}
+             started: [{pid,<0.268.0>},{mfa,{inet_gethost_native,init,[[]]}}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.267.0>},
+                       {id,inet_gethost_native_sup},
+                       {mfargs,{inet_gethost_native,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,1000},
+                       {child_type,worker}]
+11:54:07.127 [info] Resolved "d@10.0.0.14" to {10,0,0,14}
+11:54:07.127 [info] Resolved "10.0.0.14" to {10,0,0,14}
+11:54:07.808 [info] Partisan listening on {10,0,0,14}:49987 listen_addrs: [#{ip => {10,0,0,14},port => 49987}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.313.0>},
+                       {id,partisan_rpc_backend},
+                       {mfargs,{partisan_rpc_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.314.0>},
+                       {id,partisan_acknowledgement_backend},
+                       {mfargs,
+                           {partisan_acknowledgement_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+11:54:07.873 [info] Not using container orchestration; disabling.
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:07 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.315.0>},
+                       {id,partisan_orchestration_backend},
+                       {mfargs,{partisan_orchestration_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+11:54:08.051 [info] node 'd@10.0.0.14' choosing random seed: {901180,-576460745942829011,-576460752303423423}
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.316.0>},
+                       {id,partisan_hyparview_peer_service_manager},
+                       {mfargs,
+                           {partisan_hyparview_peer_service_manager,
+                               start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.317.0>},
+                       {id,partisan_peer_service_events},
+                       {mfargs,{partisan_peer_service_events,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+11:54:08.070 [info] node 'd@10.0.0.14' choosing random seed: {901180,-576460745942829011,-576460752303423423}
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.318.0>},
+                       {id,partisan_plumtree_backend},
+                       {mfargs,{partisan_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.319.0>},
+                       {id,partisan_plumtree_broadcast},
+                       {mfargs,{partisan_plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.320.0>},
+                       {id,partisan_monitor},
+                       {mfargs,{partisan_monitor,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.322.0>},
+                       {id,partisan_pool},
+                       {mfargs,{partisan_pool,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.323.0>},
+                       {id,{partisan_socket,{10,0,0,14},49987}},
+                       {mfargs,
+                           {partisan_socket,start_link,[{10,0,0,14},49987]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.321.0>},
+                       {id,partisan_pool_sup},
+                       {mfargs,{partisan_pool_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,20000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+         application: partisan
+          started_at: 'd@10.0.0.14'
+11:54:08.406 [info] Application partisan started on node 'd@10.0.0.14'
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+          supervisor: {local,plumtree_sup}
+             started: [{pid,<0.338.0>},
+                       {id,plumtree_broadcast},
+                       {mfargs,{plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+         application: plumtree
+          started_at: 'd@10.0.0.14'
+11:54:08.499 [info] Application plumtree started on node 'd@10.0.0.14'
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+         application: gen_fsm_compat
+          started_at: 'd@10.0.0.14'
+11:54:08.499 [info] Application gen_fsm_compat started on node 'd@10.0.0.14'
+11:54:08.551 [info] Setting jitter: false
+11:54:08.579 [info] Setting jitter percent: 1
+11:54:08.583 [info] Setting event interval: 0
+11:54:08.598 [info] Setting max events: 1000
+11:54:08.611 [info] Setting extended logging: false
+11:54:08.615 [info] Setting mailbox logging: false
+11:54:08.627 [info] Setting operation mode: delta_based
+11:54:08.634 [info] Setting set type: orset
+11:54:08.647 [info] Setting broadcast: false
+11:54:08.818 [info] Membership: false
+11:54:08.825 [info] Workflow: false
+11:54:08.854 [info] AdClientEnabled: false
+11:54:08.864 [info] AdServerEnabled: false
+11:54:08.885 [info] TournClientEnabled: false
+11:54:08.890 [info] TournServerEnabled: false
+11:54:08.895 [info] ThroughputType: gset
+11:54:08.905 [info] ThroughputClientEnabled: false
+11:54:08.910 [info] ThroughputServerEnabled: false
+11:54:08.915 [info] DivergenceType: gcounter
+11:54:08.917 [info] DivergenceClientEnabled: false
+11:54:08.951 [info] DivergenceServerEnabled: false
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:08 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.385.0>},
+                       {id,lasp_unique},
+                       {mfargs,{lasp_unique,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:09 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.386.0>},
+                       {id,lasp_plumtree_backend},
+                       {mfargs,{lasp_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:09 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.387.0>},
+                       {id,lasp_plumtree_memory_report},
+                       {mfargs,{lasp_plumtree_memory_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:09 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.388.0>},
+                       {id,lasp_memory_utilization_report},
+                       {mfargs,{lasp_memory_utilization_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+11:54:09.409 [info] Backend initialized with pid: <0.393.0>
+11:54:09.409 [info] Backend lasp_ets_storage_backend initialized: <0.393.0>
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:09 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.389.0>},
+                       {id,lasp_distribution_backend},
+                       {mfargs,{lasp_distribution_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:09 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.395.0>},
+                       {id,lasp_process_sup},
+                       {mfargs,{lasp_process_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+11:54:09.414 [error] LASPVIN check timestamp: "2020-07-03T11:54:09.414" 
+
+=PROGRESS REPORT==== 3-Jul-2020::11:54:09 ===
+         application: lasp
+          started_at: 'd@10.0.0.14'
+[0;32m===> Booted types
+[0m[0;32m===> Booted gen_flow
+[0m11:54:09.420 [info] Application lasp started on node 'd@10.0.0.14'
+[0;32m===> Booted syntax_tools
+[0m[0;32m===> Booted compiler
+[0m[0;32m===> Booted goldrush
+[0m[0;32m===> Booted lager
+[0m[0;32m===> Booted sasl
+[0m[0;32m===> Booted lasp_support
+[0m[0;32m===> Booted acceptor_pool
+[0m[0;32m===> Booted quickrand
+[0m[0;32m===> Booted uuid
+[0m[0;32m===> Booted partisan
+[0m[0;32m===> Booted plumtree
+[0m[0;32m===> Booted gen_fsm_compat
+[0m[0;32m===> Booted lasp
+[0m
+(d@10.0.0.14)1> erlang:set_cookie(node(),'RPJVCXYDYULBNZFEFPHJ').
+true
+(d@10.0.0.14)2> application:get_env(partisan, max_active_size).
+{ok,50}
+(d@10.0.0.14)3> application:get_env(partisan, max_passive_size).
+{ok,80}
+(d@10.0.0.14)4> application:get_env(partisan, min_active_size).
+{ok,3}
+(d@10.0.0.14)5> )5> lasp_peer_service:join('a@10.0.0.11').
+ok
+(d@10.0.0.14)6> lasp_peer_service:members().
+{ok,['a@10.0.0.11','d@10.0.0.14','e@10.0.0.15']}
+(d@10.0.0.14)7> lasp_peer_service:join('a@10.0.0.11').
+ok
+(d@10.0.0.14)8> lasp_peer_service:members().
+{ok,['a@10.0.0.11','d@10.0.0.14','e@10.0.0.15']}
+(d@10.0.0.14)9> 11:56:03.617 [warning] global: 'd@10.0.0.14' failed to connect to 'a@12.0.0.11'
+11:56:03.618 [warning] global: 'd@10.0.0.14' failed to connect to 'a@13.0.0.11'
+11:56:03.620 [warning] global: 'd@10.0.0.14' failed to connect to 'a@14.0.0.11'
+11:56:03.620 [warning] global: 'd@10.0.0.14' failed to connect to 'a@11.0.0.11'
+11:56:03.620 [warning] global: 'd@10.0.0.14' failed to connect to 'a@15.0.0.11'
+11:56:03.622 [warning] global: 'd@10.0.0.14' failed to connect to 'a@16.0.0.11'
+11:56:03.623 [warning] global: 'd@10.0.0.14' failed to connect to 'a@18.0.0.11'
+11:56:03.623 [warning] global: 'd@10.0.0.14' failed to connect to 'a@17.0.0.11'
+11:56:03.624 [warning] global: 'd@10.0.0.14' failed to connect to 'a@19.0.0.11'
+11:58:03.353 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T11:58:03.353" microseconds=110586 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_3D1VFYMWS0O5G8A}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+11:58:03.353 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",1,0},{"delta_send",0,1},{"send_backend",0,0}] 
+11:58:09.581 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T11:58:09.581" microseconds=314 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_3D1VFYMWS0O5G8A}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+11:58:09.581 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",2,0},{"delta_send",0,2},{"send_backend",1,0}] 
+11:58:09.662 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T11:58:09.662" 
+11:58:09.663 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,3}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:1 
+11:58:09.663 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T11:58:09.663" 
+11:58:09.663 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,3}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_3D1VFYMWS0O5G8A}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+11:58:13.271 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T11:58:13.271" microseconds=35044 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_JJSK8I6I77VPGAP}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+11:58:13.272 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",3,2},{"delta_send",2,3},{"send_backend",4,0}] 
+11:58:19.607 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T11:58:19.607" microseconds=438 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_JJSK8I6I77VPGAP}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+11:58:19.607 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",4,2},{"delta_send",2,4},{"send_backend",5,0}] 
+11:58:19.672 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T11:58:19.671" 
+11:58:19.672 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,5}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:2 
+11:58:19.672 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T11:58:19.672" 
+11:58:19.672 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,5}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_JJSK8I6I77VPGAP}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+11:58:23.263 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T11:58:23.263" microseconds=24114 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[#{what => val_32C0TPFWP5RPU1J}],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+11:58:23.263 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",5,4},{"delta_send",4,5},{"send_backend",8,0}] 
+11:58:29.624 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T11:58:29.624" microseconds=5076 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[#{what => val_32C0TPFWP5RPU1J}],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+11:58:29.624 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",6,4},{"delta_send",4,6},{"send_backend",9,0}] 
+11:58:29.709 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T11:58:29.709" 
+11:58:29.740 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,7}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:3 
+11:58:29.773 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T11:58:29.773" 
+11:58:29.774 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,7}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},4},#{what => val_32C0TPFWP5RPU1J}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},3},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},4}]}}}} Counter:3 
+11:58:33.261 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T11:58:33.261" microseconds=22309 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[#{what => val_GGG6I32PBMP2BLQ}],[],[],[],[],[],[]}}}}] 
+11:58:33.261 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",7,6},{"delta_send",6,7},{"send_backend",12,0}] 
+11:58:39.591 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T11:58:39.590" microseconds=373 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[#{what => val_GGG6I32PBMP2BLQ}],[],[],[],[],[],[]}}}}] 
+11:58:39.591 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",8,6},{"delta_send",6,8},{"send_backend",13,0}] 
+11:58:39.711 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T11:58:39.711" 
+11:58:39.734 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,9}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:4 
+11:58:39.735 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T11:58:39.735" 
+11:58:39.760 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,9}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},5},#{what => val_GGG6I32PBMP2BLQ}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},4},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},5}]}}}} Counter:4 
+11:58:43.273 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T11:58:43.272" microseconds=26524 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_7Q0LC43V1P39MQX}]}}}}] 
+11:58:43.273 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",9,8},{"delta_send",8,9},{"send_backend",16,0}] 
+11:58:49.624 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T11:58:49.624" microseconds=349 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_7Q0LC43V1P39MQX}]}}}}] 
+11:58:49.624 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",10,8},{"delta_send",8,10},{"send_backend",17,0}] 
+11:58:49.711 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T11:58:49.711" 
+11:58:49.724 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,11}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:5 
+11:58:49.725 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T11:58:49.724" 
+11:58:49.725 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,11}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},7},#{what => val_7Q0LC43V1P39MQX}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},5},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},6},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},7}]}}}} Counter:5 
+11:58:53.277 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T11:58:53.277" microseconds=31933 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[#{what => val_8Z8POJTTQAFY6CV}],[],[],[],[],[],[],[],[],[]}}}}] 
+11:58:53.277 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",11,10},{"delta_send",10,11},{"send_backend",20,0}] 
+11:58:59.650 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T11:58:59.650" microseconds=376 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[#{what => val_8Z8POJTTQAFY6CV}],[],[],[],[],[],[],[],[],[]}}}}] 
+11:58:59.650 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",12,10},{"delta_send",10,12},{"send_backend",21,0}] 
+11:58:59.781 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T11:58:59.781" 
+11:58:59.811 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:6 
+11:58:59.814 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T11:58:59.814" 
+11:58:59.886 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},9},#{what => val_8Z8POJTTQAFY6CV}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},7},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},8},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},9}]}}}} Counter:6 
+11:59:03.271 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T11:59:03.271" microseconds=22391 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[#{what => val_Z8TQOOOMEE3P12F}],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+11:59:03.271 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",13,12},{"delta_send",12,13},{"send_backend",24,0}] 
+11:59:09.599 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T11:59:09.598" microseconds=262 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[#{what => val_Z8TQOOOMEE3P12F}],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+11:59:09.599 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",14,12},{"delta_send",12,14},{"send_backend",25,0}] 
+11:59:09.783 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T11:59:09.782" 
+11:59:09.784 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,15}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:7 
+11:59:09.786 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T11:59:09.786" 
+11:59:09.786 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,15}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},11},#{what => val_Z8TQOOOMEE3P12F}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},9},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},10},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},11}]}}}} Counter:7 
+11:59:13.296 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T11:59:13.295" microseconds=35062 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[#{what => val_SWDRS5O2GYQWDCS}],[],[],[],[]}}}}] 
+11:59:13.296 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",15,14},{"delta_send",14,15},{"send_backend",28,0}] 
+11:59:19.600 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T11:59:19.600" microseconds=275 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[#{what => val_SWDRS5O2GYQWDCS}],[],[],[],[]}}}}] 
+11:59:19.601 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",16,14},{"delta_send",14,16},{"send_backend",29,0}] 
+11:59:19.785 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T11:59:19.785" 
+11:59:19.803 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,17}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:8 
+11:59:19.803 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T11:59:19.803" 
+11:59:19.804 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,17}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},12},#{what => val_SWDRS5O2GYQWDCS}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},10},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},11},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},12}]}}}} Counter:8 
+11:59:23.281 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T11:59:23.281" microseconds=20936 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[#{what => val_KYDYW4DY50K1N55}],[],[],[],[],[],[],[]}}}}] 
+11:59:23.281 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",17,16},{"delta_send",16,17},{"send_backend",32,0}] 
+11:59:29.690 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T11:59:29.690" microseconds=441 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[#{what => val_KYDYW4DY50K1N55}],[],[],[],[],[],[],[]}}}}] 
+11:59:29.690 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",18,16},{"delta_send",16,18},{"send_backend",33,0}] 
+11:59:29.786 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T11:59:29.786" 
+11:59:29.805 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,19}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:9 
+11:59:29.806 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T11:59:29.806" 
+11:59:29.839 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,19}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},14},#{what => val_KYDYW4DY50K1N55}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},11},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},12},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},13},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},14}]}}}} Counter:9 
+11:59:33.292 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T11:59:33.292" microseconds=23291 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[#{what => val_20KB8LNY0TPQIBB}],[],[],[],[]}}}}] 
+11:59:33.292 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",19,18},{"delta_send",18,19},{"send_backend",36,0}] 
+11:59:39.609 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T11:59:39.608" microseconds=452 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[#{what => val_20KB8LNY0TPQIBB}],[],[],[],[]}}}}] 
+11:59:39.609 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",20,18},{"delta_send",18,20},{"send_backend",37,0}] 
+11:59:39.788 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T11:59:39.788" 
+11:59:39.801 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,21}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:10 
+11:59:39.851 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T11:59:39.851" 
+11:59:39.851 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,21}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},12},#{what => val_SWDRS5O2GYQWDCS}},{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},15},#{what => val_20KB8LNY0TPQIBB}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},10},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},11},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},12},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},14},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},15}]}}}} Counter:10 
+11:59:43.296 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T11:59:43.296" microseconds=27796 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_FPJF445R5YVSOEX}],[]}}}}] 
+11:59:43.297 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",21,20},{"delta_send",20,21},{"send_backend",40,0}] 
+11:59:49.610 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T11:59:49.609" microseconds=449 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_FPJF445R5YVSOEX}],[]}}}}] 
+11:59:49.610 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",22,20},{"delta_send",20,22},{"send_backend",41,0}] 
+11:59:49.790 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T11:59:49.790" 
+11:59:49.805 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,23}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:11 
+11:59:49.807 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T11:59:49.807" 
+11:59:49.847 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,23}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},17},#{what => val_FPJF445R5YVSOEX}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},12},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},15},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},16},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},17}]}}}} Counter:11 
+11:59:53.335 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T11:59:53.335" microseconds=22278 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_MGQDILKVNQSG9Z8}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+11:59:53.335 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",23,22},{"delta_send",22,23},{"send_backend",44,0}] 
+11:59:59.675 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T11:59:59.675" microseconds=341 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_MGQDILKVNQSG9Z8}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+11:59:59.675 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",24,22},{"delta_send",22,24},{"send_backend",45,0}] 
+11:59:59.793 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T11:59:59.793" 
+11:59:59.813 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,25}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:12 
+11:59:59.839 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T11:59:59.838" 
+11:59:59.839 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,25}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},19},#{what => val_MGQDILKVNQSG9Z8}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},17},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},18},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},19}]}}}} Counter:12 
+12:00:03.309 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:00:03.308" microseconds=29633 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[#{what => val_GRDFFNR0CC3IM9D}],[],[],[],[],[],[]}}}}] 
+12:00:03.309 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",25,24},{"delta_send",24,25},{"send_backend",48,0}] 
+12:00:09.616 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:00:09.616" microseconds=399 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[#{what => val_GRDFFNR0CC3IM9D}],[],[],[],[],[],[]}}}}] 
+12:00:09.616 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",26,24},{"delta_send",24,26},{"send_backend",49,0}] 
+12:00:09.796 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:00:09.796" 
+12:00:09.796 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,27}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:13 
+12:00:09.797 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:00:09.797" 
+12:00:09.797 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,27}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},20},#{what => val_GRDFFNR0CC3IM9D}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},19},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},20}]}}}} Counter:13 
+12:00:13.310 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:00:13.309" microseconds=34169 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[#{what => val_LWAMYF1PQN47WCE}],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:00:13.310 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",27,26},{"delta_send",26,27},{"send_backend",52,0}] 
+12:00:19.726 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:00:19.726" microseconds=405 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[#{what => val_LWAMYF1PQN47WCE}],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:00:19.726 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",28,26},{"delta_send",26,28},{"send_backend",53,0}] 
+12:00:19.798 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:00:19.798" 
+12:00:19.799 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,29}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:14 
+12:00:19.799 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:00:19.799" 
+12:00:19.799 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,29}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},22},#{what => val_LWAMYF1PQN47WCE}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},20},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},21},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},22}]}}}} Counter:14 
+12:00:23.305 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:00:23.305" microseconds=28997 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_QUW8VXJ7JJW1DDV}],[],[],[]}}}}] 
+12:00:23.305 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",29,28},{"delta_send",28,29},{"send_backend",56,0}] 
+12:00:29.621 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:00:29.621" microseconds=236 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_QUW8VXJ7JJW1DDV}],[],[],[]}}}}] 
+12:00:29.622 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",30,28},{"delta_send",28,30},{"send_backend",57,0}] 
+12:00:29.801 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:00:29.801" 
+12:00:29.816 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,31}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:15 
+12:00:29.816 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:00:29.816" 
+12:00:29.883 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,31}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},24},#{what => val_QUW8VXJ7JJW1DDV}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},22},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},23},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},24}]}}}} Counter:15 
+12:00:33.302 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:00:33.302" microseconds=22081 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[#{what => val_ME5YSM81UG2DZIY}],[],[],[],[],[],[],[],[]}}}}] 
+12:00:33.303 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",31,30},{"delta_send",30,31},{"send_backend",60,0}] 
+12:00:39.625 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:00:39.625" microseconds=318 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[#{what => val_ME5YSM81UG2DZIY}],[],[],[],[],[],[],[],[]}}}}] 
+12:00:39.625 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",32,30},{"delta_send",30,32},{"send_backend",61,0}] 
+12:00:39.802 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:00:39.802" 
+12:00:39.802 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,33}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:16 
+12:00:39.802 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:00:39.802" 
+12:00:39.803 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,33}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},25},#{what => val_ME5YSM81UG2DZIY}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},24},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},25}]}}}} Counter:16 
+12:00:43.317 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:00:43.317" microseconds=31814 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_Z1P1OTGNN55NPJ1}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:00:43.317 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",33,32},{"delta_send",32,33},{"send_backend",64,0}] 
+12:00:49.668 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:00:49.668" microseconds=269 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_Z1P1OTGNN55NPJ1}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:00:49.669 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",34,32},{"delta_send",32,34},{"send_backend",65,0}] 
+12:00:49.805 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:00:49.805" 
+12:00:49.805 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,35}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:17 
+12:00:49.806 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:00:49.806" 
+12:00:49.806 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,35}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},27},#{what => val_Z1P1OTGNN55NPJ1}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},25},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},26},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},27}]}}}} Counter:17 
+12:00:53.316 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:00:53.316" microseconds=34105 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[#{what => val_84OB9GQADAC24M0}],[],[],[],[],[],[],[]}}}}] 
+12:00:53.316 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",35,34},{"delta_send",34,35},{"send_backend",68,0}] 
+12:00:59.665 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:00:59.665" microseconds=318 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[#{what => val_84OB9GQADAC24M0}],[],[],[],[],[],[],[]}}}}] 
+12:00:59.665 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",36,34},{"delta_send",34,36},{"send_backend",69,0}] 
+12:00:59.808 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:00:59.808" 
+12:00:59.821 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,37}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:18 
+12:00:59.855 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:00:59.855" 
+12:00:59.855 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,37}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},29},#{what => val_84OB9GQADAC24M0}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},27},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},28},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},29}]}}}} Counter:18 
+12:01:03.317 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:01:03.317" microseconds=33677 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[#{what => val_6GN4TB0JRU14XEC}],[],[],[],[],[],[]}}}}] 
+12:01:03.317 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",37,36},{"delta_send",36,37},{"send_backend",72,0}] 
+12:01:09.632 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:01:09.632" microseconds=254 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[#{what => val_6GN4TB0JRU14XEC}],[],[],[],[],[],[]}}}}] 
+12:01:09.632 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",38,36},{"delta_send",36,38},{"send_backend",73,0}] 
+12:01:09.810 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:01:09.810" 
+12:01:09.811 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,39}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:19 
+12:01:09.811 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:01:09.811" 
+12:01:09.812 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,39}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},30},#{what => val_6GN4TB0JRU14XEC}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},29},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},30}]}}}} Counter:19 
+12:01:13.309 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:01:13.309" microseconds=22941 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_I93JBSXV8805TAN}]}}}}] 
+12:01:13.309 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",39,38},{"delta_send",38,39},{"send_backend",76,0}] 
+12:01:19.657 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:01:19.657" microseconds=328 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_I93JBSXV8805TAN}]}}}}] 
+12:01:19.658 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",40,38},{"delta_send",38,40},{"send_backend",77,0}] 
+12:01:19.813 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:01:19.813" 
+12:01:19.838 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,41}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:20 
+12:01:19.897 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:01:19.896" 
+12:01:19.897 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,41}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},32},#{what => val_I93JBSXV8805TAN}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},30},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},31},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},32}]}}}} Counter:20 
+12:01:23.322 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:01:23.322" microseconds=32505 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[#{what => val_7H1V8PRFBQUNUQ7}],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:01:23.322 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",41,40},{"delta_send",40,41},{"send_backend",80,0}] 
+12:01:29.637 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:01:29.637" microseconds=316 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[#{what => val_7H1V8PRFBQUNUQ7}],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:01:29.637 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",42,40},{"delta_send",40,42},{"send_backend",81,0}] 
+12:01:29.814 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:01:29.814" 
+12:01:29.814 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,43}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:21 
+12:01:29.815 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:01:29.815" 
+12:01:29.815 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,43}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},34},#{what => val_7H1V8PRFBQUNUQ7}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},32},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},33},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},34}]}}}} Counter:21 
+12:01:33.322 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:01:33.322" microseconds=31715 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[#{what => val_BJ3C68CBJ2YOWS4}],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:01:33.322 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",43,42},{"delta_send",42,43},{"send_backend",84,0}] 
+12:01:39.639 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:01:39.639" microseconds=350 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[#{what => val_BJ3C68CBJ2YOWS4}],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:01:39.639 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",44,42},{"delta_send",42,44},{"send_backend",85,0}] 
+12:01:39.816 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:01:39.816" 
+12:01:39.816 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,45}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:22 
+12:01:39.816 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:01:39.816" 
+12:01:39.817 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,45}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},35},#{what => val_BJ3C68CBJ2YOWS4}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},34},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},35}]}}}} Counter:22 
+12:01:43.367 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:01:43.367" microseconds=32947 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[#{what => val_FKAS6J3AYT110PI}],[],[],[],[]}}}}] 
+12:01:43.367 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",45,44},{"delta_send",44,45},{"send_backend",88,0}] 
+12:01:49.701 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:01:49.701" microseconds=328 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[#{what => val_FKAS6J3AYT110PI}],[],[],[],[]}}}}] 
+12:01:49.701 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",46,44},{"delta_send",44,46},{"send_backend",89,0}] 
+12:01:49.819 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:01:49.819" 
+12:01:49.831 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,47}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:23 
+12:01:49.831 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:01:49.831" 
+12:01:49.906 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,47}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},37},#{what => val_FKAS6J3AYT110PI}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},35},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},36},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},37}]}}}} Counter:23 
+12:01:53.352 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:01:53.351" microseconds=25510 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[#{what => val_RKM5Y0QQCZXJT6B}],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:01:53.352 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",47,46},{"delta_send",46,47},{"send_backend",92,0}] 
+12:01:59.641 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:01:59.641" microseconds=278 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[#{what => val_RKM5Y0QQCZXJT6B}],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:01:59.642 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",48,46},{"delta_send",46,48},{"send_backend",93,0}] 
+12:01:59.821 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:01:59.821" 
+12:01:59.835 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,49}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:24 
+12:01:59.838 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:01:59.838" 
+12:01:59.876 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,49}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},39},#{what => val_RKM5Y0QQCZXJT6B}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},37},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},38},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},39}]}}}} Counter:24 
+12:02:03.330 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:02:03.330" microseconds=33612 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[#{what => val_EV2BQOZK8NV8B7B}],[],[],[],[],[],[],[],[]}}}}] 
+12:02:03.331 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",49,48},{"delta_send",48,49},{"send_backend",96,0}] 
+12:02:09.643 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:02:09.643" microseconds=264 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[#{what => val_EV2BQOZK8NV8B7B}],[],[],[],[],[],[],[],[]}}}}] 
+12:02:09.643 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",50,48},{"delta_send",48,50},{"send_backend",97,0}] 
+12:02:09.823 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:02:09.823" 
+12:02:09.824 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,51}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:25 
+12:02:09.824 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:02:09.824" 
+12:02:09.824 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,51}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},40},#{what => val_EV2BQOZK8NV8B7B}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},39},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},40}]}}}} Counter:25 
+12:02:13.326 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:02:13.326" microseconds=22714 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[#{what => val_FGRLQUNWFPHV2OP}],[],[],[],[]}}}}] 
+12:02:13.326 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",51,50},{"delta_send",50,51},{"send_backend",100,0}] 
+12:02:19.646 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:02:19.646" microseconds=240 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[#{what => val_FGRLQUNWFPHV2OP}],[],[],[],[]}}}}] 
+12:02:19.646 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",52,50},{"delta_send",50,52},{"send_backend",101,0}] 
+12:02:19.827 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:02:19.826" 
+12:02:19.827 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,53}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:26 
+12:02:19.827 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:02:19.827" 
+12:02:19.827 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,53}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},42},#{what => val_FGRLQUNWFPHV2OP}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},40},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},41},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},42}]}}}} Counter:26 
+12:02:23.324 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:02:23.324" microseconds=23998 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[#{what => val_87A374NP4G69RG9}],[],[],[],[],[],[],[],[]}}}}] 
+12:02:23.324 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",53,52},{"delta_send",52,53},{"send_backend",104,0}] 
+12:02:29.650 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:02:29.649" microseconds=395 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[#{what => val_87A374NP4G69RG9}],[],[],[],[],[],[],[],[]}}}}] 
+12:02:29.650 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",54,52},{"delta_send",52,54},{"send_backend",105,0}] 
+12:02:29.829 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:02:29.829" 
+12:02:29.852 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,55}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:27 
+12:02:29.903 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:02:29.902" 
+12:02:29.903 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,55}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},44},#{what => val_87A374NP4G69RG9}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},42},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},43},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},44}]}}}} Counter:27 
+12:02:33.328 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:02:33.328" microseconds=25009 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_4CXWYFQC4UYW9K8}],[],[],[],[],[]}}}}] 
+12:02:33.329 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",55,54},{"delta_send",54,55},{"send_backend",108,0}] 
+12:02:39.650 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:02:39.650" microseconds=349 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_4CXWYFQC4UYW9K8}],[],[],[],[],[]}}}}] 
+12:02:39.650 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",56,54},{"delta_send",54,56},{"send_backend",109,0}] 
+12:02:39.832 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:02:39.832" 
+12:02:39.833 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,57}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:28 
+12:02:39.834 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:02:39.834" 
+12:02:39.834 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,57}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},45},#{what => val_4CXWYFQC4UYW9K8}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},44},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},45}]}}}} Counter:28 
+12:02:43.330 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:02:43.329" microseconds=23774 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[#{what => val_V5X2LCITAH6MFV7}],[],[],[],[],[],[],[],[],[]}}}}] 
+12:02:43.330 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",57,56},{"delta_send",56,57},{"send_backend",112,0}] 
+12:02:49.720 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:02:49.720" microseconds=389 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[#{what => val_V5X2LCITAH6MFV7}],[],[],[],[],[],[],[],[],[]}}}}] 
+12:02:49.720 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",58,56},{"delta_send",56,58},{"send_backend",113,0}] 
+12:02:49.835 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:02:49.835" 
+12:02:49.835 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,59}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:29 
+12:02:49.835 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:02:49.835" 
+12:02:49.836 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,59}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},47},#{what => val_V5X2LCITAH6MFV7}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},45},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},46},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},47}]}}}} Counter:29 
+12:02:53.340 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:02:53.340" microseconds=34290 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_8TOIK0TYFC40VC9}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:02:53.340 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",59,58},{"delta_send",58,59},{"send_backend",116,0}] 
+12:02:59.655 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:02:59.655" microseconds=311 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_8TOIK0TYFC40VC9}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:02:59.655 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",60,58},{"delta_send",58,60},{"send_backend",117,0}] 
+12:02:59.839 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:02:59.839" 
+12:02:59.839 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,61}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:30 
+12:02:59.849 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:02:59.848" 
+12:02:59.849 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,61}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},49},#{what => val_8TOIK0TYFC40VC9}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},47},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},48},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},49}]}}}} Counter:30 
+12:03:13.352 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:03:13.352" microseconds=33065 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_0QUWRXDBJ4WDAKJ}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:03:13.352 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",61,60},{"delta_send",60,61},{"send_backend",120,0}] 
+12:03:19.665 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:03:19.665" microseconds=370 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[#{what => val_0QUWRXDBJ4WDAKJ}],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:03:19.665 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",62,60},{"delta_send",60,62},{"send_backend",121,0}] 
+12:03:19.843 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:03:19.843" 
+12:03:19.844 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,63}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:31 
+12:03:19.846 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:03:19.846" 
+12:03:19.847 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,63}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},51},#{what => val_0QUWRXDBJ4WDAKJ}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},49},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},50},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},51}]}}}} Counter:31 
+12:03:23.347 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:03:23.346" microseconds=25220 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_XE30EQG7N6RJ5ZF}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:03:23.347 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",63,62},{"delta_send",62,63},{"send_backend",124,0}] 
+12:03:29.663 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:03:29.663" microseconds=322 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_XE30EQG7N6RJ5ZF}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:03:29.663 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",64,62},{"delta_send",62,64},{"send_backend",125,0}] 
+12:03:29.845 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:03:29.845" 
+12:03:29.855 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,65}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:32 
+12:03:29.856 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:03:29.856" 
+12:03:29.856 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,65}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},53},#{what => val_XE30EQG7N6RJ5ZF}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},51},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},52},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},53}]}}}} Counter:32 
+12:03:33.350 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:03:33.350" microseconds=29076 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_JUJHTI50F15SSSK}],[],[],[],[],[]}}}}] 
+12:03:33.350 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",65,64},{"delta_send",64,65},{"send_backend",128,0}] 
+12:03:39.665 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:03:39.665" microseconds=233 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_JUJHTI50F15SSSK}],[],[],[],[],[]}}}}] 
+12:03:39.665 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",66,64},{"delta_send",64,66},{"send_backend",129,0}] 
+12:03:39.848 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:03:39.848" 
+12:03:39.873 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,67}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:33 
+12:03:39.916 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:03:39.915" 
+12:03:39.916 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,67}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},54},#{what => val_JUJHTI50F15SSSK}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},53},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},54}]}}}} Counter:33 
+12:03:43.347 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:03:43.347" microseconds=24245 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_KROPVOU81LA9S22}],[],[],[]}}}}] 
+12:03:43.347 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",67,66},{"delta_send",66,67},{"send_backend",132,0}] 
+12:03:49.703 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:03:49.702" microseconds=410 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_KROPVOU81LA9S22}],[],[],[]}}}}] 
+12:03:49.703 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",68,66},{"delta_send",66,68},{"send_backend",133,0}] 
+12:03:49.850 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:03:49.850" 
+12:03:49.850 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,69}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:34 
+12:03:49.851 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:03:49.850" 
+12:03:49.851 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,69}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},56},#{what => val_KROPVOU81LA9S22}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},54},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},55},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},56}]}}}} Counter:34 
+12:03:53.354 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:03:53.354" microseconds=29981 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_NS695BJADOSZCOV}],[],[],[]}}}}] 
+12:03:53.355 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",69,68},{"delta_send",68,69},{"send_backend",136,0}] 
+12:03:59.669 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:03:59.669" microseconds=320 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_NS695BJADOSZCOV}],[],[],[]}}}}] 
+12:03:59.669 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",70,68},{"delta_send",68,70},{"send_backend",137,0}] 
+12:03:59.851 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:03:59.851" 
+12:03:59.862 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,71}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:35 
+12:03:59.897 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:03:59.897" 
+12:03:59.897 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,71}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},58},#{what => val_NS695BJADOSZCOV}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},56},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},57},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},58}]}}}} Counter:35 
+12:04:03.351 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:04:03.351" microseconds=22532 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_29GZHA6PL0GFRZE}],[],[],[]}}}}] 
+12:04:03.351 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",71,70},{"delta_send",70,71},{"send_backend",140,0}] 
+12:04:09.672 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:04:09.672" microseconds=256 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_29GZHA6PL0GFRZE}],[],[],[]}}}}] 
+12:04:09.672 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",72,70},{"delta_send",70,72},{"send_backend",141,0}] 
+12:04:09.852 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:04:09.852" 
+12:04:09.872 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,73}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:36 
+12:04:09.872 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:04:09.872" 
+12:04:09.872 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,73}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},59},#{what => val_29GZHA6PL0GFRZE}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},58},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},59}]}}}} Counter:36 
+12:04:13.356 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:04:13.356" microseconds=26276 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_ZDJEEDPBQ11WAQR}],[],[],[]}}}}] 
+12:04:13.356 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",73,72},{"delta_send",72,73},{"send_backend",144,0}] 
+12:04:19.718 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:04:19.718" microseconds=331 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_ZDJEEDPBQ11WAQR}],[],[],[]}}}}] 
+12:04:19.718 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",74,72},{"delta_send",72,74},{"send_backend",145,0}] 
+12:04:19.855 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:04:19.855" 
+12:04:19.856 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,75}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:37 
+12:04:19.856 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:04:19.856" 
+12:04:19.856 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,75}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},61},#{what => val_ZDJEEDPBQ11WAQR}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},59},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},60},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},61}]}}}} Counter:37 
+12:04:23.353 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:04:23.352" microseconds=22191 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_9XFSENZBQNQEGUI}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:04:23.353 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",75,74},{"delta_send",74,75},{"send_backend",148,0}] 
+12:04:29.678 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:04:29.678" microseconds=253 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_9XFSENZBQNQEGUI}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:04:29.678 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",76,74},{"delta_send",74,76},{"send_backend",149,0}] 
+12:04:29.859 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:04:29.859" 
+12:04:29.874 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,77}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:38 
+12:04:29.879 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:04:29.879" 
+12:04:29.941 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,77}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},63},#{what => val_9XFSENZBQNQEGUI}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},61},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},62},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},63}]}}}} Counter:38 
+12:04:33.362 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:04:33.362" microseconds=28288 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_7LR7QYLKVOTLFT9}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:04:33.362 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",77,76},{"delta_send",76,77},{"send_backend",152,0}] 
+12:04:39.680 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:04:39.680" microseconds=323 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_7LR7QYLKVOTLFT9}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:04:39.680 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",78,76},{"delta_send",76,78},{"send_backend",153,0}] 
+12:04:39.861 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:04:39.861" 
+12:04:39.877 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,79}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:39 
+12:04:39.878 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:04:39.877" 
+12:04:39.878 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,79}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},64},#{what => val_7LR7QYLKVOTLFT9}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},63},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},64}]}}}} Counter:39 
+12:04:43.366 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:04:43.365" microseconds=30293 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_GK7Q1D4S96KCG55}],[],[]}}}}] 
+12:04:43.366 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",79,78},{"delta_send",78,79},{"send_backend",156,0}] 
+12:04:49.758 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:04:49.757" microseconds=286 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_GK7Q1D4S96KCG55}],[],[]}}}}] 
+12:04:49.758 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",80,78},{"delta_send",78,80},{"send_backend",157,0}] 
+12:04:49.864 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:04:49.864" 
+12:04:49.889 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,81}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:40 
+12:04:49.890 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:04:49.889" 
+12:04:49.890 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,81}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},66},#{what => val_GK7Q1D4S96KCG55}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},64},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},65},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},66}]}}}} Counter:40 
+12:04:53.371 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:04:53.371" microseconds=28127 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[#{what => val_1USZKIPS53NSVE2}],[],[],[],[],[],[],[],[],[]}}}}] 
+12:04:53.372 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",81,80},{"delta_send",80,81},{"send_backend",160,0}] 
+12:04:59.703 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:04:59.703" microseconds=342 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[#{what => val_1USZKIPS53NSVE2}],[],[],[],[],[],[],[],[],[]}}}}] 
+12:04:59.703 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",82,80},{"delta_send",80,82},{"send_backend",161,0}] 
+12:04:59.867 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:04:59.867" 
+12:04:59.883 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,83}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:41 
+12:04:59.888 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:04:59.888" 
+12:04:59.950 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,83}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},68},#{what => val_1USZKIPS53NSVE2}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},66},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},67},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},68}]}}}} Counter:41 
+12:05:03.434 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:05:03.434" microseconds=33710 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_CS1MTM0Y5DLP5SH}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:05:03.434 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",83,82},{"delta_send",82,83},{"send_backend",164,0}] 
+12:05:09.686 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:05:09.686" microseconds=316 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[#{what => val_CS1MTM0Y5DLP5SH}],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:05:09.686 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",84,82},{"delta_send",82,84},{"send_backend",165,0}] 
+12:05:09.869 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:05:09.869" 
+12:05:09.879 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,85}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:42 
+12:05:09.879 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:05:09.879" 
+12:05:09.879 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,85}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},69},#{what => val_CS1MTM0Y5DLP5SH}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},68},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},69}]}}}} Counter:42 
+12:05:13.366 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:05:13.366" microseconds=25233 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[#{what => val_AIXMOLFZQ68FD9E}],[],[],[],[],[],[],[]}}}}] 
+12:05:13.366 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",85,84},{"delta_send",84,85},{"send_backend",168,0}] 
+12:05:19.733 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:05:19.733" microseconds=339 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[#{what => val_AIXMOLFZQ68FD9E}],[],[],[],[],[],[],[]}}}}] 
+12:05:19.734 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",86,84},{"delta_send",84,86},{"send_backend",169,0}] 
+12:05:19.871 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:05:19.871" 
+12:05:19.890 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,87}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:43 
+12:05:19.891 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:05:19.891" 
+12:05:19.891 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,87}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},71},#{what => val_AIXMOLFZQ68FD9E}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},69},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},70},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},71}]}}}} Counter:43 
+12:05:23.404 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:05:23.404" microseconds=23984 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[#{what => val_N3JS44WMK8PQJUH}],[],[],[],[],[],[],[]}}}}] 
+12:05:23.404 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",87,86},{"delta_send",86,87},{"send_backend",172,0}] 
+12:05:29.734 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:05:29.734" microseconds=379 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[#{what => val_N3JS44WMK8PQJUH}],[],[],[],[],[],[],[]}}}}] 
+12:05:29.734 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",88,86},{"delta_send",86,88},{"send_backend",173,0}] 
+12:05:29.872 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:05:29.872" 
+12:05:29.882 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,89}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:44 
+12:05:29.932 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:05:29.932" 
+12:05:29.933 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,89}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},73},#{what => val_N3JS44WMK8PQJUH}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},71},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},72},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},73}]}}}} Counter:44 
+12:05:33.369 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:05:33.369" microseconds=23613 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[#{what => val_L1QCUOP5OTQRTM5}],[],[],[],[]}}}}] 
+12:05:33.369 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",89,88},{"delta_send",88,89},{"send_backend",176,0}] 
+12:05:39.695 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:05:39.695" microseconds=333 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[#{what => val_L1QCUOP5OTQRTM5}],[],[],[],[]}}}}] 
+12:05:39.695 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",90,88},{"delta_send",88,90},{"send_backend",177,0}] 
+12:05:39.875 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:05:39.875" 
+12:05:39.876 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,91}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:45 
+12:05:39.876 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:05:39.876" 
+12:05:39.877 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,91}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},74},#{what => val_L1QCUOP5OTQRTM5}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},73},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},74}]}}}} Counter:45 
+12:05:43.372 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:05:43.371" microseconds=22639 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[#{what => val_A907BAKL3OWZA8S}],[],[],[],[],[],[],[]}}}}] 
+12:05:43.372 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",91,90},{"delta_send",90,91},{"send_backend",180,0}] 
+12:05:49.695 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:05:49.695" microseconds=302 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[#{what => val_A907BAKL3OWZA8S}],[],[],[],[],[],[],[]}}}}] 
+12:05:49.696 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",92,90},{"delta_send",90,92},{"send_backend",181,0}] 
+12:05:49.878 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:05:49.877" 
+12:05:49.878 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,93}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:46 
+12:05:49.878 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:05:49.878" 
+12:05:49.878 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,93}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},76},#{what => val_A907BAKL3OWZA8S}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},74},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},75},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},76}]}}}} Counter:46 
+12:05:53.371 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:05:53.371" microseconds=22507 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[#{what => val_ZW7MULWE9LDZ147}],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:05:53.371 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",93,92},{"delta_send",92,93},{"send_backend",184,0}] 
+12:05:59.740 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:05:59.740" microseconds=317 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[#{what => val_ZW7MULWE9LDZ147}],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:05:59.740 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",94,92},{"delta_send",92,94},{"send_backend",185,0}] 
+12:05:59.881 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:05:59.881" 
+12:05:59.896 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,95}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:47 
+12:05:59.898 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:05:59.898" 
+12:05:59.938 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,95}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},78},#{what => val_ZW7MULWE9LDZ147}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},76},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},77},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},78}]}}}} Counter:47 
+12:06:03.388 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:06:03.388" microseconds=32692 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[#{what => val_AKAAOC74NVY2ON5}],[],[],[],[],[],[],[],[]}}}}] 
+12:06:03.388 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",95,94},{"delta_send",94,95},{"send_backend",188,0}] 
+12:06:09.733 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:06:09.733" microseconds=229 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[#{what => val_AKAAOC74NVY2ON5}],[],[],[],[],[],[],[],[]}}}}] 
+12:06:09.733 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",96,94},{"delta_send",94,96},{"send_backend",189,0}] 
+12:06:09.885 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:06:09.885" 
+12:06:09.885 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,97}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:48 
+12:06:09.886 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:06:09.886" 
+12:06:09.886 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,97}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},79},#{what => val_AKAAOC74NVY2ON5}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},78},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},79}]}}}} Counter:48 
+12:06:13.377 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:06:13.377" microseconds=21486 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_L5DZQFVYG0TAUMJ}],[]}}}}] 
+12:06:13.377 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",97,96},{"delta_send",96,97},{"send_backend",192,0}] 
+12:06:19.704 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:06:19.704" microseconds=310 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_L5DZQFVYG0TAUMJ}],[]}}}}] 
+12:06:19.705 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",98,96},{"delta_send",96,98},{"send_backend",193,0}] 
+12:06:19.887 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:06:19.887" 
+12:06:19.900 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,99}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:49 
+12:06:19.967 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:06:19.967" 
+12:06:19.968 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,99}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},81},#{what => val_L5DZQFVYG0TAUMJ}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},79},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},80},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},81}]}}}} Counter:49 
+12:06:23.396 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:06:23.396" microseconds=38935 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_QYJE0DMAY1KK6SZ}],[],[],[],[],[]}}}}] 
+12:06:23.396 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",99,98},{"delta_send",98,99},{"send_backend",196,0}] 
+12:06:29.707 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:06:29.707" microseconds=312 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_QYJE0DMAY1KK6SZ}],[],[],[],[],[]}}}}] 
+12:06:29.707 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",100,98},{"delta_send",98,100},{"send_backend",197,0}] 
+12:06:29.888 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:06:29.888" 
+12:06:29.902 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,101}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:50 
+12:06:29.945 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:06:29.945" 
+12:06:29.945 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,101}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},83},#{what => val_QYJE0DMAY1KK6SZ}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},81},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},82},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},83}]}}}} Counter:50 
+12:06:33.389 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:06:33.389" microseconds=29240 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[#{what => val_C1AIBXJJVDIUTN2}],[],[],[],[],[],[]}}}}] 
+12:06:33.389 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",101,100},{"delta_send",100,101},{"send_backend",200,0}] 
+12:06:39.756 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:06:39.756" microseconds=322 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[#{what => val_C1AIBXJJVDIUTN2}],[],[],[],[],[],[]}}}}] 
+12:06:39.756 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",102,100},{"delta_send",100,102},{"send_backend",201,0}] 
+12:06:39.890 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:06:39.890" 
+12:06:39.890 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,103}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:51 
+12:06:39.891 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:06:39.891" 
+12:06:39.891 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,103}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},84},#{what => val_C1AIBXJJVDIUTN2}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},83},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},84}]}}}} Counter:51 
+12:06:43.392 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:06:43.392" microseconds=27069 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_29WUQZPS47GJE3Z}],[],[]}}}}] 
+12:06:43.392 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",103,102},{"delta_send",102,103},{"send_backend",204,0}] 
+12:06:49.712 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:06:49.711" microseconds=414 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[],[#{what => val_29WUQZPS47GJE3Z}],[],[]}}}}] 
+12:06:49.712 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",104,102},{"delta_send",102,104},{"send_backend",205,0}] 
+12:06:49.893 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:06:49.893" 
+12:06:49.907 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,105}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:52 
+12:06:49.974 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:06:49.974" 
+12:06:49.974 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,105}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},86},#{what => val_29WUQZPS47GJE3Z}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},84},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},85},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},86}]}}}} Counter:52 
+12:06:53.393 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:06:53.393" microseconds=26837 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_05AYGM2IY6BXB0T}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:06:53.394 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",105,104},{"delta_send",104,105},{"send_backend",208,0}] 
+12:06:59.715 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:06:59.714" microseconds=438 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_05AYGM2IY6BXB0T}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:06:59.715 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",106,104},{"delta_send",104,106},{"send_backend",209,0}] 
+12:06:59.894 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:06:59.894" 
+12:06:59.917 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,107}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:53 
+12:06:59.918 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:06:59.918" 
+12:06:59.975 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,107}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},88},#{what => val_05AYGM2IY6BXB0T}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},86},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},87},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},88}]}}}} Counter:53 
+12:07:03.394 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:07:03.394" microseconds=24689 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[#{what => val_ONO93J6WQQN63O0}],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:07:03.395 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",107,106},{"delta_send",106,107},{"send_backend",212,0}] 
+12:07:09.741 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:07:09.741" microseconds=291 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[#{what => val_ONO93J6WQQN63O0}],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:07:09.741 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",108,106},{"delta_send",106,108},{"send_backend",213,0}] 
+12:07:09.896 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:07:09.896" 
+12:07:09.920 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,109}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:54 
+12:07:09.920 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:07:09.920" 
+12:07:09.921 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,109}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},89},#{what => val_ONO93J6WQQN63O0}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},88},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},89}]}}}} Counter:54 
+12:07:13.402 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:07:13.402" microseconds=33462 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[#{what => val_LZ40GHNK6TLBC8Y}],[],[],[],[],[],[]}}}}] 
+12:07:13.403 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",109,108},{"delta_send",108,109},{"send_backend",216,0}] 
+12:07:19.759 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:07:19.759" microseconds=483 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[#{what => val_LZ40GHNK6TLBC8Y}],[],[],[],[],[],[]}}}}] 
+12:07:19.759 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",110,108},{"delta_send",108,110},{"send_backend",217,0}] 
+12:07:19.898 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:07:19.898" 
+12:07:19.917 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,111}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:55 
+12:07:19.918 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:07:19.918" 
+12:07:19.919 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,111}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},91},#{what => val_LZ40GHNK6TLBC8Y}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},89},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},90},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},91}]}}}} Counter:55 
+12:07:23.400 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:07:23.400" microseconds=25170 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[#{what => val_ZXZYU4W7LQL4DJQ}],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:07:23.400 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",111,110},{"delta_send",110,111},{"send_backend",220,0}] 
+12:07:29.719 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:07:29.719" microseconds=270 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[#{what => val_ZXZYU4W7LQL4DJQ}],[],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:07:29.719 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",112,110},{"delta_send",110,112},{"send_backend",221,0}] 
+12:07:29.901 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:07:29.901" 
+12:07:29.902 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,113}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:56 
+12:07:29.902 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:07:29.902" 
+12:07:29.903 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,113}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},93},#{what => val_ZXZYU4W7LQL4DJQ}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},91},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},92},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},93}]}}}} Counter:56 
+12:07:33.394 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:07:33.394" microseconds=20715 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[#{what => val_6X8O8ZX66OMZ726}],[],[],[],[],[],[],[],[],[]}}}}] 
+12:07:33.394 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",113,112},{"delta_send",112,113},{"send_backend",224,0}] 
+12:07:39.722 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:07:39.721" microseconds=296 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[#{what => val_6X8O8ZX66OMZ726}],[],[],[],[],[],[],[],[],[]}}}}] 
+12:07:39.722 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",114,112},{"delta_send",112,114},{"send_backend",225,0}] 
+12:07:39.902 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:07:39.902" 
+12:07:39.902 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,115}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:57 
+12:07:39.902 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:07:39.902" 
+12:07:39.903 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,115}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},94},#{what => val_6X8O8ZX66OMZ726}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},93},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},94}]}}}} Counter:57 
+12:07:43.397 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:07:43.397" microseconds=21903 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_T7H43L8WV5116DR}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:07:43.397 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",115,114},{"delta_send",114,115},{"send_backend",228,0}] 
+12:07:49.775 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:07:49.775" microseconds=454 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_T7H43L8WV5116DR}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:07:49.775 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",116,114},{"delta_send",114,116},{"send_backend",229,0}] 
+12:07:49.904 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:07:49.904" 
+12:07:49.930 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,117}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:58 
+12:07:49.980 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:07:49.980" 
+12:07:49.981 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,117}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},96},#{what => val_T7H43L8WV5116DR}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},94},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},95},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},96}]}}}} Counter:58 
+12:07:53.406 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:07:53.406" microseconds=26012 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_TE4LVHYQPF95ESJ}],[],[],[],[],[]}}}}] 
+12:07:53.407 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",117,116},{"delta_send",116,117},{"send_backend",232,0}] 
+12:07:59.727 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:07:59.727" microseconds=511 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_TE4LVHYQPF95ESJ}],[],[],[],[],[]}}}}] 
+12:07:59.727 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",118,116},{"delta_send",116,118},{"send_backend",233,0}] 
+12:07:59.907 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:07:59.907" 
+12:07:59.925 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,119}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:59 
+12:07:59.927 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:07:59.927" 
+12:07:59.927 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,119}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},98},#{what => val_TE4LVHYQPF95ESJ}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},96},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},97},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},98}]}}}} Counter:59 
+12:08:03.403 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:08:03.402" microseconds=24049 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[#{what => val_XQLP8BW30Q8JYQA}],[],[],[],[],[],[],[],[],[]}}}}] 
+12:08:03.403 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",119,118},{"delta_send",118,119},{"send_backend",236,0}] 
+12:08:09.754 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:08:09.754" microseconds=319 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[#{what => val_XQLP8BW30Q8JYQA}],[],[],[],[],[],[],[],[],[]}}}}] 
+12:08:09.755 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",120,118},{"delta_send",118,120},{"send_backend",237,0}] 
+12:08:09.909 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:08:09.909" 
+12:08:09.909 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,121}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:60 
+12:08:09.910 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:08:09.910" 
+12:08:09.910 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,121}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},99},#{what => val_XQLP8BW30Q8JYQA}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},98},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},99}]}}}} Counter:60 
+12:08:13.406 [error] LASPVIN Received delta From='a@10.0.0.11' at TimeStamp="2020-07-03T12:08:13.406" microseconds=24862 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[#{what => val_ED5I7NPH66J9N8S}],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:08:13.407 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",121,120},{"delta_send",120,121},{"send_backend",240,0}] 
+12:08:19.733 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-03T12:08:19.733" microseconds=330 DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[#{what => val_ED5I7NPH66J9N8S}],[],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+12:08:19.734 [error] Message Counters [{"Message","Tx","Rx"},{"delta_ack",122,120},{"delta_send",120,122},{"send_backend",241,0}] 
+12:08:19.911 [error] LASPVIN Sending delta to 'a@10.0.0.11' at "2020-07-03T12:08:19.911" 
+12:08:19.946 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,123}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:61 
+12:08:19.987 [error] LASPVIN Sending delta to 'e@10.0.0.15' at "2020-07-03T12:08:19.987" 
+12:08:19.988 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<130,236,3,131,72,53,227,54,208,140,40,165,151,154,94,227,182,122,185,95>>,123}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},100},#{what => val_ED5I7NPH66J9N8S}}]}],{[],[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},99},{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},100}]}}}} Counter:61 
