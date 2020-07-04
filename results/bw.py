@@ -1,6 +1,7 @@
 import os
 import sys
 import pickle
+from prettytable import PrettyTable
 
 def flattenList(data):
         results = []
@@ -94,6 +95,9 @@ def newget_BwKbTotal(folder, testfor, ND4bw):
     BwTotal = []
     BwControl = []
     BwData = []
+    t = PrettyTable()
+    t.title = str(testfor)
+    t.field_names = ['Node', 'Total', 'Control', 'Data']
     for node in ND4bw.get_allNodes():
         ControlValue, ControloriginalVal = get_bwLine(folder+'/'+testfor+'/'+'BWLogs/'+node+'_bwLogsControl', node)
         TotalValue, TotaloriginalVal = get_bwLine(folder+'/'+testfor+'/'+'BWLogs/'+node+'_bwLogsData', node)
@@ -101,9 +105,16 @@ def newget_BwKbTotal(folder, testfor, ND4bw):
         BwTotal.append(float(TotalValue))
         BwControl.append(float(ControlValue))
         BwData.append(float(DataValue))
+        if ND4bw.get_id(node)=='a':
+            t.add_row([node+'(Edge)', str(TotalValue)+'('+ND4bw.get_rate(node)+')', ControlValue, DataValue])
+        else:
+            t.add_row([node, str(TotalValue)+'('+ND4bw.get_rate(node)+')', ControlValue, DataValue])
     TotalBW = float(sum(BwTotal, (0.0)) / 1024)
     TotalBWControl = float(sum(BwControl, (0.0)) / 1024)
     TotalBWData = float(sum(BwData, (0.0)) / 1024)
+    t.sortby = "Data"
+    t.add_row(['Total MB', str(TotalBW), str(TotalBWControl), str(TotalBWData)])
+    print(t)
     return TotalBW, TotalBWControl, TotalBWData
 
 ExpFolder = sys.argv[1]
@@ -112,11 +123,18 @@ for ExpJobs in (os.listdir(ExpFolder)):
     print('*****************************************************************')
     print('')
     print ExpJobs
-    DTBW, DCBW, DDBW = newget_BwKbTotal(ExpFolder+'/'+ExpJobs, 'dev', NDUtility(ExpFolder+'/'+ExpJobs))
-    BTBW, BCBW, BDBW = newget_BwKbTotal(ExpFolder+'/'+ExpJobs, 'base', NDUtility(ExpFolder+'/'+ExpJobs))
+    #DTBW, DCBW, DDBW = newget_BwKbTotal(ExpFolder+'/'+ExpJobs, 'dev', NDUtility(ExpFolder+'/'+ExpJobs))
+    #BTBW, BCBW, BDBW = newget_BwKbTotal(ExpFolder+'/'+ExpJobs, 'base', NDUtility(ExpFolder+'/'+ExpJobs))
     print('')
-    print("Base Total:"+str(BTBW)+" Control:"+str(BCBW)+" Data:"+str(BDBW))
-    print("Dev Total:"+str(DTBW)+" Control:"+str(DCBW)+" Data:"+str(DDBW))
+    print('\t\t--->BASE<---')
+    print('')
+    BTBW, BCBW, BDBW = newget_BwKbTotal(ExpFolder+'/'+ExpJobs, 'base', NDUtility(ExpFolder+'/'+ExpJobs))
+    #print("Base Total:"+str(BTBW)+" Control:"+str(BCBW)+" Data:"+str(BDBW))
+    print('')
+    print('\t\t--->DEV<---')
+    print('')
+    DTBW, DCBW, DDBW = newget_BwKbTotal(ExpFolder+'/'+ExpJobs, 'dev', NDUtility(ExpFolder+'/'+ExpJobs))
+    #print("Dev Total:"+str(DTBW)+" Control:"+str(DCBW)+" Data:"+str(DDBW))
     print('_______________________________')
     print('')
     print('    DATA DIFF:    '+str(BDBW-DDBW))
