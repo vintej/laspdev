@@ -1,0 +1,806 @@
+
+
+root@csst-06:/home/ubuntu/laspdev# 
+root@csst-06:/home/ubuntu/laspdev# python /home/ubuntu/laspdev/utility/setup_laspp.py d52
+d52
+ip:18.0.0.14
+node:d
+root@d52:/# [Kroot@d52:/# service vnstat start
+[....] Starting vnStat daemon: vnstatd[?25l7[1G[[32m ok [39;49m8[?12l[?25h.
+root@d52:/# sysctl -w net.ipv4.ip_forward=0
+net.ipv4.ip_forward = 0
+root@d52:/# vnstat -u -i d52-eth0
+Error: Unable to read database "/var/lib/vnstat/d52-eth0": No such file or directory
+Info: -> A new database has been created.
+root@d52:/# vnstat -u
+root@d52:/# vnstat
+
+                      rx      /      tx      /     total    /   estimated
+ d52-eth0: Not enough data available yet.
+ eth0:
+       Jun '20         4 KiB  /       1 KiB  /       5 KiB
+       Jul '20         0 KiB  /       7 KiB  /       7 KiB  /       0 KiB
+     yesterday         0 KiB  /       7 KiB  /       7 KiB
+         today         0 KiB  /       0 KiB  /       0 KiB  /      --    
+
+root@d52:/# export PEER_SERVICE=partisan_hyparview_peer_service_manager
+root@d52:/# export RATE_CLASS=c3
+root@d52:/# export RATE_C1=10000
+root@d52:/# export RATE_C2=40000
+root@d52:/# export RATE_C3=70000
+root@d52:/# export PROPAGATE_ON_UPDATE=false
+root@d52:/# export MAX_ACTIVE_SIZE=50
+root@d52:/# cd /opt/lasp
+root@d52:/opt/lasp# epmd -daemon
+root@d52:/opt/lasp# rebar3 shell --name d@18.0.0.14
+[0;32m===> Verifying dependencies...
+[0m[0;32m===> Compiling lasp
+[0mErlang/OTP 19 [erts-8.3] [source] [64-bit] [smp:24:24] [ds:24:24:10] [async-threads:0] [hipe] [kernel-poll:false]
+
+Eshell V8.3  (abort with ^G)
+(d@18.0.0.14)1> [0;35m===> The rebar3 shell is a development tool; to deploy applications in production, consider using releases (http://www.rebar3.org/docs/releases)
+[0m13:49:31.847 [info] Application lager started on node 'd@18.0.0.14'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:31 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.253.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:31 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.252.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:31 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.254.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:31 ===
+         application: sasl
+          started_at: 'd@18.0.0.14'
+13:49:31.918 [info] Application sasl started on node 'd@18.0.0.14'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:31 ===
+         application: lasp_support
+          started_at: 'd@18.0.0.14'
+13:49:31.918 [info] Application lasp_support started on node 'd@18.0.0.14'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:31 ===
+         application: acceptor_pool
+          started_at: 'd@18.0.0.14'
+13:49:31.919 [info] Application acceptor_pool started on node 'd@18.0.0.14'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:31 ===
+         application: quickrand
+          started_at: 'd@18.0.0.14'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:31 ===
+         application: uuid
+          started_at: 'd@18.0.0.14'
+13:49:31.919 [info] Application quickrand started on node 'd@18.0.0.14'
+13:49:31.919 [info] Application uuid started on node 'd@18.0.0.14'
+13:49:31.931 [info] Using node name: 'd@18.0.0.14'
+13:49:31.944 [info] Resolving "18.0.0.14"...
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:31 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.266.0>},
+                       {id,timer_server},
+                       {mfargs,{timer,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,1000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:31 ===
+          supervisor: {local,inet_gethost_native_sup}
+             started: [{pid,<0.268.0>},{mfa,{inet_gethost_native,init,[[]]}}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:31 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.267.0>},
+                       {id,inet_gethost_native_sup},
+                       {mfargs,{inet_gethost_native,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,1000},
+                       {child_type,worker}]
+13:49:31.948 [info] Resolved "d@18.0.0.14" to {18,0,0,14}
+13:49:31.948 [info] Resolved "18.0.0.14" to {18,0,0,14}
+13:49:32.122 [info] Partisan listening on {18,0,0,14}:48077 listen_addrs: [#{ip => {18,0,0,14},port => 48077}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.313.0>},
+                       {id,partisan_rpc_backend},
+                       {mfargs,{partisan_rpc_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.314.0>},
+                       {id,partisan_acknowledgement_backend},
+                       {mfargs,
+                           {partisan_acknowledgement_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:49:32.171 [info] Not using container orchestration; disabling.
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.315.0>},
+                       {id,partisan_orchestration_backend},
+                       {mfargs,{partisan_orchestration_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:49:32.269 [info] node 'd@18.0.0.14' choosing random seed: {133494488,-576460748791271171,-576460752303423423}
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.316.0>},
+                       {id,partisan_hyparview_peer_service_manager},
+                       {mfargs,
+                           {partisan_hyparview_peer_service_manager,
+                               start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.317.0>},
+                       {id,partisan_peer_service_events},
+                       {mfargs,{partisan_peer_service_events,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:49:32.283 [info] node 'd@18.0.0.14' choosing random seed: {133494488,-576460748791271171,-576460752303423423}
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.318.0>},
+                       {id,partisan_plumtree_backend},
+                       {mfargs,{partisan_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.319.0>},
+                       {id,partisan_plumtree_broadcast},
+                       {mfargs,{partisan_plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.320.0>},
+                       {id,partisan_monitor},
+                       {mfargs,{partisan_monitor,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.322.0>},
+                       {id,partisan_pool},
+                       {mfargs,{partisan_pool,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.323.0>},
+                       {id,{partisan_socket,{18,0,0,14},48077}},
+                       {mfargs,
+                           {partisan_socket,start_link,[{18,0,0,14},48077]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.321.0>},
+                       {id,partisan_pool_sup},
+                       {mfargs,{partisan_pool_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,20000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+         application: partisan
+          started_at: 'd@18.0.0.14'
+13:49:32.441 [info] Application partisan started on node 'd@18.0.0.14'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,plumtree_sup}
+             started: [{pid,<0.338.0>},
+                       {id,plumtree_broadcast},
+                       {mfargs,{plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+         application: plumtree
+          started_at: 'd@18.0.0.14'
+13:49:32.454 [info] Application plumtree started on node 'd@18.0.0.14'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+         application: gen_fsm_compat
+          started_at: 'd@18.0.0.14'
+13:49:32.454 [info] Application gen_fsm_compat started on node 'd@18.0.0.14'
+13:49:32.459 [info] Setting jitter: false
+13:49:32.462 [info] Setting jitter percent: 1
+13:49:32.463 [info] Setting event interval: 0
+13:49:32.465 [info] Setting max events: 1000
+13:49:32.466 [info] Setting extended logging: false
+13:49:32.468 [info] Setting mailbox logging: false
+13:49:32.469 [info] Setting operation mode: delta_based
+13:49:32.470 [info] Setting set type: orset
+13:49:32.473 [info] Setting broadcast: false
+13:49:32.505 [info] Membership: false
+13:49:32.507 [info] Workflow: false
+13:49:32.512 [info] AdClientEnabled: false
+13:49:32.514 [info] AdServerEnabled: false
+13:49:32.516 [info] TournClientEnabled: false
+13:49:32.517 [info] TournServerEnabled: false
+13:49:32.518 [info] ThroughputType: gset
+13:49:32.519 [info] ThroughputClientEnabled: false
+13:49:32.520 [info] ThroughputServerEnabled: false
+13:49:32.522 [info] DivergenceType: gcounter
+13:49:32.523 [info] DivergenceClientEnabled: false
+13:49:32.524 [info] DivergenceServerEnabled: false
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.385.0>},
+                       {id,lasp_unique},
+                       {mfargs,{lasp_unique,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.386.0>},
+                       {id,lasp_plumtree_backend},
+                       {mfargs,{lasp_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.387.0>},
+                       {id,lasp_plumtree_memory_report},
+                       {mfargs,{lasp_plumtree_memory_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.388.0>},
+                       {id,lasp_memory_utilization_report},
+                       {mfargs,{lasp_memory_utilization_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:49:32.569 [info] Backend initialized with pid: <0.393.0>
+13:49:32.569 [info] Backend lasp_ets_storage_backend initialized: <0.393.0>
+13:49:32.579 [error] Rate Propagations c1: "10000" c2:"40000" c3:"70000" 
+13:49:32.618 [error] C1 propagation "2020-07-05T13:49:32.618" 
+13:49:32.643 [error] C2 propagation "2020-07-05T13:49:32.643" 
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.389.0>},
+                       {id,lasp_distribution_backend},
+                       {mfargs,{lasp_distribution_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:49:32.643 [error] C3 propagation "2020-07-05T13:49:32.643" 
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.395.0>},
+                       {id,lasp_process_sup},
+                       {mfargs,{lasp_process_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:49:32 ===
+         application: lasp
+          started_at: 'd@18.0.0.14'
+[0;32m===> Booted types
+[0m[0;32m===> Booted gen_flow
+[0m[0;32m===> Booted syntax_tools
+[0m[0;32m===> Booted compiler
+[0m[0;32m===> Booted goldrush
+[0m[0;32m===> Booted lager
+[0m[0;32m===> Booted sasl
+[0m[0;32m===> Booted lasp_support
+[0m[0;32m===> Booted acceptor_pool
+[0m[0;32m===> Booted quickrand
+[0m[0;32m===> Booted uuid
+[0m[0;32m===> Booted partisan
+[0m[0;32m===> Booted plumtree
+[0m[0;32m===> Booted gen_fsm_compat
+[0m[0;32m===> Booted lasp
+[0m13:49:32.684 [error] batched message propagation "2020-07-05T13:49:32.684" 
+13:49:32.725 [info] Application lasp started on node 'd@18.0.0.14'
+
+(d@18.0.0.14)1> erlang:set_cookie(node(),'RPJVCXYDYULBNZFEFPHJ').
+true
+(d@18.0.0.14)2> application:get_env(partisan, max_active_size).
+{ok,50}
+(d@18.0.0.14)3> application:get_env(partisan, max_passive_size).
+{ok,10}
+(d@18.0.0.14)4> application:get_env(partisan, min_active_size).
+{ok,9}
+(d@18.0.0.14)5> partisan_config:set(passive_view_shuffle_period, 1000000000).
+ok
+(d@18.0.0.14)6> partisan_config:get(passive_view_shuffle_period).
+1000000000
+(d@18.0.0.14)7> )7> 13:49:42.619 [error] C1 propagation "2020-07-05T13:49:42.619" 
+13:49:42.685 [error] Sending find_sub batch [] 
+13:49:42.685 [error] Sending find_sub_aq batch [] 
+13:49:42.685 [error] batched message propagation "2020-07-05T13:49:42.685" 
+13:49:52.620 [error] C1 propagation "2020-07-05T13:49:52.620" 
+13:49:52.687 [error] Sending find_sub batch [] 
+13:49:52.687 [error] Sending find_sub_aq batch [] 
+13:49:52.687 [error] batched message propagation "2020-07-05T13:49:52.687" 
+13:50:02.621 [error] C1 propagation "2020-07-05T13:50:02.621" 
+13:50:02.690 [error] Sending find_sub batch [] 
+13:50:02.690 [error] Sending find_sub_aq batch [] 
+13:50:02.690 [error] batched message propagation "2020-07-05T13:50:02.690" 
+13:50:12.623 [error] C1 propagation "2020-07-05T13:50:12.623" 
+13:50:12.644 [error] C2 propagation "2020-07-05T13:50:12.644" 
+13:50:12.691 [error] Sending find_sub batch [] 
+13:50:12.691 [error] Sending find_sub_aq batch [] 
+13:50:12.691 [error] batched message propagation "2020-07-05T13:50:12.691" 
+13:50:22.625 [error] C1 propagation "2020-07-05T13:50:22.625" 
+13:50:22.692 [error] Sending find_sub batch [] 
+13:50:22.692 [error] Sending find_sub_aq batch [] 
+13:50:22.693 [error] batched message propagation "2020-07-05T13:50:22.693" 
+13:50:32.626 [error] C1 propagation "2020-07-05T13:50:32.626" 
+13:50:32.694 [error] Sending find_sub batch [] 
+13:50:32.694 [error] Sending find_sub_aq batch [] 
+13:50:32.694 [error] batched message propagation "2020-07-05T13:50:32.694" 
+13:50:42.628 [error] C1 propagation "2020-07-05T13:50:42.628" 
+13:50:42.662 [error] C3 propagation "2020-07-05T13:50:42.662" 
+13:50:42.696 [error] Sending find_sub batch [] 
+13:50:42.696 [error] Sending find_sub_aq batch [] 
+13:50:42.696 [error] batched message propagation "2020-07-05T13:50:42.696" 
+lasp_peer_service:join('a@18.0.0.11').
+ok
+(d@18.0.0.14)8> 13:50:52.630 [error] C1 propagation "2020-07-05T13:50:52.630" 
+13:50:52.664 [error] C2 propagation "2020-07-05T13:50:52.664" 
+13:50:52.673 [error] Sending rate "c3" to 'b@18.0.0.12' 
+13:50:52.673 [error] Sending rate "c3" to 'a@18.0.0.11' 
+lasp_peer_service:members().
+{ok,['b@18.0.0.12','d@18.0.0.14','a@18.0.0.11']}
+(d@18.0.0.14)9> 13:50:52.673 [error] Sending Subscription to 'a@18.0.0.11' case2 
+13:50:52.674 [error] Rate_subscribe_ack received from 'a@18.0.0.11' for rate "c3" 
+13:50:52.697 [error] Sending find_sub batch [] 
+13:50:52.697 [error] Sending find_sub_aq batch [] 
+13:50:52.697 [error] batched message propagation "2020-07-05T13:50:52.697" 
+lasp_peer_service:join('a@18.0.0.11').
+ok
+(d@18.0.0.14)10> 13:51:02.632 [error] C1 propagation "2020-07-05T13:51:02.632" 
+13:51:02.709 [error] Sending find_sub batch [] 
+lasp_peer_service:members().
+13:51:02.709 [error] Sending find_sub_aq batch [] 
+{ok,['b@18.0.0.12','d@18.0.0.14','a@18.0.0.11']}
+(d@18.0.0.14)11> 13:51:02.709 [error] batched message propagation "2020-07-05T13:51:02.709" 
+13:51:04.836 [error] LASPVIN received find_sub Id: "c@15.0.0.13c1" From: 'a@18.0.0.11' Hop:3 
+13:51:04.909 [error] Checking sub_exists for Id:"c@15.0.0.13c1" From:'a@18.0.0.11' Hop:3 
+13:51:05.021 [error] Id is not get_connections(): ['b@18.0.0.12','a@18.0.0.11']  
+13:51:05.021 [error] Forwarding Req Id "c@15.0.0.13c1" to Peers RcvHop:3 IncHop:4 
+13:51:05.120 [error] Forwarding ReqId "c@15.0.0.13c1" to Peer:'b@18.0.0.12' Hop:4 
+13:51:05.120 [error] LASPVIN Request forwarded~n
+13:51:05.120 [error] LASPVIN received find_sub Id: "c@17.0.0.13c1" From: 'a@18.0.0.11' Hop:3 
+13:51:05.159 [error] Checking sub_exists for Id:"c@17.0.0.13c1" From:'a@18.0.0.11' Hop:3 
+13:51:05.362 [error] Id is not get_connections(): ['b@18.0.0.12','a@18.0.0.11']  
+13:51:05.362 [error] Forwarding Req Id "c@17.0.0.13c1" to Peers RcvHop:3 IncHop:4 
+13:51:05.492 [error] Forwarding ReqId "c@17.0.0.13c1" to Peer:'b@18.0.0.12' Hop:4 
+13:51:05.492 [error] LASPVIN Request forwarded~n
+13:51:05.493 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'a@18.0.0.11' Hop:3 
+13:51:05.495 [error] Checking sub_exists for Id:"c@11.0.0.13c1" From:'a@18.0.0.11' Hop:3 
+13:51:05.543 [error] Id is not get_connections(): ['b@18.0.0.12','a@18.0.0.11']  
+13:51:05.543 [error] Forwarding Req Id "c@11.0.0.13c1" to Peers RcvHop:3 IncHop:4 
+13:51:05.583 [error] Forwarding ReqId "c@11.0.0.13c1" to Peer:'b@18.0.0.12' Hop:4 
+13:51:05.583 [error] LASPVIN Request forwarded~n
+13:51:11.459 [error] LASPVIN received find_sub Id: "c@15.0.0.13c1" From: 'b@18.0.0.12' Hop:4 
+13:51:11.599 [error] Checking sub_exists for Id:"c@15.0.0.13c1" From:'b@18.0.0.12' Hop:4 
+13:51:11.710 [error] Hop 4 for Id "c@15.0.0.13c1" is more than existing 3...Skipping
+13:51:11.710 [error] LASPVIN Request forwarded~n
+13:51:11.710 [error] LASPVIN received find_sub Id: "c@17.0.0.13c1" From: 'b@18.0.0.12' Hop:4 
+13:51:11.806 [error] Checking sub_exists for Id:"c@17.0.0.13c1" From:'b@18.0.0.12' Hop:4 
+13:51:11.870 [error] Hop 4 for Id "c@17.0.0.13c1" is more than existing 3...Skipping
+13:51:11.870 [error] LASPVIN Request forwarded~n
+13:51:11.870 [error] LASPVIN received find_sub Id: "c@11.0.0.13c1" From: 'b@18.0.0.12' Hop:4 
+13:51:12.028 [error] Checking sub_exists for Id:"c@11.0.0.13c1" From:'b@18.0.0.12' Hop:4 
+13:51:12.224 [error] Hop 4 for Id "c@11.0.0.13c1" is more than existing 3...Skipping
+13:51:12.224 [error] LASPVIN Request forwarded~n
+13:51:12.634 [error] C1 propagation "2020-07-05T13:51:12.634" 
+13:51:12.710 [error] Sending find_sub batch [{'d@18.0.0.14',"c1","c@15.0.0.13c1",4,'b@18.0.0.12'},{'d@18.0.0.14',"c1","c@17.0.0.13c1",4,'b@18.0.0.12'},{'d@18.0.0.14',"c1","c@11.0.0.13c1",4,'b@18.0.0.12'}] 
+13:51:12.711 [error] Sent find_sub control message from batch 'd@18.0.0.14' "c1" "c@15.0.0.13c1" 4 'b@18.0.0.12' 
+13:51:12.711 [error] Sent find_sub control message from batch 'd@18.0.0.14' "c1" "c@17.0.0.13c1" 4 'b@18.0.0.12' 
+13:51:12.711 [error] Sent find_sub control message from batch 'd@18.0.0.14' "c1" "c@11.0.0.13c1" 4 'b@18.0.0.12' 
+13:51:12.711 [error] Sending find_sub_aq batch [] 
+13:51:12.711 [error] batched message propagation "2020-07-05T13:51:12.711" 
+13:51:17.420 [error] LASPVIN received find_sub Id: "c@16.0.0.13c1" From: 'a@18.0.0.11' Hop:3 
+13:51:17.479 [error] Checking sub_exists for Id:"c@16.0.0.13c1" From:'a@18.0.0.11' Hop:3 
+13:51:17.560 [error] Id is not get_connections(): ['b@18.0.0.12','a@18.0.0.11']  
+13:51:17.560 [error] Forwarding Req Id "c@16.0.0.13c1" to Peers RcvHop:3 IncHop:4 
+13:51:17.712 [error] Forwarding ReqId "c@16.0.0.13c1" to Peer:'b@18.0.0.12' Hop:4 
+13:51:17.712 [error] LASPVIN Request forwarded~n
+13:51:17.712 [error] LASPVIN received find_sub Id: "c@14.0.0.13c1" From: 'a@18.0.0.11' Hop:3 
+13:51:17.752 [error] Checking sub_exists for Id:"c@14.0.0.13c1" From:'a@18.0.0.11' Hop:3 
+13:51:17.969 [error] Id is not get_connections(): ['b@18.0.0.12','a@18.0.0.11']  
+13:51:17.969 [error] Forwarding Req Id "c@14.0.0.13c1" to Peers RcvHop:3 IncHop:4 
+13:51:18.183 [error] Forwarding ReqId "c@14.0.0.13c1" to Peer:'b@18.0.0.12' Hop:4 
+13:51:18.184 [error] LASPVIN Request forwarded~n
+13:51:21.464 [error] LASPVIN received find_sub Id: "c@16.0.0.13c1" From: 'b@18.0.0.12' Hop:4 
+13:51:21.554 [error] Checking sub_exists for Id:"c@16.0.0.13c1" From:'b@18.0.0.12' Hop:4 
+13:51:21.645 [error] Hop 4 for Id "c@16.0.0.13c1" is more than existing 3...Skipping
+13:51:21.645 [error] LASPVIN Request forwarded~n
+13:51:21.645 [error] LASPVIN received find_sub Id: "c@14.0.0.13c1" From: 'b@18.0.0.12' Hop:4 
+13:51:21.749 [error] Checking sub_exists for Id:"c@14.0.0.13c1" From:'b@18.0.0.12' Hop:4 
+13:51:21.883 [error] Hop 4 for Id "c@14.0.0.13c1" is more than existing 3...Skipping
+13:51:21.883 [error] LASPVIN Request forwarded~n
+13:51:22.636 [error] C1 propagation "2020-07-05T13:51:22.636" 
+13:51:22.712 [error] Sending find_sub batch [{'d@18.0.0.14',"c1","c@16.0.0.13c1",4,'b@18.0.0.12'},{'d@18.0.0.14',"c1","c@14.0.0.13c1",4,'b@18.0.0.12'}] 
+13:51:22.713 [error] Sent find_sub control message from batch 'd@18.0.0.14' "c1" "c@16.0.0.13c1" 4 'b@18.0.0.12' 
+13:51:22.713 [error] Sent find_sub control message from batch 'd@18.0.0.14' "c1" "c@14.0.0.13c1" 4 'b@18.0.0.12' 
+13:51:22.713 [error] Sending find_sub_aq batch [] 
+13:51:22.713 [error] batched message propagation "2020-07-05T13:51:22.713" 
+13:51:28.196 [error] LASPVIN found the peer at "2020-07-05T13:51:28.196" for ID: "c@15.0.0.13c1" ToNode: 'c@18.0.0.13' Via:'d@18.0.0.14' 
+13:51:28.199 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@15.0.0.13c1" ToNode:'c@18.0.0.13' From:'d@18.0.0.14' to 'a@18.0.0.11' HopCount:1 
+13:51:28.200 [error] LASPVIN found the peer at "2020-07-05T13:51:28.199" for ID: "c@17.0.0.13c1" ToNode: 'c@18.0.0.13' Via:'d@18.0.0.14' 
+13:51:28.202 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@17.0.0.13c1" ToNode:'c@18.0.0.13' From:'d@18.0.0.14' to 'a@18.0.0.11' HopCount:1 
+13:51:28.202 [error] LASPVIN found the peer at "2020-07-05T13:51:28.202" for ID: "c@11.0.0.13c1" ToNode: 'c@18.0.0.13' Via:'d@18.0.0.14' 
+13:51:28.205 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@11.0.0.13c1" ToNode:'c@18.0.0.13' From:'d@18.0.0.14' to 'a@18.0.0.11' HopCount:1 
+13:51:28.205 [error] LASPVIN found the peer at "2020-07-05T13:51:28.205" for ID: "c@16.0.0.13c1" ToNode: 'c@18.0.0.13' Via:'d@18.0.0.14' 
+13:51:28.208 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@16.0.0.13c1" ToNode:'c@18.0.0.13' From:'d@18.0.0.14' to 'a@18.0.0.11' HopCount:1 
+13:51:28.208 [error] LASPVIN found the peer at "2020-07-05T13:51:28.208" for ID: "c@14.0.0.13c1" ToNode: 'c@18.0.0.13' Via:'d@18.0.0.14' 
+13:51:28.211 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@14.0.0.13c1" ToNode:'c@18.0.0.13' From:'d@18.0.0.14' to 'a@18.0.0.11' HopCount:1 
+13:51:28.430 [error] Sending rate "c3" to 'c@18.0.0.13' 
+13:51:32.639 [error] C1 propagation "2020-07-05T13:51:32.639" 
+13:51:32.744 [error] C2 propagation "2020-07-05T13:51:32.744" 
+13:51:32.744 [error] Sending find_sub batch [] 
+13:51:32.745 [error] Sending find_sub_aq batch [{"c@15.0.0.13c1",'c@18.0.0.13','d@18.0.0.14','d@18.0.0.14',1,'a@18.0.0.11'},{"c@11.0.0.13c1",'c@18.0.0.13','d@18.0.0.14','d@18.0.0.14',1,'a@18.0.0.11'},{"c@17.0.0.13c1",'c@18.0.0.13','d@18.0.0.14','d@18.0.0.14',1,'a@18.0.0.11'},{"c@14.0.0.13c1",'c@18.0.0.13','d@18.0.0.14','d@18.0.0.14',1,'a@18.0.0.11'},{"c@16.0.0.13c1",'c@18.0.0.13','d@18.0.0.14','d@18.0.0.14',1,'a@18.0.0.11'}] 
+13:51:32.745 [error] Sent find_sub_aq control message for "c@11.0.0.13c1" ['c@18.0.0.13'] 'd@18.0.0.14' 'd@18.0.0.14' 1 'a@18.0.0.11' 
+13:51:32.746 [error] Sent find_sub_aq control message for "c@14.0.0.13c1" ['c@18.0.0.13'] 'd@18.0.0.14' 'd@18.0.0.14' 1 'a@18.0.0.11' 
+13:51:32.746 [error] Sent find_sub_aq control message for "c@15.0.0.13c1" ['c@18.0.0.13'] 'd@18.0.0.14' 'd@18.0.0.14' 1 'a@18.0.0.11' 
+13:51:32.746 [error] Sent find_sub_aq control message for "c@16.0.0.13c1" ['c@18.0.0.13'] 'd@18.0.0.14' 'd@18.0.0.14' 1 'a@18.0.0.11' 
+13:51:32.746 [error] Sent find_sub_aq control message for "c@17.0.0.13c1" ['c@18.0.0.13'] 'd@18.0.0.14' 'd@18.0.0.14' 1 'a@18.0.0.11' 
+13:51:32.746 [error] batched message propagation "2020-07-05T13:51:32.746" 
+13:51:37.426 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'a@18.0.0.11' Hop:2 
+13:51:37.485 [error] Checking sub_exists for Id:"c@18.0.0.13c1" From:'a@18.0.0.11' Hop:2 
+13:51:37.543 [error] Request Id "c@18.0.0.13c1" is from a Peer directly connected
+13:51:37.543 [error] LASPVIN Request forwarded~n
+13:51:37.543 [error] LASPVIN received find_sub Id: "c@19.0.0.13c1" From: 'a@18.0.0.11' Hop:3 
+13:51:37.596 [error] Checking sub_exists for Id:"c@19.0.0.13c1" From:'a@18.0.0.11' Hop:3 
+13:51:37.766 [error] Id is not get_connections(): ['b@18.0.0.12','a@18.0.0.11','c@18.0.0.13'] 
+13:51:37.766 [error] LASPVIN found the peer at "2020-07-05T13:51:37.766" for ID: "c@19.0.0.13c1" ToNode: 'c@18.0.0.13' Via:'d@18.0.0.14' 
+13:51:37.818 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@19.0.0.13c1" ToNode:'c@18.0.0.13' From:'d@18.0.0.14' to 'a@18.0.0.11' HopCount:1 
+13:51:37.818 [error] Forwarding Req Id "c@19.0.0.13c1" to Peers RcvHop:3 IncHop:4 
+13:51:37.919 [error] Forwarding ReqId "c@19.0.0.13c1" to Peer:'b@18.0.0.12' Hop:4 
+13:51:37.919 [error] LASPVIN received find_sub Id: "c@13.0.0.13c1" From: 'a@18.0.0.11' Hop:3 
+13:51:37.967 [error] Checking sub_exists for Id:"c@13.0.0.13c1" From:'a@18.0.0.11' Hop:3 
+13:51:38.122 [error] Id is not get_connections(): ['b@18.0.0.12','a@18.0.0.11','c@18.0.0.13'] 
+13:51:38.123 [error] LASPVIN found the peer at "2020-07-05T13:51:38.122" for ID: "c@13.0.0.13c1" ToNode: 'c@18.0.0.13' Via:'d@18.0.0.14' 
+13:51:38.185 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@13.0.0.13c1" ToNode:'c@18.0.0.13' From:'d@18.0.0.14' to 'a@18.0.0.11' HopCount:1 
+13:51:38.185 [error] Forwarding Req Id "c@13.0.0.13c1" to Peers RcvHop:3 IncHop:4 
+13:51:38.347 [error] Forwarding ReqId "c@13.0.0.13c1" to Peer:'b@18.0.0.12' Hop:4 
+13:51:38.347 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'a@18.0.0.11' Hop:3 
+13:51:38.415 [error] Checking sub_exists for Id:"c@10.0.0.13c1" From:'a@18.0.0.11' Hop:3 
+13:51:38.555 [error] Id is not get_connections(): ['b@18.0.0.12','a@18.0.0.11','c@18.0.0.13'] 
+13:51:38.555 [error] LASPVIN found the peer at "2020-07-05T13:51:38.555" for ID: "c@10.0.0.13c1" ToNode: 'c@18.0.0.13' Via:'d@18.0.0.14' 
+13:51:38.571 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'c@18.0.0.13' From:'d@18.0.0.14' to 'a@18.0.0.11' HopCount:1 
+13:51:38.571 [error] Forwarding Req Id "c@10.0.0.13c1" to Peers RcvHop:3 IncHop:4 
+13:51:38.716 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'b@18.0.0.12' Hop:4 
+13:51:38.716 [error] LASPVIN received find_sub Id: "c@12.0.0.13c1" From: 'a@18.0.0.11' Hop:3 
+13:51:38.719 [error] Checking sub_exists for Id:"c@12.0.0.13c1" From:'a@18.0.0.11' Hop:3 
+13:51:38.869 [error] Id is not get_connections(): ['b@18.0.0.12','a@18.0.0.11','c@18.0.0.13'] 
+13:51:38.869 [error] LASPVIN found the peer at "2020-07-05T13:51:38.869" for ID: "c@12.0.0.13c1" ToNode: 'c@18.0.0.13' Via:'d@18.0.0.14' 
+13:51:38.913 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@12.0.0.13c1" ToNode:'c@18.0.0.13' From:'d@18.0.0.14' to 'a@18.0.0.11' HopCount:1 
+13:51:38.913 [error] Forwarding Req Id "c@12.0.0.13c1" to Peers RcvHop:3 IncHop:4 
+13:51:38.973 [error] Forwarding ReqId "c@12.0.0.13c1" to Peer:'b@18.0.0.12' Hop:4 
+13:51:41.575 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'b@18.0.0.12' Hop:3 
+13:51:41.624 [error] Checking sub_exists for Id:"c@18.0.0.13c1" From:'b@18.0.0.12' Hop:3 
+13:51:41.684 [error] Hop 3 for Id "c@18.0.0.13c1" is more than existing 1...Skipping
+13:51:41.684 [error] LASPVIN Request forwarded~n
+13:51:41.684 [error] LASPVIN received find_sub Id: "c@19.0.0.13c1" From: 'b@18.0.0.12' Hop:4 
+13:51:41.684 [error] LASPVIN find_sub_aq exists for this find_sub "c@19.0.0.13c1" 
+13:51:41.753 [error] LASPVIN received find_sub Id: "c@13.0.0.13c1" From: 'b@18.0.0.12' Hop:4 
+13:51:41.753 [error] LASPVIN find_sub_aq exists for this find_sub "c@13.0.0.13c1" 
+13:51:41.753 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'b@18.0.0.12' Hop:4 
+13:51:41.753 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+13:51:41.754 [error] LASPVIN received find_sub Id: "c@12.0.0.13c1" From: 'b@18.0.0.12' Hop:4 
+13:51:41.754 [error] LASPVIN find_sub_aq exists for this find_sub "c@12.0.0.13c1" 
+13:51:42.640 [error] C1 propagation "2020-07-05T13:51:42.640" 
+13:51:42.770 [error] Sending find_sub batch [{'d@18.0.0.14',"c1","c@19.0.0.13c1",4,'b@18.0.0.12'},{'d@18.0.0.14',"c1","c@13.0.0.13c1",4,'b@18.0.0.12'},{'d@18.0.0.14',"c1","c@10.0.0.13c1",4,'b@18.0.0.12'},{'d@18.0.0.14',"c1","c@12.0.0.13c1",4,'b@18.0.0.12'}] 
+13:51:42.771 [error] Sent find_sub control message from batch 'd@18.0.0.14' "c1" "c@19.0.0.13c1" 4 'b@18.0.0.12' 
+13:51:42.771 [error] Sent find_sub control message from batch 'd@18.0.0.14' "c1" "c@13.0.0.13c1" 4 'b@18.0.0.12' 
+13:51:42.771 [error] Sent find_sub control message from batch 'd@18.0.0.14' "c1" "c@10.0.0.13c1" 4 'b@18.0.0.12' 
+13:51:42.772 [error] Sent find_sub control message from batch 'd@18.0.0.14' "c1" "c@12.0.0.13c1" 4 'b@18.0.0.12' 
+13:51:42.772 [error] Sending find_sub_aq batch [{"c@10.0.0.13c1",'c@18.0.0.13','d@18.0.0.14','d@18.0.0.14',1,'a@18.0.0.11'},{"c@12.0.0.13c1",'c@18.0.0.13','d@18.0.0.14','d@18.0.0.14',1,'a@18.0.0.11'},{"c@13.0.0.13c1",'c@18.0.0.13','d@18.0.0.14','d@18.0.0.14',1,'a@18.0.0.11'},{"c@19.0.0.13c1",'c@18.0.0.13','d@18.0.0.14','d@18.0.0.14',1,'a@18.0.0.11'}] 
+13:51:42.772 [error] Sent find_sub_aq control message for "c@10.0.0.13c1" ['c@18.0.0.13'] 'd@18.0.0.14' 'd@18.0.0.14' 1 'a@18.0.0.11' 
+13:51:42.772 [error] Sent find_sub_aq control message for "c@12.0.0.13c1" ['c@18.0.0.13'] 'd@18.0.0.14' 'd@18.0.0.14' 1 'a@18.0.0.11' 
+13:51:42.773 [error] Sent find_sub_aq control message for "c@13.0.0.13c1" ['c@18.0.0.13'] 'd@18.0.0.14' 'd@18.0.0.14' 1 'a@18.0.0.11' 
+13:51:42.773 [error] Sent find_sub_aq control message for "c@19.0.0.13c1" ['c@18.0.0.13'] 'd@18.0.0.14' 'd@18.0.0.14' 1 'a@18.0.0.11' 
+13:51:42.773 [error] batched message propagation "2020-07-05T13:51:42.773" 
+13:51:47.582 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'c@18.0.0.13' Hop:1 
+13:51:47.639 [error] Checking sub_exists for Id:"c@18.0.0.13c1" From:'c@18.0.0.13' Hop:1 
+13:51:47.714 [error] Hop 1 for Id "c@18.0.0.13c1" is more than existing 1...Skipping
+13:51:47.714 [error] LASPVIN Request forwarded~n
+13:51:49.468 [error] Received new rate from 'a@18.0.0.11' with new rate "c1"
+13:51:49.468 [error] LASPVIN found the peer at "2020-07-05T13:51:49.468" for ID: "c@15.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.468 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.469 [error] Sub_aq exists for Id:"c@15.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.469 [error] LASPVIN found the peer at "2020-07-05T13:51:49.469" for ID: "c@17.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.470 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.501 [error] Sub_aq exists for Id:"c@17.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.501 [error] LASPVIN found the peer at "2020-07-05T13:51:49.501" for ID: "c@11.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.501 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.534 [error] Sub_aq exists for Id:"c@11.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.534 [error] LASPVIN found the peer at "2020-07-05T13:51:49.534" for ID: "c@16.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.534 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.535 [error] Sub_aq exists for Id:"c@16.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.535 [error] LASPVIN found the peer at "2020-07-05T13:51:49.535" for ID: "c@14.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.535 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.535 [error] Sub_aq exists for Id:"c@14.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.535 [error] LASPVIN found the peer at "2020-07-05T13:51:49.535" for ID: "c@18.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.538 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@18.0.0.13c1" ToNode:'a@18.0.0.11' From:'d@18.0.0.14' to 'c@18.0.0.13' HopCount:1 
+13:51:49.538 [error] LASPVIN found the peer at "2020-07-05T13:51:49.538" for ID: "c@19.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.538 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.538 [error] Sub_aq exists for Id:"c@19.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.539 [error] LASPVIN found the peer at "2020-07-05T13:51:49.539" for ID: "c@13.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.539 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.539 [error] Sub_aq exists for Id:"c@13.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.539 [error] LASPVIN found the peer at "2020-07-05T13:51:49.539" for ID: "c@10.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.539 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.539 [error] Sub_aq exists for Id:"c@10.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.539 [error] LASPVIN found the peer at "2020-07-05T13:51:49.539" for ID: "c@12.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.539 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.539 [error] Sub_aq exists for Id:"c@12.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.539 [error] LASPVIN found the peer at "2020-07-05T13:51:49.539" for ID: "c@15.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.539 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.539 [error] Sub_aq exists for Id:"c@15.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.540 [error] LASPVIN found the peer at "2020-07-05T13:51:49.539" for ID: "c@17.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.540 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.540 [error] Sub_aq exists for Id:"c@17.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.540 [error] LASPVIN found the peer at "2020-07-05T13:51:49.540" for ID: "c@11.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.540 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.540 [error] Sub_aq exists for Id:"c@11.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.540 [error] LASPVIN found the peer at "2020-07-05T13:51:49.540" for ID: "c@16.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.540 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.540 [error] Sub_aq exists for Id:"c@16.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.540 [error] LASPVIN found the peer at "2020-07-05T13:51:49.540" for ID: "c@14.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.540 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.540 [error] Sub_aq exists for Id:"c@14.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.540 [error] LASPVIN found the peer at "2020-07-05T13:51:49.540" for ID: "c@18.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.540 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.540 [error] Sub_aq exists and Hop:1 > existing HopCount:1 
+13:51:49.541 [error] LASPVIN found the peer at "2020-07-05T13:51:49.540" for ID: "c@19.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.541 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.541 [error] Sub_aq exists for Id:"c@19.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.541 [error] LASPVIN found the peer at "2020-07-05T13:51:49.541" for ID: "c@13.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.541 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.541 [error] Sub_aq exists for Id:"c@13.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.541 [error] LASPVIN found the peer at "2020-07-05T13:51:49.541" for ID: "c@10.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.541 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.541 [error] Sub_aq exists for Id:"c@10.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:49.541 [error] LASPVIN found the peer at "2020-07-05T13:51:49.541" for ID: "c@12.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'d@18.0.0.14' 
+13:51:49.541 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+13:51:49.541 [error] Sub_aq exists for Id:"c@12.0.0.13c1" but HopCount:1 is lower than existing hopcount:3 .. Forwarding request 
+13:51:52.683 [error] C1 propagation "2020-07-05T13:51:52.683" 
+13:51:54.108 [error] C3 propagation "2020-07-05T13:51:54.108" 
+13:51:54.109 [error] Sending find_sub batch [] 
+13:51:54.109 [error] Sending find_sub_aq batch [{"c@15.0.0.13c1",'a@18.0.0.11','d@18.0.0.14','d@18.0.0.14',2,'a@18.0.0.11'},{"c@10.0.0.13c1",'a@18.0.0.11','d@18.0.0.14','d@18.0.0.14',2,'a@18.0.0.11'},{"c@11.0.0.13c1",'a@18.0.0.11','d@18.0.0.14','d@18.0.0.14',2,'a@18.0.0.11'},{"c@12.0.0.13c1",'a@18.0.0.11','d@18.0.0.14','d@18.0.0.14',2,'a@18.0.0.11'},{"c@13.0.0.13c1",'a@18.0.0.11','d@18.0.0.14','d@18.0.0.14',2,'a@18.0.0.11'},{"c@18.0.0.13c1",'a@18.0.0.11','d@18.0.0.14','d@18.0.0.14',1,'c@18.0.0.13'},{"c@17.0.0.13c1",'a@18.0.0.11','d@18.0.0.14','d@18.0.0.14',2,'a@18.0.0.11'},{"c@19.0.0.13c1",'a@18.0.0.11','d@18.0.0.14','d@18.0.0.14',2,'a@18.0.0.11'},{"c@14.0.0.13c1",'a@18.0.0.11','d@18.0.0.14','d@18.0.0.14',2,'a@18.0.0.11'},{"c@16.0.0.13c1",'a@18.0.0.11','d@18.0.0.14','d@18.0.0.14',2,'a@18.0.0.11'}] 
+13:51:54.109 [error] Sent find_sub_aq control message for "c@10.0.0.13c1" ['a@18.0.0.11'] 'd@18.0.0.14' 'd@18.0.0.14' 2 'a@18.0.0.11' 
+13:51:54.109 [error] Sent find_sub_aq control message for "c@11.0.0.13c1" ['a@18.0.0.11'] 'd@18.0.0.14' 'd@18.0.0.14' 2 'a@18.0.0.11' 
+13:51:54.110 [error] Sent find_sub_aq control message for "c@12.0.0.13c1" ['a@18.0.0.11'] 'd@18.0.0.14' 'd@18.0.0.14' 2 'a@18.0.0.11' 
+13:51:54.110 [error] Sent find_sub_aq control message for "c@13.0.0.13c1" ['a@18.0.0.11'] 'd@18.0.0.14' 'd@18.0.0.14' 2 'a@18.0.0.11' 
+13:51:54.110 [error] Sent find_sub_aq control message for "c@14.0.0.13c1" ['a@18.0.0.11'] 'd@18.0.0.14' 'd@18.0.0.14' 2 'a@18.0.0.11' 
+13:51:54.110 [error] Sent find_sub_aq control message for "c@15.0.0.13c1" ['a@18.0.0.11'] 'd@18.0.0.14' 'd@18.0.0.14' 2 'a@18.0.0.11' 
+13:51:54.110 [error] Sent find_sub_aq control message for "c@16.0.0.13c1" ['a@18.0.0.11'] 'd@18.0.0.14' 'd@18.0.0.14' 2 'a@18.0.0.11' 
+13:51:54.110 [error] Sent find_sub_aq control message for "c@17.0.0.13c1" ['a@18.0.0.11'] 'd@18.0.0.14' 'd@18.0.0.14' 2 'a@18.0.0.11' 
+13:51:54.110 [error] Sent find_sub_aq control message for "c@18.0.0.13c1" ['a@18.0.0.11'] 'd@18.0.0.14' 'd@18.0.0.14' 1 'c@18.0.0.13' 
+13:51:54.111 [error] Sent find_sub_aq control message for "c@19.0.0.13c1" ['a@18.0.0.11'] 'd@18.0.0.14' 'd@18.0.0.14' 2 'a@18.0.0.11' 
+13:51:54.111 [error] batched message propagation "2020-07-05T13:51:54.111" 
+13:52:04.109 [error] C1 propagation "2020-07-05T13:52:04.109" 
+13:52:04.143 [error] Sending find_sub batch [] 
+13:52:04.143 [error] Sending find_sub_aq batch [] 
+13:52:04.143 [error] batched message propagation "2020-07-05T13:52:04.143" 
+13:52:12.746 [error] C2 propagation "2020-07-05T13:52:12.745" 
+13:52:14.110 [error] C1 propagation "2020-07-05T13:52:14.110" 
+13:52:14.144 [error] Sending find_sub batch [] 
+13:52:14.144 [error] Sending find_sub_aq batch [] 
+13:52:14.144 [error] batched message propagation "2020-07-05T13:52:14.144" 
+13:52:24.112 [error] C1 propagation "2020-07-05T13:52:24.112" 
+13:52:24.146 [error] Sending find_sub batch [] 
+13:52:24.146 [error] Sending find_sub_aq batch [] 
+13:52:24.146 [error] batched message propagation "2020-07-05T13:52:24.146" 
+13:52:34.114 [error] C1 propagation "2020-07-05T13:52:34.114" 
+13:52:34.148 [error] Sending find_sub batch [] 
+13:52:34.148 [error] Sending find_sub_aq batch [] 
+13:52:34.148 [error] batched message propagation "2020-07-05T13:52:34.148" 
+13:52:44.117 [error] C1 propagation "2020-07-05T13:52:44.116" 
+13:52:44.149 [error] Sending find_sub batch [] 
+13:52:44.149 [error] Sending find_sub_aq batch [] 
+13:52:44.149 [error] batched message propagation "2020-07-05T13:52:44.149" 
+13:52:52.746 [error] C2 propagation "2020-07-05T13:52:52.746" 
+13:52:54.118 [error] C1 propagation "2020-07-05T13:52:54.118" 
+13:52:54.150 [error] Sending find_sub batch [] 
+13:52:54.150 [error] Sending find_sub_aq batch [] 
+13:52:54.150 [error] batched message propagation "2020-07-05T13:52:54.150" 
+13:53:04.110 [error] C3 propagation "2020-07-05T13:53:04.109" 
+13:53:04.120 [error] C1 propagation "2020-07-05T13:53:04.120" 
+13:53:04.151 [error] Sending find_sub batch [] 
+13:53:04.151 [error] Sending find_sub_aq batch [] 
+13:53:04.152 [error] batched message propagation "2020-07-05T13:53:04.151" 
+13:53:14.121 [error] C1 propagation "2020-07-05T13:53:14.121" 
+13:53:14.153 [error] Sending find_sub batch [] 
+13:53:14.153 [error] Sending find_sub_aq batch [] 
+13:53:14.154 [error] batched message propagation "2020-07-05T13:53:14.153" 
+13:53:24.123 [error] C1 propagation "2020-07-05T13:53:24.123" 
+13:53:24.154 [error] Sending find_sub batch [] 
+13:53:24.155 [error] Sending find_sub_aq batch [] 
+13:53:24.155 [error] batched message propagation "2020-07-05T13:53:24.155" 
+13:53:32.748 [error] C2 propagation "2020-07-05T13:53:32.748" 
+13:53:34.125 [error] C1 propagation "2020-07-05T13:53:34.125" 
+13:53:34.155 [error] Sending find_sub batch [] 
+13:53:34.155 [error] Sending find_sub_aq batch [] 
+13:53:34.155 [error] batched message propagation "2020-07-05T13:53:34.155" 
+13:53:44.127 [error] C1 propagation "2020-07-05T13:53:44.127" 
+13:53:44.156 [error] Sending find_sub batch [] 
+13:53:44.156 [error] Sending find_sub_aq batch [] 
+13:53:44.157 [error] batched message propagation "2020-07-05T13:53:44.156" 
+13:53:54.130 [error] C1 propagation "2020-07-05T13:53:54.129" 
+13:53:54.157 [error] Sending find_sub batch [] 
+13:53:54.157 [error] Sending find_sub_aq batch [] 
+13:53:54.157 [error] batched message propagation "2020-07-05T13:53:54.157" 
+13:54:04.131 [error] C1 propagation "2020-07-05T13:54:04.131" 
+13:54:04.158 [error] Sending find_sub batch [] 
+13:54:04.158 [error] Sending find_sub_aq batch [] 
+13:54:04.159 [error] batched message propagation "2020-07-05T13:54:04.158" 
+13:54:12.749 [error] C2 propagation "2020-07-05T13:54:12.749" 
+13:54:14.111 [error] C3 propagation "2020-07-05T13:54:14.111" 
+13:54:14.133 [error] C1 propagation "2020-07-05T13:54:14.133" 
+13:54:14.159 [error] Sending find_sub batch [] 
+13:54:14.159 [error] Sending find_sub_aq batch [] 
+13:54:14.159 [error] batched message propagation "2020-07-05T13:54:14.159" 
+13:54:24.135 [error] C1 propagation "2020-07-05T13:54:24.134" 
+13:54:24.160 [error] Sending find_sub batch [] 
+13:54:24.160 [error] Sending find_sub_aq batch [] 
+13:54:24.160 [error] batched message propagation "2020-07-05T13:54:24.160" 
+13:54:34.136 [error] C1 propagation "2020-07-05T13:54:34.136" 
+13:54:34.161 [error] Sending find_sub batch [] 
+13:54:34.161 [error] Sending find_sub_aq batch [] 
+13:54:34.161 [error] batched message propagation "2020-07-05T13:54:34.161" 
+13:54:44.138 [error] C1 propagation "2020-07-05T13:54:44.138" 
+13:54:44.163 [error] Sending find_sub batch [] 
+13:54:44.163 [error] Sending find_sub_aq batch [] 
+13:54:44.163 [error] batched message propagation "2020-07-05T13:54:44.163" 
+13:54:52.751 [error] C2 propagation "2020-07-05T13:54:52.751" 
+13:54:54.139 [error] C1 propagation "2020-07-05T13:54:54.139" 
+13:54:54.164 [error] Sending find_sub batch [] 
+13:54:54.164 [error] Sending find_sub_aq batch [] 
+13:54:54.164 [error] batched message propagation "2020-07-05T13:54:54.164" 
+13:55:04.141 [error] C1 propagation "2020-07-05T13:55:04.141" 
+13:55:04.165 [error] Sending find_sub batch [] 
+13:55:04.165 [error] Sending find_sub_aq batch [] 
+13:55:04.165 [error] batched message propagation "2020-07-05T13:55:04.165" 
+13:55:14.144 [error] C1 propagation "2020-07-05T13:55:14.143" 
+13:55:14.166 [error] Sending find_sub batch [] 
+13:55:14.166 [error] Sending find_sub_aq batch [] 
+13:55:14.166 [error] batched message propagation "2020-07-05T13:55:14.166" 
+13:55:24.113 [error] C3 propagation "2020-07-05T13:55:24.113" 
+13:55:24.145 [error] C1 propagation "2020-07-05T13:55:24.145" 
+13:55:24.167 [error] Sending find_sub batch [] 
+13:55:24.167 [error] Sending find_sub_aq batch [] 
+13:55:24.167 [error] batched message propagation "2020-07-05T13:55:24.167" 
+13:55:32.753 [error] C2 propagation "2020-07-05T13:55:32.753" 
+13:55:34.147 [error] C1 propagation "2020-07-05T13:55:34.147" 
+13:55:34.168 [error] Sending find_sub batch [] 
+13:55:34.168 [error] Sending find_sub_aq batch [] 
+13:55:34.168 [error] batched message propagation "2020-07-05T13:55:34.168" 
+13:55:44.149 [error] C1 propagation "2020-07-05T13:55:44.149" 
+13:55:44.180 [error] Sending find_sub batch [] 
+13:55:44.180 [error] Sending find_sub_aq batch [] 
+13:55:44.180 [error] batched message propagation "2020-07-05T13:55:44.180" 
+13:55:54.151 [error] C1 propagation "2020-07-05T13:55:54.151" 
+13:55:54.181 [error] Sending find_sub batch [] 
+13:55:54.181 [error] Sending find_sub_aq batch [] 
+13:55:54.181 [error] batched message propagation "2020-07-05T13:55:54.181" 
+13:56:04.153 [error] C1 propagation "2020-07-05T13:56:04.153" 
+13:56:04.182 [error] Sending find_sub batch [] 
+13:56:04.182 [error] Sending find_sub_aq batch [] 
+13:56:04.182 [error] batched message propagation "2020-07-05T13:56:04.182" 
+13:56:12.755 [error] C2 propagation "2020-07-05T13:56:12.755" 
+13:56:14.155 [error] C1 propagation "2020-07-05T13:56:14.155" 
+13:56:14.199 [error] Sending find_sub batch [] 
+13:56:14.199 [error] Sending find_sub_aq batch [] 
+13:56:14.199 [error] batched message propagation "2020-07-05T13:56:14.199" 
+13:56:24.156 [error] C1 propagation "2020-07-05T13:56:24.156" 
+13:56:24.200 [error] Sending find_sub batch [] 
+13:56:24.200 [error] Sending find_sub_aq batch [] 
+13:56:24.200 [error] batched message propagation "2020-07-05T13:56:24.200" 
+13:56:29.534 [error] LASPVIN Received delta From='a@18.0.0.11' at TimeStamp="2020-07-05T13:56:29.533" Took=65431 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[#{what => timeis_13_55_42_082}],[],[],[],[],[],[],[],[],[],[],[]}}}}] 
+13:56:29.534 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,0},{"check_tonode_ack",0,0},{"delta_ack",0,0},{"delta_send",0,1},{"find_sub",9,21},{"find_sub_aq",19,0},{"find_sub_aq_lock",0,0},{"rate_ack",5,3},{"rate_class",3,5},{"rate_refresh",0,0},{"rate_subscribe",1,0},{"rate_subscribe_ack",0,1},{"send_backend",37,0},{"sub_cancel",0,0}] 
+13:56:34.114 [error] C3 propagation "2020-07-05T13:56:34.114" 
+13:56:34.157 [error] C1 propagation "2020-07-05T13:56:34.157" 
+13:56:34.159 [error] LASPVIN Sending delta to 'c@18.0.0.13' 
+13:56:34.168 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<196,31,155,80,222,230,217,184,113,38,192,31,245,234,88,141,4,181,53,22>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => timeis_13_55_42_082}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:1 
+13:56:34.193 [error] LASPVIN Sending delta to 'a@18.0.0.11' 
+13:56:34.193 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<196,31,155,80,222,230,217,184,113,38,192,31,245,234,88,141,4,181,53,22>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:1 
+13:56:34.234 [error] Sending find_sub batch [] 
+13:56:34.235 [error] Sending find_sub_aq batch [] 
+13:56:34.235 [error] batched message propagation "2020-07-05T13:56:34.235" 
+13:56:44.159 [error] C1 propagation "2020-07-05T13:56:44.159" 
+13:56:44.236 [error] Sending find_sub batch [] 
+13:56:44.236 [error] Sending find_sub_aq batch [] 
+13:56:44.237 [error] batched message propagation "2020-07-05T13:56:44.237" 
+13:56:52.756 [error] C2 propagation "2020-07-05T13:56:52.756" 
+13:56:54.160 [error] C1 propagation "2020-07-05T13:56:54.160" 
+13:56:54.238 [error] Sending find_sub batch [] 
+13:56:54.238 [error] Sending find_sub_aq batch [] 
+13:56:54.239 [error] batched message propagation "2020-07-05T13:56:54.239" 
+13:57:04.162 [error] C1 propagation "2020-07-05T13:57:04.162" 
+13:57:04.239 [error] Sending find_sub batch [] 
+13:57:04.239 [error] Sending find_sub_aq batch [] 
+13:57:04.239 [error] batched message propagation "2020-07-05T13:57:04.239" 
+13:57:14.164 [error] C1 propagation "2020-07-05T13:57:14.164" 
+13:57:14.240 [error] Sending find_sub batch [] 
+13:57:14.240 [error] Sending find_sub_aq batch [] 
+13:57:14.240 [error] batched message propagation "2020-07-05T13:57:14.240" 
+13:57:24.166 [error] C1 propagation "2020-07-05T13:57:24.166" 
+13:57:24.241 [error] Sending find_sub batch [] 
+13:57:24.241 [error] Sending find_sub_aq batch [] 
+13:57:24.241 [error] batched message propagation "2020-07-05T13:57:24.241" 
+13:57:32.757 [error] C2 propagation "2020-07-05T13:57:32.757" 
+13:57:34.168 [error] C1 propagation "2020-07-05T13:57:34.168" 
+13:57:34.242 [error] Sending find_sub batch [] 
+13:57:34.242 [error] Sending find_sub_aq batch [] 
+13:57:34.242 [error] batched message propagation "2020-07-05T13:57:34.242" 
+13:57:44.116 [error] C3 propagation "2020-07-05T13:57:44.116" 
+13:57:44.170 [error] C1 propagation "2020-07-05T13:57:44.170" 
+13:57:44.244 [error] Sending find_sub batch [] 
+13:57:44.244 [error] Sending find_sub_aq batch [] 
+13:57:44.244 [error] batched message propagation "2020-07-05T13:57:44.244" 
+13:57:54.171 [error] C1 propagation "2020-07-05T13:57:54.171" 
+13:57:54.245 [error] Sending find_sub batch [] 
+13:57:54.245 [error] Sending find_sub_aq batch [] 
+13:57:54.245 [error] batched message propagation "2020-07-05T13:57:54.245" 
+13:58:04.172 [error] C1 propagation "2020-07-05T13:58:04.172" 
+13:58:04.246 [error] Sending find_sub batch [] 
+13:58:04.246 [error] Sending find_sub_aq batch [] 
+13:58:04.247 [error] batched message propagation "2020-07-05T13:58:04.246" 

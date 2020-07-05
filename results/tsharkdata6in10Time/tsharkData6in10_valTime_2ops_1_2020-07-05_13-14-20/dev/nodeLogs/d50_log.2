@@ -1,0 +1,645 @@
+
+
+root@csst-06:/home/ubuntu/laspdev# 
+root@csst-06:/home/ubuntu/laspdev# python /home/ubuntu/laspdev/utility/setup_laspp.py d50
+d50
+ip:18.0.0.12
+node:b
+root@d50:/# [Kroot@d50:/# service vnstat start
+[....] Starting vnStat daemon: vnstatd[?25l7[1G[[32m ok [39;49m8[?12l[?25h.
+root@d50:/# sysctl -w net.ipv4.ip_forward=0
+net.ipv4.ip_forward = 0
+root@d50:/# vnstat -u -i d50-eth0
+Error: Unable to read database "/var/lib/vnstat/d50-eth0": No such file or directory
+Info: -> A new database has been created.
+root@d50:/# vnstat -u
+root@d50:/# vnstat
+
+                      rx      /      tx      /     total    /   estimated
+ eth0:
+       Jun '20         4 KiB  /       1 KiB  /       5 KiB
+       Jul '20         0 KiB  /       7 KiB  /       7 KiB  /       0 KiB
+     yesterday         0 KiB  /       7 KiB  /       7 KiB
+         today         0 KiB  /       0 KiB  /       0 KiB  /      --    
+
+ d50-eth0: Not enough data available yet.
+root@d50:/# export PEER_SERVICE=partisan_hyparview_peer_service_manager
+root@d50:/# export RATE_CLASS=c2
+root@d50:/# export RATE_C1=10000
+root@d50:/# export RATE_C2=40000
+root@d50:/# export RATE_C3=70000
+root@d50:/# export PROPAGATE_ON_UPDATE=false
+root@d50:/# export MAX_ACTIVE_SIZE=50
+root@d50:/# cd /opt/lasp
+root@d50:/opt/lasp# epmd -daemon
+root@d50:/opt/lasp# rebar3 shell --name b@18.0.0.12
+[0;32m===> Verifying dependencies...
+[0m[0;32m===> Compiling lasp
+[0mErlang/OTP 19 [erts-8.3] [source] [64-bit] [smp:24:24] [ds:24:24:10] [async-threads:0] [hipe] [kernel-poll:false]
+
+Eshell V8.3  (abort with ^G)
+(b@18.0.0.12)1> [0;35m===> The rebar3 shell is a development tool; to deploy applications in production, consider using releases (http://www.rebar3.org/docs/releases)
+[0m13:27:47.616 [info] Application lager started on node 'b@18.0.0.12'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.253.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.252.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.254.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+         application: sasl
+          started_at: 'b@18.0.0.12'
+13:27:47.715 [info] Application sasl started on node 'b@18.0.0.12'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+         application: lasp_support
+          started_at: 'b@18.0.0.12'
+13:27:47.716 [info] Application lasp_support started on node 'b@18.0.0.12'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+         application: acceptor_pool
+          started_at: 'b@18.0.0.12'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+         application: quickrand
+          started_at: 'b@18.0.0.12'
+13:27:47.720 [info] Application acceptor_pool started on node 'b@18.0.0.12'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+         application: uuid
+          started_at: 'b@18.0.0.12'
+13:27:47.724 [info] Application quickrand started on node 'b@18.0.0.12'
+13:27:47.724 [info] Application uuid started on node 'b@18.0.0.12'
+13:27:47.744 [info] Using node name: 'b@18.0.0.12'
+13:27:47.770 [info] Resolving "18.0.0.12"...
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.266.0>},
+                       {id,timer_server},
+                       {mfargs,{timer,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,1000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+          supervisor: {local,inet_gethost_native_sup}
+             started: [{pid,<0.268.0>},{mfa,{inet_gethost_native,init,[[]]}}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.267.0>},
+                       {id,inet_gethost_native_sup},
+                       {mfargs,{inet_gethost_native,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,1000},
+                       {child_type,worker}]
+13:27:47.775 [info] Resolved "b@18.0.0.12" to {18,0,0,12}
+13:27:47.775 [info] Resolved "18.0.0.12" to {18,0,0,12}
+13:27:47.952 [info] Partisan listening on {18,0,0,12}:46461 listen_addrs: [#{ip => {18,0,0,12},port => 46461}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.313.0>},
+                       {id,partisan_rpc_backend},
+                       {mfargs,{partisan_rpc_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:47 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.314.0>},
+                       {id,partisan_acknowledgement_backend},
+                       {mfargs,
+                           {partisan_acknowledgement_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:27:47.976 [info] Not using container orchestration; disabling.
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.315.0>},
+                       {id,partisan_orchestration_backend},
+                       {mfargs,{partisan_orchestration_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:27:48.033 [info] node 'b@18.0.0.12' choosing random seed: {110009422,-576460748466285545,-576460752303423416}
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.316.0>},
+                       {id,partisan_hyparview_peer_service_manager},
+                       {mfargs,
+                           {partisan_hyparview_peer_service_manager,
+                               start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.317.0>},
+                       {id,partisan_peer_service_events},
+                       {mfargs,{partisan_peer_service_events,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:27:48.044 [info] node 'b@18.0.0.12' choosing random seed: {110009422,-576460748466285545,-576460752303423416}
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.318.0>},
+                       {id,partisan_plumtree_backend},
+                       {mfargs,{partisan_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.319.0>},
+                       {id,partisan_plumtree_broadcast},
+                       {mfargs,{partisan_plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.320.0>},
+                       {id,partisan_monitor},
+                       {mfargs,{partisan_monitor,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.322.0>},
+                       {id,partisan_pool},
+                       {mfargs,{partisan_pool,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.323.0>},
+                       {id,{partisan_socket,{18,0,0,12},46461}},
+                       {mfargs,
+                           {partisan_socket,start_link,[{18,0,0,12},46461]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.321.0>},
+                       {id,partisan_pool_sup},
+                       {mfargs,{partisan_pool_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,20000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+         application: partisan
+          started_at: 'b@18.0.0.12'
+13:27:48.168 [info] Application partisan started on node 'b@18.0.0.12'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,plumtree_sup}
+             started: [{pid,<0.338.0>},
+                       {id,plumtree_broadcast},
+                       {mfargs,{plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+         application: plumtree
+          started_at: 'b@18.0.0.12'
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+         application: gen_fsm_compat
+          started_at: 'b@18.0.0.12'
+13:27:48.193 [info] Application plumtree started on node 'b@18.0.0.12'
+13:27:48.193 [info] Application gen_fsm_compat started on node 'b@18.0.0.12'
+13:27:48.201 [info] Setting jitter: false
+13:27:48.208 [info] Setting jitter percent: 1
+13:27:48.211 [info] Setting event interval: 0
+13:27:48.213 [info] Setting max events: 1000
+13:27:48.215 [info] Setting extended logging: false
+13:27:48.218 [info] Setting mailbox logging: false
+13:27:48.220 [info] Setting operation mode: delta_based
+13:27:48.223 [info] Setting set type: orset
+13:27:48.228 [info] Setting broadcast: false
+13:27:48.298 [info] Membership: false
+13:27:48.303 [info] Workflow: false
+13:27:48.319 [info] AdClientEnabled: false
+13:27:48.326 [info] AdServerEnabled: false
+13:27:48.330 [info] TournClientEnabled: false
+13:27:48.333 [info] TournServerEnabled: false
+13:27:48.336 [info] ThroughputType: gset
+13:27:48.339 [info] ThroughputClientEnabled: false
+13:27:48.342 [info] ThroughputServerEnabled: false
+13:27:48.345 [info] DivergenceType: gcounter
+13:27:48.351 [info] DivergenceClientEnabled: false
+13:27:48.354 [info] DivergenceServerEnabled: false
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.385.0>},
+                       {id,lasp_unique},
+                       {mfargs,{lasp_unique,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.386.0>},
+                       {id,lasp_plumtree_backend},
+                       {mfargs,{lasp_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.387.0>},
+                       {id,lasp_plumtree_memory_report},
+                       {mfargs,{lasp_plumtree_memory_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.388.0>},
+                       {id,lasp_memory_utilization_report},
+                       {mfargs,{lasp_memory_utilization_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:27:48.492 [info] Backend initialized with pid: <0.393.0>
+13:27:48.492 [info] Backend lasp_ets_storage_backend initialized: <0.393.0>
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.389.0>},
+                       {id,lasp_distribution_backend},
+                       {mfargs,{lasp_distribution_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+13:27:48.508 [error] Rate Propagations c1: "10000" c2:"40000" c3:"70000" 
+
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.395.0>},
+                       {id,lasp_process_sup},
+                       {mfargs,{lasp_process_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+[0;32m===> Booted types
+[0m
+=PROGRESS REPORT==== 5-Jul-2020::13:27:48 ===
+         application: lasp
+          started_at: 'b@18.0.0.12'
+[0;32m===> Booted gen_flow
+[0m[0;32m===> Booted syntax_tools
+[0m[0;32m===> Booted compiler
+[0m[0;32m===> Booted goldrush
+[0m[0;32m===> Booted lager
+[0m[0;32m===> Booted sasl
+[0m[0;32m===> Booted lasp_support
+[0m[0;32m===> Booted acceptor_pool
+[0m[0;32m===> Booted quickrand
+[0m[0;32m===> Booted uuid
+[0m[0;32m===> Booted partisan
+[0m[0;32m===> Booted plumtree
+[0m[0;32m===> Booted gen_fsm_compat
+[0m[0;32m===> Booted lasp
+[0m13:27:48.508 [error] C1 propagation "2020-07-05T13:27:48.508" 
+13:27:48.508 [error] C2 propagation "2020-07-05T13:27:48.508" 
+13:27:48.508 [error] C3 propagation "2020-07-05T13:27:48.508" 
+13:27:48.508 [error] batched message propagation "2020-07-05T13:27:48.508" 
+13:27:48.526 [info] Application lasp started on node 'b@18.0.0.12'
+
+(b@18.0.0.12)1> erlang:set_cookie(node(),'RPJVCXYDYULBNZFEFPHJ').
+true
+(b@18.0.0.12)2> application:get_env(partisan, max_active_size).
+{ok,50}
+(b@18.0.0.12)3> application:get_env(partisan, max_passive_size).
+{ok,10}
+(b@18.0.0.12)4> application:get_env(partisan, min_active_size).
+{ok,9}
+(b@18.0.0.12)5> partisan_config:set(passive_view_shuffle_period, 1000000000).
+ok
+(b@18.0.0.12)6> partisan_config:get(passive_view_shuffle_period).
+1000000000
+(b@18.0.0.12)7> )7> 13:27:58.510 [error] C1 propagation "2020-07-05T13:27:58.510" 
+13:27:58.510 [error] Sending find_sub batch [] 
+13:27:58.510 [error] Sending find_sub_aq batch [] 
+13:27:58.510 [error] batched message propagation "2020-07-05T13:27:58.510" 
+13:28:08.512 [error] C1 propagation "2020-07-05T13:28:08.512" 
+13:28:08.512 [error] Sending find_sub batch [] 
+13:28:08.512 [error] Sending find_sub_aq batch [] 
+13:28:08.512 [error] batched message propagation "2020-07-05T13:28:08.512" 
+13:28:18.514 [error] C1 propagation "2020-07-05T13:28:18.514" 
+13:28:18.514 [error] Sending find_sub batch [] 
+13:28:18.514 [error] Sending find_sub_aq batch [] 
+13:28:18.514 [error] batched message propagation "2020-07-05T13:28:18.514" 
+13:28:28.510 [error] C2 propagation "2020-07-05T13:28:28.510" 
+13:28:28.515 [error] C1 propagation "2020-07-05T13:28:28.515" 
+13:28:28.521 [error] Sending find_sub batch [] 
+13:28:28.521 [error] Sending find_sub_aq batch [] 
+13:28:28.521 [error] batched message propagation "2020-07-05T13:28:28.521" 
+13:28:38.516 [error] C1 propagation "2020-07-05T13:28:38.516" 
+13:28:38.523 [error] Sending find_sub batch [] 
+13:28:38.523 [error] Sending find_sub_aq batch [] 
+13:28:38.523 [error] batched message propagation "2020-07-05T13:28:38.523" 
+13:28:48.518 [error] C1 propagation "2020-07-05T13:28:48.518" 
+13:28:48.525 [error] Sending find_sub batch [] 
+13:28:48.525 [error] Sending find_sub_aq batch [] 
+13:28:48.525 [error] batched message propagation "2020-07-05T13:28:48.525" 
+13:28:58.510 [error] C3 propagation "2020-07-05T13:28:58.510" 
+13:28:58.519 [error] C1 propagation "2020-07-05T13:28:58.519" 
+13:28:58.526 [error] Sending find_sub batch [] 
+13:28:58.526 [error] Sending find_sub_aq batch [] 
+13:28:58.526 [error] batched message propagation "2020-07-05T13:28:58.526" 
+13:29:08.512 [error] C2 propagation "2020-07-05T13:29:08.512" 
+13:29:08.520 [error] C1 propagation "2020-07-05T13:29:08.520" 
+13:29:08.527 [error] Sending find_sub batch [] 
+13:29:08.527 [error] Sending find_sub_aq batch [] 
+13:29:08.527 [error] batched message propagation "2020-07-05T13:29:08.527" 
+13:29:18.522 [error] C1 propagation "2020-07-05T13:29:18.522" 
+13:29:18.528 [error] Sending find_sub batch [] 
+13:29:18.528 [error] Sending find_sub_aq batch [] 
+13:29:18.528 [error] batched message propagation "2020-07-05T13:29:18.528" 
+13:29:28.524 [error] C1 propagation "2020-07-05T13:29:28.524" 
+13:29:28.565 [error] Sending find_sub batch [] 
+13:29:28.565 [error] Sending find_sub_aq batch [] 
+13:29:28.565 [error] batched message propagation "2020-07-05T13:29:28.565" 
+lasp_peer_service:join('a@18.0.0.11').
+ok
+(b@18.0.0.12)8> lasp_peer_service:members().
+{ok,['e@18.0.0.15','d@18.0.0.14','f@18.0.0.16',
+     'b@18.0.0.12','a@18.0.0.11']}
+(b@18.0.0.12)9> 13:29:38.526 [error] C1 propagation "2020-07-05T13:29:38.526" 
+13:29:38.574 [error] Sending find_sub batch [] 
+13:29:38.574 [error] Sending find_sub_aq batch [] 
+13:29:38.574 [error] batched message propagation "2020-07-05T13:29:38.574" 
+13:29:38.659 [error] Sending rate "c2" to 'e@18.0.0.15' 
+13:29:38.659 [error] Sending rate "c2" to 'd@18.0.0.14' 
+13:29:38.659 [error] Sending rate "c2" to 'f@18.0.0.16' 
+13:29:38.660 [error] Sending rate "c2" to 'a@18.0.0.11' 
+13:29:42.038 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'd@18.0.0.14' Hop:2 
+13:29:42.119 [error] Checking sub_exists for Id:"c@18.0.0.13c1" From:'d@18.0.0.14' Hop:2 
+13:29:42.182 [error] Id is not get_connections(): ['d@18.0.0.14','a@18.0.0.11','f@18.0.0.16','e@18.0.0.15'] 
+13:29:42.182 [error] LASPVIN found the peer at "2020-07-05T13:29:42.182" for ID: "c@18.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'b@18.0.0.12' 
+13:29:42.185 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@18.0.0.13c1" ToNode:'a@18.0.0.11' From:'b@18.0.0.12' to 'd@18.0.0.14' HopCount:1 
+13:29:42.185 [error] Forwarding Req Id "c@18.0.0.13c1" to Peers RcvHop:2 IncHop:3 
+13:29:42.268 [error] Forwarding ReqId "c@18.0.0.13c1" to Peer:'a@18.0.0.11' Hop:3 
+13:29:42.268 [error] Forwarding ReqId "c@18.0.0.13c1" to Peer:'f@18.0.0.16' Hop:3 
+13:29:42.268 [error] Forwarding ReqId "c@18.0.0.13c1" to Peer:'e@18.0.0.15' Hop:3 
+13:29:43.214 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'a@18.0.0.11' Hop:2 
+13:29:43.214 [error] LASPVIN find_sub_aq exists for this find_sub "c@18.0.0.13c1" 
+13:29:44.216 [error] Sending Subscription to 'a@18.0.0.11' case1 
+13:29:48.514 [error] C2 propagation "2020-07-05T13:29:48.514" 
+13:29:48.579 [error] C1 propagation "2020-07-05T13:29:48.578" 
+13:29:48.636 [error] Sending find_sub batch [{'b@18.0.0.12',"c1","c@18.0.0.13c1",3,'a@18.0.0.11'},{'b@18.0.0.12',"c1","c@18.0.0.13c1",3,'f@18.0.0.16'},{'b@18.0.0.12',"c1","c@18.0.0.13c1",3,'e@18.0.0.15'}] 
+13:29:48.636 [error] Sent find_sub control message from batch 'b@18.0.0.12' "c1" "c@18.0.0.13c1" 3 'a@18.0.0.11' 
+13:29:48.637 [error] Sent find_sub control message from batch 'b@18.0.0.12' "c1" "c@18.0.0.13c1" 3 'f@18.0.0.16' 
+13:29:48.637 [error] Sent find_sub control message from batch 'b@18.0.0.12' "c1" "c@18.0.0.13c1" 3 'e@18.0.0.15' 
+13:29:48.637 [error] Sending find_sub_aq batch [{"c@18.0.0.13c1",'a@18.0.0.11','b@18.0.0.12','b@18.0.0.12',1,'d@18.0.0.14'}] 
+13:29:48.637 [error] Sent find_sub_aq control message for "c@18.0.0.13c1" ['a@18.0.0.11'] 'b@18.0.0.12' 'b@18.0.0.12' 1 'd@18.0.0.14' 
+13:29:48.637 [error] batched message propagation "2020-07-05T13:29:48.637" 
+13:29:49.217 [error] Sending Subscription to 'a@18.0.0.11' case1 
+13:29:49.353 [error] Rate_subscribe_ack received from 'a@18.0.0.11' for rate "c2" 
+13:29:49.917 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'e@18.0.0.15' Hop:3 
+13:29:49.917 [error] LASPVIN find_sub_aq exists for this find_sub "c@18.0.0.13c1" 
+13:29:51.099 [error] Rate_subscribe_ack received from 'a@18.0.0.11' for rate "c2" 
+13:29:51.517 [error] LASPVIN received find_sub Id: "c@18.0.0.13c1" From: 'f@18.0.0.16' Hop:3 
+13:29:51.517 [error] LASPVIN find_sub_aq exists for this find_sub "c@18.0.0.13c1" 
+13:29:58.580 [error] C1 propagation "2020-07-05T13:29:58.580" 
+13:29:58.639 [error] Sending find_sub batch [] 
+13:29:58.639 [error] Sending find_sub_aq batch [] 
+13:29:58.639 [error] batched message propagation "2020-07-05T13:29:58.639" 
+13:30:08.512 [error] C3 propagation "2020-07-05T13:30:08.512" 
+13:30:08.582 [error] C1 propagation "2020-07-05T13:30:08.582" 
+13:30:08.641 [error] Sending find_sub batch [] 
+13:30:08.641 [error] Sending find_sub_aq batch [] 
+13:30:08.641 [error] batched message propagation "2020-07-05T13:30:08.641" 
+13:30:18.584 [error] C1 propagation "2020-07-05T13:30:18.584" 
+13:30:18.643 [error] Sending find_sub batch [] 
+13:30:18.643 [error] Sending find_sub_aq batch [] 
+13:30:18.643 [error] batched message propagation "2020-07-05T13:30:18.643" 
+13:30:28.516 [error] C2 propagation "2020-07-05T13:30:28.516" 
+13:30:28.585 [error] C1 propagation "2020-07-05T13:30:28.585" 
+13:30:28.645 [error] Sending find_sub batch [] 
+13:30:28.645 [error] Sending find_sub_aq batch [] 
+13:30:28.645 [error] batched message propagation "2020-07-05T13:30:28.645" 
+13:30:38.587 [error] C1 propagation "2020-07-05T13:30:38.587" 
+13:30:38.647 [error] Sending find_sub batch [] 
+13:30:38.647 [error] Sending find_sub_aq batch [] 
+13:30:38.647 [error] batched message propagation "2020-07-05T13:30:38.647" 
+13:30:48.589 [error] C1 propagation "2020-07-05T13:30:48.589" 
+13:30:48.649 [error] Sending find_sub batch [] 
+13:30:48.649 [error] Sending find_sub_aq batch [] 
+13:30:48.649 [error] batched message propagation "2020-07-05T13:30:48.649" 
+13:30:58.590 [error] C1 propagation "2020-07-05T13:30:58.590" 
+13:30:58.651 [error] Sending find_sub batch [] 
+13:30:58.651 [error] Sending find_sub_aq batch [] 
+13:30:58.651 [error] batched message propagation "2020-07-05T13:30:58.651" 
+13:31:08.518 [error] C2 propagation "2020-07-05T13:31:08.518" 
+13:31:08.591 [error] C1 propagation "2020-07-05T13:31:08.591" 
+13:31:08.653 [error] Sending find_sub batch [] 
+13:31:08.653 [error] Sending find_sub_aq batch [] 
+13:31:08.653 [error] batched message propagation "2020-07-05T13:31:08.653" 
+13:31:18.514 [error] C3 propagation "2020-07-05T13:31:18.514" 
+13:31:18.592 [error] C1 propagation "2020-07-05T13:31:18.592" 
+13:31:18.655 [error] Sending find_sub batch [] 
+13:31:18.655 [error] Sending find_sub_aq batch [] 
+13:31:18.655 [error] batched message propagation "2020-07-05T13:31:18.655" 
+13:31:28.594 [error] C1 propagation "2020-07-05T13:31:28.594" 
+13:31:28.656 [error] Sending find_sub batch [] 
+13:31:28.656 [error] Sending find_sub_aq batch [] 
+13:31:28.656 [error] batched message propagation "2020-07-05T13:31:28.656" 
+13:31:38.595 [error] C1 propagation "2020-07-05T13:31:38.595" 
+13:31:38.657 [error] Sending find_sub batch [] 
+13:31:38.657 [error] Sending find_sub_aq batch [] 
+13:31:38.657 [error] batched message propagation "2020-07-05T13:31:38.657" 
+13:31:48.519 [error] C2 propagation "2020-07-05T13:31:48.519" 
+13:31:48.597 [error] C1 propagation "2020-07-05T13:31:48.597" 
+13:31:48.659 [error] Sending find_sub batch [] 
+13:31:48.659 [error] Sending find_sub_aq batch [] 
+13:31:48.659 [error] batched message propagation "2020-07-05T13:31:48.659" 
+13:31:58.598 [error] C1 propagation "2020-07-05T13:31:58.598" 
+13:31:58.661 [error] Sending find_sub batch [] 
+13:31:58.661 [error] Sending find_sub_aq batch [] 
+13:31:58.661 [error] batched message propagation "2020-07-05T13:31:58.661" 
+13:32:08.600 [error] C1 propagation "2020-07-05T13:32:08.600" 
+13:32:08.662 [error] Sending find_sub batch [] 
+13:32:08.662 [error] Sending find_sub_aq batch [] 
+13:32:08.662 [error] batched message propagation "2020-07-05T13:32:08.662" 
+13:32:18.602 [error] C1 propagation "2020-07-05T13:32:18.602" 
+13:32:18.663 [error] Sending find_sub batch [] 
+13:32:18.663 [error] Sending find_sub_aq batch [] 
+13:32:18.663 [error] batched message propagation "2020-07-05T13:32:18.663" 
+13:32:28.515 [error] C3 propagation "2020-07-05T13:32:28.515" 
+13:32:28.521 [error] C2 propagation "2020-07-05T13:32:28.521" 
+13:32:28.604 [error] C1 propagation "2020-07-05T13:32:28.604" 
+13:32:28.664 [error] Sending find_sub batch [] 
+13:32:28.664 [error] Sending find_sub_aq batch [] 
+13:32:28.664 [error] batched message propagation "2020-07-05T13:32:28.664" 
+13:32:38.606 [error] C1 propagation "2020-07-05T13:32:38.606" 
+13:32:38.665 [error] Sending find_sub batch [] 
+13:32:38.665 [error] Sending find_sub_aq batch [] 
+13:32:38.665 [error] batched message propagation "2020-07-05T13:32:38.665" 
+13:32:48.608 [error] C1 propagation "2020-07-05T13:32:48.608" 
+13:32:48.666 [error] Sending find_sub batch [] 
+13:32:48.666 [error] Sending find_sub_aq batch [] 
+13:32:48.666 [error] batched message propagation "2020-07-05T13:32:48.666" 
+13:32:58.610 [error] C1 propagation "2020-07-05T13:32:58.610" 
+13:32:58.667 [error] Sending find_sub batch [] 
+13:32:58.667 [error] Sending find_sub_aq batch [] 
+13:32:58.667 [error] batched message propagation "2020-07-05T13:32:58.667" 
+13:33:08.522 [error] C2 propagation "2020-07-05T13:33:08.522" 
+13:33:08.611 [error] C1 propagation "2020-07-05T13:33:08.611" 
+13:33:08.668 [error] Sending find_sub batch [] 
+13:33:08.668 [error] Sending find_sub_aq batch [] 
+13:33:08.668 [error] batched message propagation "2020-07-05T13:33:08.668" 
+13:33:11.199 [error] LASPVIN Received delta From='a@18.0.0.11' at TimeStamp="2020-07-05T13:33:11.199" Took=70321 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[#{what => timeis_13_32_15_559}],[],[],[],[],[],[],[],[],[]}}}}] 
+13:33:11.199 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,0},{"check_tonode_ack",0,0},{"delta_ack",0,0},{"delta_send",0,1},{"find_sub",3,4},{"find_sub_aq",1,0},{"find_sub_aq_lock",0,0},{"rate_ack",4,4},{"rate_class",4,4},{"rate_refresh",0,0},{"rate_subscribe",2,0},{"rate_subscribe_ack",0,2},{"send_backend",14,0},{"sub_cancel",0,0}] 
+13:33:18.613 [error] C1 propagation "2020-07-05T13:33:18.613" 
+13:33:18.614 [error] LASPVIN Sending delta to 'a@18.0.0.11' 
+13:33:18.614 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<54,66,220,197,96,234,40,69,83,230,29,245,151,242,181,244,58,99,208,183>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:1 
+13:33:18.697 [error] Sending find_sub batch [] 
+13:33:18.697 [error] Sending find_sub_aq batch [] 
+13:33:18.697 [error] batched message propagation "2020-07-05T13:33:18.697" 
+13:33:28.615 [error] C1 propagation "2020-07-05T13:33:28.615" 
+13:33:28.699 [error] Sending find_sub batch [] 
+13:33:28.699 [error] Sending find_sub_aq batch [] 
+13:33:28.699 [error] batched message propagation "2020-07-05T13:33:28.699" 
+13:33:38.517 [error] C3 propagation "2020-07-05T13:33:38.517" 
+13:33:38.617 [error] C1 propagation "2020-07-05T13:33:38.617" 
+13:33:38.701 [error] Sending find_sub batch [] 
+13:33:38.701 [error] Sending find_sub_aq batch [] 
+13:33:38.701 [error] batched message propagation "2020-07-05T13:33:38.701" 
+13:33:48.523 [error] C2 propagation "2020-07-05T13:33:48.523" 
+13:33:48.619 [error] C1 propagation "2020-07-05T13:33:48.619" 
+13:33:48.703 [error] Sending find_sub batch [] 
+13:33:48.703 [error] Sending find_sub_aq batch [] 
+13:33:48.703 [error] batched message propagation "2020-07-05T13:33:48.703" 
+13:33:51.142 [error] LASPVIN Received delta From='a@18.0.0.11' at TimeStamp="2020-07-05T13:33:51.142" Took=27347 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[],[],[#{what => timeis_13_33_03_674}],[],[],[]}}}}] 
+13:33:51.142 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,0},{"check_tonode_ack",0,0},{"delta_ack",1,1},{"delta_send",1,2},{"find_sub",3,4},{"find_sub_aq",1,0},{"find_sub_aq_lock",0,0},{"rate_ack",4,4},{"rate_class",4,4},{"rate_refresh",0,0},{"rate_subscribe",2,0},{"rate_subscribe_ack",0,2},{"send_backend",16,0},{"sub_cancel",0,0}] 
+13:33:58.621 [error] C1 propagation "2020-07-05T13:33:58.621" 
+13:33:58.621 [error] LASPVIN Sending delta to 'a@18.0.0.11' 
+13:33:58.621 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<54,66,220,197,96,234,40,69,83,230,29,245,151,242,181,244,58,99,208,183>>,3}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:2 
+13:33:58.705 [error] Sending find_sub batch [] 
+13:33:58.705 [error] Sending find_sub_aq batch [] 
+13:33:58.705 [error] batched message propagation "2020-07-05T13:33:58.705" 
+13:34:08.077 [warning] global: 'b@18.0.0.12' failed to connect to 'a@17.0.0.11'
+13:34:08.078 [warning] global: 'b@18.0.0.12' failed to connect to 'a@14.0.0.11'
+13:34:08.078 [warning] global: 'b@18.0.0.12' failed to connect to 'a@15.0.0.11'
+13:34:08.079 [warning] global: 'b@18.0.0.12' failed to connect to 'a@13.0.0.11'
+13:34:08.079 [warning] global: 'b@18.0.0.12' failed to connect to 'a@11.0.0.11'
+13:34:08.079 [warning] global: 'b@18.0.0.12' failed to connect to 'a@16.0.0.11'
+13:34:08.079 [warning] global: 'b@18.0.0.12' failed to connect to 'a@12.0.0.11'
+13:34:08.080 [warning] global: 'b@18.0.0.12' failed to connect to 'a@19.0.0.11'
+13:34:08.080 [warning] global: 'b@18.0.0.12' failed to connect to 'a@10.0.0.11'
+13:34:08.623 [error] C1 propagation "2020-07-05T13:34:08.623" 
+13:34:08.707 [error] Sending find_sub batch [] 
+13:34:08.707 [error] Sending find_sub_aq batch [] 
+13:34:08.707 [error] batched message propagation "2020-07-05T13:34:08.707" 
+13:34:18.625 [error] C1 propagation "2020-07-05T13:34:18.625" 
+13:34:18.708 [error] Sending find_sub batch [] 
+13:34:18.708 [error] Sending find_sub_aq batch [] 
+13:34:18.708 [error] batched message propagation "2020-07-05T13:34:18.708" 
+13:34:28.525 [error] C2 propagation "2020-07-05T13:34:28.525" 
+13:34:28.627 [error] C1 propagation "2020-07-05T13:34:28.627" 
+13:34:28.709 [error] Sending find_sub batch [] 
+13:34:28.709 [error] Sending find_sub_aq batch [] 
+13:34:28.709 [error] batched message propagation "2020-07-05T13:34:28.709" 
+13:34:38.629 [error] C1 propagation "2020-07-05T13:34:38.629" 
+13:34:38.710 [error] Sending find_sub batch [] 
+13:34:38.710 [error] Sending find_sub_aq batch [] 
+13:34:38.710 [error] batched message propagation "2020-07-05T13:34:38.710" 
+13:34:48.518 [error] C3 propagation "2020-07-05T13:34:48.518" 
+13:34:48.631 [error] C1 propagation "2020-07-05T13:34:48.631" 
+13:34:48.711 [error] Sending find_sub batch [] 
+13:34:48.711 [error] Sending find_sub_aq batch [] 
+13:34:48.711 [error] batched message propagation "2020-07-05T13:34:48.711" 
+13:34:58.632 [error] C1 propagation "2020-07-05T13:34:58.632" 
+13:34:58.712 [error] Sending find_sub batch [] 
+13:34:58.712 [error] Sending find_sub_aq batch [] 
+13:34:58.712 [error] batched message propagation "2020-07-05T13:34:58.712" 
+13:35:08.526 [error] C2 propagation "2020-07-05T13:35:08.526" 
+13:35:08.634 [error] C1 propagation "2020-07-05T13:35:08.634" 
+13:35:08.713 [error] Sending find_sub batch [] 
+13:35:08.713 [error] Sending find_sub_aq batch [] 
+13:35:08.713 [error] batched message propagation "2020-07-05T13:35:08.713" 
+13:35:18.635 [error] C1 propagation "2020-07-05T13:35:18.635" 
+13:35:18.715 [error] Sending find_sub batch [] 
+13:35:18.715 [error] Sending find_sub_aq batch [] 
+13:35:18.715 [error] batched message propagation "2020-07-05T13:35:18.715" 
+13:35:28.636 [error] C1 propagation "2020-07-05T13:35:28.636" 
+13:35:28.716 [error] Sending find_sub batch [] 
+13:35:28.716 [error] Sending find_sub_aq batch [] 
+13:35:28.716 [error] batched message propagation "2020-07-05T13:35:28.716" 
+13:35:38.637 [error] C1 propagation "2020-07-05T13:35:38.637" 
+13:35:38.718 [error] Sending find_sub batch [] 
+13:35:38.718 [error] Sending find_sub_aq batch [] 
+13:35:38.718 [error] batched message propagation "2020-07-05T13:35:38.718" 
+13:35:48.527 [error] C2 propagation "2020-07-05T13:35:48.527" 
+13:35:48.639 [error] C1 propagation "2020-07-05T13:35:48.639" 
+13:35:48.719 [error] Sending find_sub batch [] 
+13:35:48.719 [error] Sending find_sub_aq batch [] 
+13:35:48.719 [error] batched message propagation "2020-07-05T13:35:48.719" 
+13:35:58.520 [error] C3 propagation "2020-07-05T13:35:58.520" 
+13:35:58.641 [error] C1 propagation "2020-07-05T13:35:58.641" 
+13:35:58.721 [error] Sending find_sub batch [] 
+13:35:58.721 [error] Sending find_sub_aq batch [] 
+13:35:58.721 [error] batched message propagation "2020-07-05T13:35:58.721" 
+13:36:08.643 [error] C1 propagation "2020-07-05T13:36:08.643" 
+13:36:08.723 [error] Sending find_sub batch [] 
+13:36:08.723 [error] Sending find_sub_aq batch [] 
+13:36:08.723 [error] batched message propagation "2020-07-05T13:36:08.723" 
+13:36:18.644 [error] C1 propagation "2020-07-05T13:36:18.644" 
+13:36:18.724 [error] Sending find_sub batch [] 
+13:36:18.724 [error] Sending find_sub_aq batch [] 
+13:36:18.724 [error] batched message propagation "2020-07-05T13:36:18.724" 
+13:36:28.529 [error] C2 propagation "2020-07-05T13:36:28.529" 
+13:36:28.646 [error] C1 propagation "2020-07-05T13:36:28.646" 
+13:36:28.725 [error] Sending find_sub batch [] 
+13:36:28.725 [error] Sending find_sub_aq batch [] 
+13:36:28.725 [error] batched message propagation "2020-07-05T13:36:28.725" 
