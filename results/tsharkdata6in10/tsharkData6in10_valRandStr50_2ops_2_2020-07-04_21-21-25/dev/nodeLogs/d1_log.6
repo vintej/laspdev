@@ -1,0 +1,987 @@
+
+
+root@csst-06:/home/ubuntu/laspdev# 
+root@csst-06:/home/ubuntu/laspdev# python /home/ubuntu/laspdev/utility/setup_laspp.py d1
+d1
+ip:10.0.0.11
+node:a
+root@d1:/# [Kroot@d1:/# service vnstat start
+[....] Starting vnStat daemon: vnstatd[?25l7[1G[[32m ok [39;49m8[?12l[?25h.
+root@d1:/# sysctl -w net.ipv4.ip_forward=0
+net.ipv4.ip_forward = 0
+root@d1:/# vnstat -u -i d1-eth0
+Error: Unable to read database "/var/lib/vnstat/d1-eth0": No such file or directory
+Info: -> A new database has been created.
+root@d1:/# vnstat -u
+root@d1:/# vnstat
+
+                      rx      /      tx      /     total    /   estimated
+ eth0:
+       Jun '20         4 KiB  /       1 KiB  /       5 KiB
+       Jul '20         0 KiB  /       7 KiB  /       7 KiB  /       0 KiB
+      06/26/20         4 KiB  /       1 KiB  /       5 KiB
+         today         0 KiB  /       7 KiB  /       7 KiB  /      --    
+
+ d1-eth0: Not enough data available yet.
+root@d1:/# export PEER_SERVICE=partisan_hyparview_peer_service_manager
+root@d1:/# export RATE_CLASS=c2
+root@d1:/# export RATE_C1=10000
+root@d1:/# export RATE_C2=40000
+root@d1:/# export RATE_C3=70000
+root@d1:/# export PROPAGATE_ON_UPDATE=false
+root@d1:/# export MAX_ACTIVE_SIZE=50
+root@d1:/# cd /opt/lasp
+root@d1:/opt/lasp# epmd -daemon
+root@d1:/opt/lasp# rebar3 shell --name a@10.0.0.11
+[0;32m===> Verifying dependencies...
+[0m[0;32m===> Compiling lasp
+[0mErlang/OTP 19 [erts-8.3] [source] [64-bit] [smp:24:24] [ds:24:24:10] [async-threads:0] [hipe] [kernel-poll:false]
+
+Eshell V8.3  (abort with ^G)
+(a@10.0.0.11)1> [0;35m===> The rebar3 shell is a development tool; to deploy applications in production, consider using releases (http://www.rebar3.org/docs/releases)
+[0m21:35:05.570 [info] Application lager started on node 'a@10.0.0.11'
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,sasl_safe_sup}
+             started: [{pid,<0.253.0>},
+                       {id,alarm_handler},
+                       {mfargs,{alarm_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.252.0>},
+                       {id,sasl_safe_sup},
+                       {mfargs,
+                           {supervisor,start_link,
+                               [{local,sasl_safe_sup},sasl,safe]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,sasl_sup}
+             started: [{pid,<0.254.0>},
+                       {id,release_handler},
+                       {mfargs,{release_handler,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,2000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+         application: sasl
+          started_at: 'a@10.0.0.11'
+21:35:05.622 [info] Application sasl started on node 'a@10.0.0.11'
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+         application: lasp_support
+          started_at: 'a@10.0.0.11'
+21:35:05.622 [info] Application lasp_support started on node 'a@10.0.0.11'
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+         application: acceptor_pool
+          started_at: 'a@10.0.0.11'
+21:35:05.623 [info] Application acceptor_pool started on node 'a@10.0.0.11'
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+         application: quickrand
+          started_at: 'a@10.0.0.11'
+21:35:05.623 [info] Application quickrand started on node 'a@10.0.0.11'
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+         application: uuid
+          started_at: 'a@10.0.0.11'
+21:35:05.623 [info] Application uuid started on node 'a@10.0.0.11'
+21:35:05.629 [info] Using node name: 'a@10.0.0.11'
+21:35:05.634 [info] Resolving "10.0.0.11"...
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.266.0>},
+                       {id,timer_server},
+                       {mfargs,{timer,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,1000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,inet_gethost_native_sup}
+             started: [{pid,<0.268.0>},{mfa,{inet_gethost_native,init,[[]]}}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,kernel_safe_sup}
+             started: [{pid,<0.267.0>},
+                       {id,inet_gethost_native_sup},
+                       {mfargs,{inet_gethost_native,start_link,[]}},
+                       {restart_type,temporary},
+                       {shutdown,1000},
+                       {child_type,worker}]
+21:35:05.637 [info] Resolved "a@10.0.0.11" to {10,0,0,11}
+21:35:05.637 [info] Resolved "10.0.0.11" to {10,0,0,11}
+21:35:05.728 [info] Partisan listening on {10,0,0,11}:43809 listen_addrs: [#{ip => {10,0,0,11},port => 43809}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.313.0>},
+                       {id,partisan_rpc_backend},
+                       {mfargs,{partisan_rpc_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.314.0>},
+                       {id,partisan_acknowledgement_backend},
+                       {mfargs,
+                           {partisan_acknowledgement_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+21:35:05.747 [info] Not using container orchestration; disabling.
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.315.0>},
+                       {id,partisan_orchestration_backend},
+                       {mfargs,{partisan_orchestration_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+21:35:05.779 [info] node 'a@10.0.0.11' choosing random seed: {8440798,-576460748773904431,-576460752303423422}
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.316.0>},
+                       {id,partisan_hyparview_peer_service_manager},
+                       {mfargs,
+                           {partisan_hyparview_peer_service_manager,
+                               start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.317.0>},
+                       {id,partisan_peer_service_events},
+                       {mfargs,{partisan_peer_service_events,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+21:35:05.784 [info] node 'a@10.0.0.11' choosing random seed: {8440798,-576460748773904431,-576460752303423422}
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.318.0>},
+                       {id,partisan_plumtree_backend},
+                       {mfargs,{partisan_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.319.0>},
+                       {id,partisan_plumtree_broadcast},
+                       {mfargs,{partisan_plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.320.0>},
+                       {id,partisan_monitor},
+                       {mfargs,{partisan_monitor,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.322.0>},
+                       {id,partisan_pool},
+                       {mfargs,{partisan_pool,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,partisan_pool_sup}
+             started: [{pid,<0.323.0>},
+                       {id,{partisan_socket,{10,0,0,11},43809}},
+                       {mfargs,
+                           {partisan_socket,start_link,[{10,0,0,11},43809]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,partisan_sup}
+             started: [{pid,<0.321.0>},
+                       {id,partisan_pool_sup},
+                       {mfargs,{partisan_pool_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,20000},
+                       {child_type,supervisor}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+         application: partisan
+          started_at: 'a@10.0.0.11'
+21:35:05.858 [info] Application partisan started on node 'a@10.0.0.11'
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,plumtree_sup}
+             started: [{pid,<0.338.0>},
+                       {id,plumtree_broadcast},
+                       {mfargs,{plumtree_broadcast,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+         application: plumtree
+          started_at: 'a@10.0.0.11'
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+         application: gen_fsm_compat
+          started_at: 'a@10.0.0.11'
+21:35:05.868 [info] Application plumtree started on node 'a@10.0.0.11'
+21:35:05.869 [info] Application gen_fsm_compat started on node 'a@10.0.0.11'
+21:35:05.874 [info] Setting jitter: false
+21:35:05.878 [info] Setting jitter percent: 1
+21:35:05.879 [info] Setting event interval: 0
+21:35:05.881 [info] Setting max events: 1000
+21:35:05.882 [info] Setting extended logging: false
+21:35:05.884 [info] Setting mailbox logging: false
+21:35:05.886 [info] Setting operation mode: delta_based
+21:35:05.887 [info] Setting set type: orset
+21:35:05.890 [info] Setting broadcast: false
+21:35:05.926 [info] Membership: false
+21:35:05.928 [info] Workflow: false
+21:35:05.933 [info] AdClientEnabled: false
+21:35:05.936 [info] AdServerEnabled: false
+21:35:05.938 [info] TournClientEnabled: false
+21:35:05.939 [info] TournServerEnabled: false
+21:35:05.940 [info] ThroughputType: gset
+21:35:05.942 [info] ThroughputClientEnabled: false
+21:35:05.943 [info] ThroughputServerEnabled: false
+21:35:05.944 [info] DivergenceType: gcounter
+21:35:05.945 [info] DivergenceClientEnabled: false
+21:35:05.947 [info] DivergenceServerEnabled: false
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.385.0>},
+                       {id,lasp_unique},
+                       {mfargs,{lasp_unique,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.386.0>},
+                       {id,lasp_plumtree_backend},
+                       {mfargs,{lasp_plumtree_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.387.0>},
+                       {id,lasp_plumtree_memory_report},
+                       {mfargs,{lasp_plumtree_memory_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:05 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.388.0>},
+                       {id,lasp_memory_utilization_report},
+                       {mfargs,{lasp_memory_utilization_report,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+21:35:05.996 [info] Backend initialized with pid: <0.393.0>
+21:35:05.996 [info] Backend lasp_ets_storage_backend initialized: <0.393.0>
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:06 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.389.0>},
+                       {id,lasp_distribution_backend},
+                       {mfargs,{lasp_distribution_backend,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,5000},
+                       {child_type,worker}]
+
+=PROGRESS REPORT==== 4-Jul-2020::21:35:06 ===
+          supervisor: {local,lasp_sup}
+             started: [{pid,<0.395.0>},
+                       {id,lasp_process_sup},
+                       {mfargs,{lasp_process_sup,start_link,[]}},
+                       {restart_type,permanent},
+                       {shutdown,infinity},
+                       {child_type,supervisor}]
+[0;32m===> Booted types
+[0m
+=PROGRESS REPORT==== 4-Jul-2020::21:35:06 ===
+         application: lasp
+          started_at: 'a@10.0.0.11'
+[0;32m===> Booted gen_flow
+[0m[0;32m===> Booted syntax_tools
+[0m[0;32m===> Booted compiler
+[0m[0;32m===> Booted goldrush
+[0m[0;32m===> Booted lager
+[0m[0;32m===> Booted sasl
+[0m[0;32m===> Booted lasp_support
+[0m[0;32m===> Booted acceptor_pool
+[0m[0;32m===> Booted quickrand
+[0m[0;32m===> Booted uuid
+[0m[0;32m===> Booted partisan
+[0m[0;32m===> Booted plumtree
+[0m[0;32m===> Booted gen_fsm_compat
+[0m[0;32m===> Booted lasp
+[0m21:35:06.007 [error] Rate Propagations c1: "10000" c2:"40000" c3:"70000" 
+21:35:06.007 [error] C1 propagation "2020-07-04T21:35:06.795" 
+21:35:06.008 [error] C2 propagation "2020-07-04T21:35:06.801" 
+21:35:06.008 [error] C3 propagation "2020-07-04T21:35:06.805" 
+21:35:06.008 [error] batched message propagation "2020-07-04T21:35:06.811" 
+21:35:06.036 [info] Application lasp started on node 'a@10.0.0.11'
+
+(a@10.0.0.11)1> erlang:set_cookie(node(),'RPJVCXYDYULBNZFEFPHJ').
+true
+(a@10.0.0.11)2> application:get_env(partisan, max_active_size).
+{ok,50}
+(a@10.0.0.11)3> application:get_env(partisan, max_passive_size).
+{ok,10}
+(a@10.0.0.11)4> application:get_env(partisan, min_active_size).
+{ok,9}
+(a@10.0.0.11)5> partisan_config:set(passive_view_shuffle_period, 1000000000).
+ok
+(a@10.0.0.11)6> partisan_config:get(passive_view_shuffle_period).
+1000000000
+(a@10.0.0.11)7> )7> 21:35:16.009 [error] C1 propagation "2020-07-04T21:35:16.932" 
+21:35:16.009 [error] Sending find_sub batch [] 
+21:35:16.009 [error] Sending find_sub_aq batch [] 
+21:35:16.009 [error] batched message propagation "2020-07-04T21:35:16.975" 
+21:35:21.023 [error] Sending rate "c2" to 'a@11.0.0.11' 
+21:35:26.010 [error] C1 propagation "2020-07-04T21:35:26.102" 
+21:35:26.010 [error] Sending find_sub batch [] 
+21:35:26.010 [error] Sending find_sub_aq batch [] 
+21:35:26.010 [error] batched message propagation "2020-07-04T21:35:26.105" 
+21:35:36.011 [error] C1 propagation "2020-07-04T21:35:36.113" 
+21:35:36.011 [error] Sending find_sub batch [] 
+21:35:36.011 [error] Sending find_sub_aq batch [] 
+21:35:36.011 [error] batched message propagation "2020-07-04T21:35:36.117" 
+21:35:41.067 [error] Sending rate "c2" to 'a@19.0.0.11' 
+21:35:41.067 [error] Sending rate "c2" to 'a@12.0.0.11' 
+21:35:41.067 [error] Sending rate "c2" to 'a@14.0.0.11' 
+21:35:46.009 [error] C2 propagation "2020-07-04T21:35:46.928" 
+21:35:46.018 [error] C1 propagation "2020-07-04T21:35:46.187" 
+21:35:46.018 [error] Sending find_sub batch [] 
+21:35:46.018 [error] Sending find_sub_aq batch [] 
+21:35:46.019 [error] batched message propagation "2020-07-04T21:35:46.189" 
+21:35:46.079 [error] Sending rate "c2" to 'a@16.0.0.11' 
+21:35:51.082 [error] Sending rate "c2" to 'a@15.0.0.11' 
+21:35:51.082 [error] Sending rate "c2" to 'a@13.0.0.11' 
+21:35:56.020 [error] C1 propagation "2020-07-04T21:35:56.203" 
+21:35:56.020 [error] Sending find_sub batch [] 
+21:35:56.020 [error] Sending find_sub_aq batch [] 
+21:35:56.020 [error] batched message propagation "2020-07-04T21:35:56.206" 
+21:35:56.086 [error] Sending rate "c2" to 'a@18.0.0.11' 
+21:36:06.022 [error] C1 propagation "2020-07-04T21:36:06.223" 
+21:36:06.022 [error] Sending find_sub batch [] 
+21:36:06.022 [error] Sending find_sub_aq batch [] 
+21:36:06.022 [error] batched message propagation "2020-07-04T21:36:06.225" 
+21:36:16.009 [error] C3 propagation "2020-07-04T21:36:16.936" 
+21:36:16.023 [error] C1 propagation "2020-07-04T21:36:16.233" 
+21:36:16.023 [error] Sending find_sub batch [] 
+21:36:16.023 [error] Sending find_sub_aq batch [] 
+21:36:16.023 [error] batched message propagation "2020-07-04T21:36:16.235" 
+21:36:26.010 [error] C2 propagation "2020-07-04T21:36:26.103" 
+21:36:26.024 [error] C1 propagation "2020-07-04T21:36:26.243" 
+21:36:26.024 [error] Sending find_sub batch [] 
+21:36:26.024 [error] Sending find_sub_aq batch [] 
+21:36:26.024 [error] batched message propagation "2020-07-04T21:36:26.246" 
+21:36:26.804 [error] Sending rate "c2" to 'c@10.0.0.13' 
+21:36:30.630 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'c@10.0.0.13' Hop:1 
+21:36:30.671 [error] Checking sub_exists for Id:"c@10.0.0.13c1" From:'c@10.0.0.13' Hop:1 
+21:36:30.718 [error] Request Id "c@10.0.0.13c1" is from a Peer directly connected
+21:36:30.718 [error] Forwarding Req Id "c@10.0.0.13c1" to Peers RcvHop:1 IncHop:2 
+21:36:30.775 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'a@19.0.0.11' Hop:2 
+21:36:30.775 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'a@12.0.0.11' Hop:2 
+21:36:30.775 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'a@15.0.0.11' Hop:2 
+21:36:30.813 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'a@14.0.0.11' Hop:2 
+21:36:30.813 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'b@10.0.0.12' Hop:2 
+21:36:30.813 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'a@11.0.0.11' Hop:2 
+21:36:30.814 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'a@16.0.0.11' Hop:2 
+21:36:30.814 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'a@18.0.0.11' Hop:2 
+21:36:30.814 [error] Forwarding ReqId "c@10.0.0.13c1" to Peer:'a@13.0.0.11' Hop:2 
+21:36:30.814 [error] LASPVIN Request forwarded~n
+21:36:34.046 [error] Sending rate "c2" to 'b@10.0.0.12' 
+21:36:34.046 [error] Sending Subscription to 'c@10.0.0.13' case1 
+21:36:34.047 [error] Rate_subscribe_ack received from 'c@10.0.0.13' for rate "c2" 
+21:36:36.026 [error] C1 propagation "2020-07-04T21:36:36.263" 
+21:36:36.026 [error] Sending find_sub batch [{'a@10.0.0.11',"c1","c@10.0.0.13c1",2,'a@19.0.0.11'},{'a@10.0.0.11',"c1","c@10.0.0.13c1",2,'a@12.0.0.11'},{'a@10.0.0.11',"c1","c@10.0.0.13c1",2,'a@15.0.0.11'},{'a@10.0.0.11',"c1","c@10.0.0.13c1",2,'a@14.0.0.11'},{'a@10.0.0.11',"c1","c@10.0.0.13c1",2,'b@10.0.0.12'},{'a@10.0.0.11',"c1","c@10.0.0.13c1",2,'a@11.0.0.11'},{'a@10.0.0.11',"c1","c@10.0.0.13c1",2,'a@16.0.0.11'},{'a@10.0.0.11',"c1","c@10.0.0.13c1",2,'a@18.0.0.11'},{'a@10.0.0.11',"c1","c@10.0.0.13c1",2,'a@13.0.0.11'}] 
+21:36:36.026 [error] Sent find_sub control message from batch 'a@10.0.0.11' "c1" "c@10.0.0.13c1" 2 'a@19.0.0.11' 
+21:36:36.027 [error] Sent find_sub control message from batch 'a@10.0.0.11' "c1" "c@10.0.0.13c1" 2 'a@12.0.0.11' 
+21:36:36.027 [error] Sent find_sub control message from batch 'a@10.0.0.11' "c1" "c@10.0.0.13c1" 2 'a@15.0.0.11' 
+21:36:36.027 [error] Sent find_sub control message from batch 'a@10.0.0.11' "c1" "c@10.0.0.13c1" 2 'a@14.0.0.11' 
+21:36:36.027 [error] Sent find_sub control message from batch 'a@10.0.0.11' "c1" "c@10.0.0.13c1" 2 'b@10.0.0.12' 
+21:36:36.027 [error] Sent find_sub control message from batch 'a@10.0.0.11' "c1" "c@10.0.0.13c1" 2 'a@11.0.0.11' 
+21:36:36.027 [error] Sent find_sub control message from batch 'a@10.0.0.11' "c1" "c@10.0.0.13c1" 2 'a@16.0.0.11' 
+21:36:36.027 [error] Sent find_sub control message from batch 'a@10.0.0.11' "c1" "c@10.0.0.13c1" 2 'a@18.0.0.11' 
+21:36:36.028 [error] Sent find_sub control message from batch 'a@10.0.0.11' "c1" "c@10.0.0.13c1" 2 'a@13.0.0.11' 
+21:36:36.028 [error] Sending find_sub_aq batch [] 
+21:36:36.028 [error] batched message propagation "2020-07-04T21:36:36.281" 
+21:36:39.815 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['c@14.0.0.13'] Via:'a@14.0.0.11' From:'a@14.0.0.11' HopCount:1 
+21:36:39.861 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'c@14.0.0.13' From:'a@14.0.0.11' to 'c@10.0.0.13' HopCount:2 
+21:36:40.016 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'b@10.0.0.12' Hop:2 
+21:36:40.016 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+21:36:46.028 [error] C1 propagation "2020-07-04T21:36:46.283" 
+21:36:46.029 [error] Sending find_sub batch [] 
+21:36:46.029 [error] Sending find_sub_aq batch [{"c@10.0.0.13c1",'c@14.0.0.13','a@14.0.0.11','a@10.0.0.11',2,'c@10.0.0.13'}] 
+21:36:46.029 [error] Sent find_sub_aq control message for "c@10.0.0.13c1" ['c@14.0.0.13'] 'a@14.0.0.11' 'a@10.0.0.11' 2 'c@10.0.0.13' 
+21:36:46.029 [error] batched message propagation "2020-07-04T21:36:46.298" 
+21:36:46.073 [error] LASPVIN received find_sub_aq_lock for Id:"c@10.0.0.13c1" ToNode'c@14.0.0.13' From:'c@10.0.0.13' 
+21:36:46.073 [error] LASPVIN updating rate ~n
+21:36:46.073 [error] LASPVIN Forwarding lock for ID:"c@10.0.0.13c1" to ['a@14.0.0.11'] 
+21:36:46.079 [error] Sending updated rate "c1" to 'a@11.0.0.11' 
+21:36:46.079 [error] Sending updated rate "c1" to 'a@12.0.0.11' 
+21:36:46.079 [error] Sending updated rate "c1" to 'a@13.0.0.11' 
+21:36:46.079 [error] Sending updated rate "c1" to 'a@14.0.0.11' 
+21:36:46.079 [error] Sending updated rate "c1" to 'a@15.0.0.11' 
+21:36:46.079 [error] Sending updated rate "c1" to 'a@16.0.0.11' 
+21:36:46.079 [error] Sending updated rate "c1" to 'a@18.0.0.11' 
+21:36:46.079 [error] Sending updated rate "c1" to 'a@19.0.0.11' 
+21:36:46.080 [error] Sending updated rate "c1" to 'b@10.0.0.12' 
+21:36:46.080 [error] Sending updated rate "c1" to 'c@10.0.0.13' 
+21:36:46.106 [error] Received new rate from 'a@14.0.0.11' with new rate "c1"
+21:36:46.106 [error] LASPVIN found the peer at "2020-07-04T21:36:46.106" for ID: "c@10.0.0.13c1" ToNode: 'a@14.0.0.11' Via:'a@10.0.0.11' 
+21:36:46.106 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+21:36:46.107 [error] Sub_aq exists and Hop:1 > existing HopCount:1 
+21:36:47.745 [error] Received rate_subscribe from 'a@18.0.0.11' for rate "c2" 
+21:36:48.386 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@10.0.0.11'] Via:'a@16.0.0.11' From:'a@16.0.0.11' HopCount:1 
+21:36:48.386 [error] Discarding as I am the ToNode for Id "c@10.0.0.13c1" 
+ 
+21:36:48.386 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@14.0.0.11'] Via:'a@16.0.0.11' From:'a@16.0.0.11' HopCount:2 
+21:36:48.751 [error] ToNode 'a@14.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c2"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c2"},{'a@18.0.0.11',"c2"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req...
+21:36:48.897 [error] Received rate_subscribe from 'a@19.0.0.11' for rate "c2" 
+21:36:48.901 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@10.0.0.11'] Via:'a@11.0.0.11' From:'a@11.0.0.11' HopCount:1 
+21:36:48.901 [error] Discarding as I am the ToNode for Id "c@10.0.0.13c1" 
+ 
+21:36:48.902 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@14.0.0.11'] Via:'a@11.0.0.11' From:'a@11.0.0.11' HopCount:2 
+21:36:49.908 [error] ToNode 'a@14.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c2"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c2"},{'a@18.0.0.11',"c2"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req...
+21:36:50.913 [error] Sending rate "c1" to 'e@10.0.0.15' 
+21:36:50.913 [error] Sending rate "c1" to 'f@10.0.0.16' 
+21:36:50.914 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@10.0.0.11'] Via:'a@14.0.0.11' From:'a@14.0.0.11' HopCount:2 
+21:36:50.914 [error] Discarding as I am the ToNode for Id "c@10.0.0.13c1" 
+ 
+21:36:50.914 [error] Received rate_subscribe from 'a@11.0.0.11' for rate "c2" 
+21:36:50.915 [error] Received rate_subscribe from 'a@13.0.0.11' for rate "c2" 
+21:36:50.915 [error] Received rate_subscribe from 'a@16.0.0.11' for rate "c2" 
+21:36:50.915 [error] Received rate_subscribe from 'a@15.0.0.11' for rate "c2" 
+21:36:50.915 [error] Received rate_subscribe from 'a@12.0.0.11' for rate "c2" 
+21:36:53.746 [error] LASPVIN sent find_sub on join req Id:"c@10.0.0.13c1", Hop:2 
+21:36:53.746 [error] Received rate_subscribe from 'e@10.0.0.15' for rate "c2" 
+21:36:53.796 [error] LASPVIN sent find_sub on join req Id:"c@10.0.0.13c1", Hop:2 
+21:36:53.796 [error] Received rate_subscribe from 'f@10.0.0.16' for rate "c2" 
+21:36:53.919 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@10.0.0.11'] Via:'a@18.0.0.11' From:'a@18.0.0.11' HopCount:1 
+21:36:53.919 [error] Discarding as I am the ToNode for Id "c@10.0.0.13c1" 
+ 
+21:36:53.919 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@14.0.0.11','c@18.0.0.13'] Via:'a@18.0.0.11' From:'a@18.0.0.11' HopCount:2 
+21:36:55.925 [error] ToNode 'a@14.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c2"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c2"},{'a@18.0.0.11',"c2"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req...
+21:36:56.928 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'c@18.0.0.13' From:'a@18.0.0.11' to 'c@10.0.0.13' HopCount:3 
+21:36:57.944 [error] Sending rate "c1" to 'd@10.0.0.14' 
+21:36:57.945 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@10.0.0.11'] Via:'a@13.0.0.11' From:'a@13.0.0.11' HopCount:1 
+21:36:57.945 [error] Discarding as I am the ToNode for Id "c@10.0.0.13c1" 
+ 
+21:36:57.945 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@14.0.0.11','c@13.0.0.13'] Via:'a@13.0.0.11' From:'a@13.0.0.11' HopCount:2 
+21:36:58.951 [error] ToNode 'a@14.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c2"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c2"},{'a@18.0.0.11',"c2"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req...
+21:36:59.957 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'c@13.0.0.13' From:'a@13.0.0.11' to 'c@10.0.0.13' HopCount:3 
+21:36:59.958 [error] C1 propagation "2020-07-04T21:36:59.957" 
+21:36:59.958 [error] Sending find_sub batch [{'a@10.0.0.11',"c1","c@10.0.0.13c1",2,'e@10.0.0.15'},{'a@10.0.0.11',"c1","c@10.0.0.13c1",2,'f@10.0.0.16'}] 
+21:36:59.958 [error] Sent find_sub control message from batch 'a@10.0.0.11' "c1" "c@10.0.0.13c1" 2 'e@10.0.0.15' 
+21:36:59.958 [error] Sent find_sub control message from batch 'a@10.0.0.11' "c1" "c@10.0.0.13c1" 2 'f@10.0.0.16' 
+21:36:59.958 [error] Sending find_sub_aq batch [{"c@10.0.0.13c1",'c@18.0.0.13','a@18.0.0.11','a@10.0.0.11',3,'c@10.0.0.13'},{"c@10.0.0.13c1",'c@13.0.0.13','a@13.0.0.11','a@10.0.0.11',3,'c@10.0.0.13'}] 
+21:36:59.959 [error] Sent find_sub_aq control message for "c@10.0.0.13c1" ['c@13.0.0.13'] 'a@13.0.0.11' 'a@10.0.0.11' 3 'c@10.0.0.13' 
+21:36:59.960 [error] Sent find_sub_aq control message for "c@10.0.0.13c1" ['c@18.0.0.13'] 'a@18.0.0.11' 'a@10.0.0.11' 3 'c@10.0.0.13' 
+21:36:59.960 [error] batched message propagation "2020-07-04T21:36:59.960" 
+21:36:59.960 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@10.0.0.11'] Via:'a@15.0.0.11' From:'a@15.0.0.11' HopCount:1 
+21:36:59.960 [error] Discarding as I am the ToNode for Id "c@10.0.0.13c1" 
+ 
+21:36:59.960 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@14.0.0.11'] Via:'a@15.0.0.11' From:'a@15.0.0.11' HopCount:2 
+21:37:00.003 [error] ToNode 'a@14.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c2"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c2"},{'a@18.0.0.11',"c2"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req...
+21:37:00.003 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@10.0.0.11'] Via:'a@19.0.0.11' From:'a@19.0.0.11' HopCount:1 
+21:37:00.003 [error] Discarding as I am the ToNode for Id "c@10.0.0.13c1" 
+ 
+21:37:00.003 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@14.0.0.11'] Via:'a@19.0.0.11' From:'a@19.0.0.11' HopCount:2 
+21:37:02.007 [error] ToNode 'a@14.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c2"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c2"},{'a@18.0.0.11',"c2"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req...
+21:37:02.008 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['c@16.0.0.13'] Via:'a@16.0.0.11' From:'a@16.0.0.11' HopCount:2 
+21:37:02.034 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'c@16.0.0.13' From:'a@16.0.0.11' to 'c@10.0.0.13' HopCount:3 
+21:37:02.034 [error] LASPVIN sent find_sub on join req Id:"c@10.0.0.13c1", Hop:2 
+21:37:02.035 [error] Received rate_subscribe from 'd@10.0.0.14' for rate "c3" 
+21:37:02.035 [error] Received rate_subscribe from 'c@10.0.0.13' for rate "c1" 
+21:37:04.199 [error] Received new rate from 'a@18.0.0.11' with new rate "c1"
+21:37:04.199 [error] LASPVIN found the peer at "2020-07-04T21:37:04.199" for ID: "c@10.0.0.13c1" ToNode: 'a@18.0.0.11' Via:'a@10.0.0.11' 
+21:37:04.199 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+21:37:04.199 [error] Sub_aq exists and Hop:1 > existing HopCount:1 
+21:37:04.392 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['c@15.0.0.13'] Via:'a@15.0.0.11' From:'a@15.0.0.11' HopCount:2 
+21:37:04.817 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'c@15.0.0.13' From:'a@15.0.0.11' to 'c@10.0.0.13' HopCount:3 
+21:37:05.925 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['c@11.0.0.13'] Via:'a@11.0.0.11' From:'a@11.0.0.11' HopCount:2 
+21:37:06.838 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'c@11.0.0.13' From:'a@11.0.0.11' to 'c@10.0.0.13' HopCount:3 
+21:37:06.934 [error] C2 propagation "2020-07-04T21:37:06.933" 
+21:37:06.935 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@10.0.0.11'] Via:'a@12.0.0.11' From:'a@12.0.0.11' HopCount:1 
+21:37:06.935 [error] Discarding as I am the ToNode for Id "c@10.0.0.13c1" 
+ 
+21:37:06.935 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@14.0.0.11','c@12.0.0.13'] Via:'a@12.0.0.11' From:'a@12.0.0.11' HopCount:2 
+21:37:06.974 [error] ToNode 'a@14.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c2"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c2"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:07.074 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'c@12.0.0.13' From:'a@12.0.0.11' to 'c@10.0.0.13' HopCount:3 
+21:37:07.809 [warning] global: 'a@10.0.0.11' failed to connect to 'd@12.0.0.14'
+21:37:08.399 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@18.0.0.11'] Via:'a@16.0.0.11' From:'a@16.0.0.11' HopCount:2 
+21:37:08.418 [error] ToNode 'a@18.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c2"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c2"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:08.424 [error] LASPVIN received find_sub Id: "c@10.0.0.13c1" From: 'd@10.0.0.14' Hop:4 
+21:37:08.424 [error] LASPVIN find_sub_aq exists for this find_sub "c@10.0.0.13c1" 
+21:37:09.823 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@18.0.0.11'] Via:'a@14.0.0.11' From:'a@14.0.0.11' HopCount:2 
+21:37:09.893 [error] ToNode 'a@18.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c2"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c2"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:09.959 [error] C1 propagation "2020-07-04T21:37:09.959" 
+21:37:10.052 [error] Sending find_sub batch [{'a@10.0.0.11',"c1","c@10.0.0.13c1",2,'d@10.0.0.14'}] 
+21:37:10.052 [error] Sent find_sub control message from batch 'a@10.0.0.11' "c1" "c@10.0.0.13c1" 2 'd@10.0.0.14' 
+21:37:10.052 [error] Sending find_sub_aq batch [{"c@10.0.0.13c1",'c@16.0.0.13','a@16.0.0.11','a@10.0.0.11',3,'c@10.0.0.13'},{"c@10.0.0.13c1",'c@15.0.0.13','a@15.0.0.11','a@10.0.0.11',3,'c@10.0.0.13'},{"c@10.0.0.13c1",'c@11.0.0.13','a@11.0.0.11','a@10.0.0.11',3,'c@10.0.0.13'},{"c@10.0.0.13c1",'c@12.0.0.13','a@12.0.0.11','a@10.0.0.11',3,'c@10.0.0.13'}] 
+21:37:10.053 [error] Sent find_sub_aq control message for "c@10.0.0.13c1" ['c@11.0.0.13'] 'a@11.0.0.11' 'a@10.0.0.11' 3 'c@10.0.0.13' 
+21:37:10.053 [error] Sent find_sub_aq control message for "c@10.0.0.13c1" ['c@12.0.0.13'] 'a@12.0.0.11' 'a@10.0.0.11' 3 'c@10.0.0.13' 
+21:37:10.053 [error] Sent find_sub_aq control message for "c@10.0.0.13c1" ['c@15.0.0.13'] 'a@15.0.0.11' 'a@10.0.0.11' 3 'c@10.0.0.13' 
+21:37:10.053 [error] Sent find_sub_aq control message for "c@10.0.0.13c1" ['c@16.0.0.13'] 'a@16.0.0.11' 'a@10.0.0.11' 3 'c@10.0.0.13' 
+21:37:10.053 [error] batched message propagation "2020-07-04T21:37:10.534" 
+21:37:10.579 [error] Received new rate from 'a@16.0.0.11' with new rate "c1"
+21:37:10.579 [error] LASPVIN found the peer at "2020-07-04T21:37:10.579" for ID: "c@10.0.0.13c1" ToNode: 'a@16.0.0.11' Via:'a@10.0.0.11' 
+21:37:10.579 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+21:37:10.579 [error] Sub_aq exists and Hop:1 > existing HopCount:1 
+21:37:10.650 [error] LASPVIN found the peer at "2020-07-04T21:37:10.649" for ID: "c@10.0.0.13c1" ToNode: 'a@16.0.0.11' Via:'a@10.0.0.11' 
+21:37:10.650 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+21:37:10.650 [error] Sub_aq exists and Hop:1 > existing HopCount:1 
+21:37:12.025 [error] LASPVIN received find_sub_aq_lock for Id:"c@10.0.0.13c1" ToNode'c@13.0.0.13' From:'c@10.0.0.13' 
+21:37:12.025 [error] LASPVIN Rate updated already ~n
+21:37:12.025 [error] LASPVIN Forwarding lock for ID:"c@10.0.0.13c1" to ['a@14.0.0.11','a@18.0.0.11','a@13.0.0.11','a@16.0.0.11','a@15.0.0.11','a@11.0.0.11','a@12.0.0.11'] 
+21:37:13.591 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@16.0.0.11'] Via:'a@18.0.0.11' From:'a@18.0.0.11' HopCount:2 
+21:37:13.632 [error] ToNode 'a@16.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c2"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:13.750 [error] Received new rate from 'a@13.0.0.11' with new rate "c1"
+21:37:13.750 [error] LASPVIN found the peer at "2020-07-04T21:37:13.750" for ID: "c@10.0.0.13c1" ToNode: 'a@13.0.0.11' Via:'a@10.0.0.11' 
+21:37:13.750 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+21:37:13.750 [error] Sub_aq exists and Hop:1 > existing HopCount:1 
+21:37:15.300 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@16.0.0.11','a@13.0.0.11'] Via:'a@15.0.0.11' From:'a@15.0.0.11' HopCount:2 
+21:37:15.304 [error] ToNode 'a@16.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:15.330 [error] ToNode 'a@13.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:16.271 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@18.0.0.11','a@16.0.0.11'] Via:'a@13.0.0.11' From:'a@13.0.0.11' HopCount:2 
+21:37:16.327 [error] ToNode 'a@18.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:16.372 [error] ToNode 'a@16.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:16.525 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['c@19.0.0.13','a@18.0.0.11'] Via:'a@19.0.0.11' From:'a@19.0.0.11' HopCount:2 
+21:37:16.609 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'c@19.0.0.13' From:'a@19.0.0.11' to 'c@10.0.0.13' HopCount:3 
+21:37:16.663 [error] ToNode 'a@18.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:19.620 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@13.0.0.11'] Via:'a@16.0.0.11' From:'a@16.0.0.11' HopCount:2 
+21:37:19.658 [error] ToNode 'a@13.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:19.892 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@16.0.0.11','a@13.0.0.11'] Via:'a@14.0.0.11' From:'a@14.0.0.11' HopCount:2 
+21:37:19.936 [error] ToNode 'a@16.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:20.010 [error] ToNode 'a@13.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:20.055 [error] C1 propagation "2020-07-04T21:37:20.552" 
+21:37:20.055 [error] Sending find_sub batch [] 
+21:37:20.055 [error] Sending find_sub_aq batch [{"c@10.0.0.13c1",'c@19.0.0.13','a@19.0.0.11','a@10.0.0.11',3,'c@10.0.0.13'}] 
+21:37:20.055 [error] Sent find_sub_aq control message for "c@10.0.0.13c1" ['c@19.0.0.13'] 'a@19.0.0.11' 'a@10.0.0.11' 3 'c@10.0.0.13' 
+21:37:20.056 [error] batched message propagation "2020-07-04T21:37:20.559" 
+21:37:20.448 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@18.0.0.11','a@16.0.0.11','a@13.0.0.11'] Via:'a@11.0.0.11' From:'a@11.0.0.11' HopCount:2 
+21:37:20.546 [error] ToNode 'a@18.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:20.605 [error] ToNode 'a@16.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:20.687 [error] ToNode 'a@13.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:20.688 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['c@17.0.0.13'] Via:'a@17.0.0.11' From:'a@11.0.0.11' HopCount:3 
+21:37:20.696 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'c@17.0.0.13' From:'a@11.0.0.11' to 'c@10.0.0.13' HopCount:4 
+21:37:20.773 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@18.0.0.11','a@16.0.0.11','a@13.0.0.11'] Via:'a@12.0.0.11' From:'a@12.0.0.11' HopCount:2 
+21:37:20.847 [error] ToNode 'a@18.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:20.895 [error] ToNode 'a@16.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:20.987 [error] ToNode 'a@13.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c2"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:20.987 [error] Received new rate from 'a@12.0.0.11' with new rate "c1"
+21:37:20.987 [error] LASPVIN found the peer at "2020-07-04T21:37:20.987" for ID: "c@10.0.0.13c1" ToNode: 'a@12.0.0.11' Via:'a@10.0.0.11' 
+21:37:20.987 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+21:37:20.987 [error] Sub_aq exists and Hop:1 > existing HopCount:1 
+21:37:22.070 [error] LASPVIN received find_sub_aq_lock for Id:"c@10.0.0.13c1" ToNode'c@18.0.0.13' From:'c@10.0.0.13' 
+21:37:22.071 [error] LASPVIN Rate updated already ~n
+21:37:22.071 [error] LASPVIN Forwarding lock for ID:"c@10.0.0.13c1" to ['a@14.0.0.11','a@18.0.0.11','a@13.0.0.11','a@16.0.0.11','a@15.0.0.11','a@11.0.0.11','a@12.0.0.11','a@19.0.0.11','a@11.0.0.11'] 
+21:37:23.594 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@13.0.0.11','a@12.0.0.11'] Via:'a@18.0.0.11' From:'a@18.0.0.11' HopCount:2 
+21:37:23.702 [error] ToNode 'a@13.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:23.777 [error] ToNode 'a@12.0.0.11' is a peer [{'a@11.0.0.11',"c2"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:24.541 [error] Received new rate from 'a@11.0.0.11' with new rate "c1"
+21:37:24.541 [error] LASPVIN found the peer at "2020-07-04T21:37:24.541" for ID: "c@10.0.0.13c1" ToNode: 'a@11.0.0.11' Via:'a@10.0.0.11' 
+21:37:24.541 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+21:37:24.542 [error] Sub_aq exists and Hop:1 > existing HopCount:1 
+21:37:26.011 [error] C3 propagation "2020-07-04T21:37:26.114" 
+21:37:26.557 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@12.0.0.11','a@11.0.0.11'] Via:'a@15.0.0.11' From:'a@15.0.0.11' HopCount:2 
+21:37:26.645 [error] ToNode 'a@12.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:26.721 [error] ToNode 'a@11.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c2"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:26.763 [error] Received new rate from 'a@15.0.0.11' with new rate "c1"
+21:37:26.763 [error] LASPVIN found the peer at "2020-07-04T21:37:26.763" for ID: "c@10.0.0.13c1" ToNode: 'a@15.0.0.11' Via:'a@10.0.0.11' 
+21:37:26.763 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+21:37:26.763 [error] Sub_aq exists and Hop:1 > existing HopCount:1 
+21:37:26.763 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@12.0.0.11','a@11.0.0.11'] Via:'a@13.0.0.11' From:'a@13.0.0.11' HopCount:2 
+21:37:26.810 [error] ToNode 'a@12.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:27.052 [error] ToNode 'a@11.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:27.445 [error] LASPVIN found the peer at "2020-07-04T21:37:27.445" for ID: "c@10.0.0.13c1" ToNode: 'a@11.0.0.11' Via:'a@10.0.0.11' 
+21:37:27.445 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+21:37:27.446 [error] Sub_aq exists and Hop:1 > existing HopCount:1 
+21:37:29.893 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@12.0.0.11','a@11.0.0.11','a@15.0.0.11'] Via:'a@14.0.0.11' From:'a@14.0.0.11' HopCount:2 
+21:37:30.014 [error] ToNode 'a@12.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:30.062 [error] ToNode 'a@11.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:30.127 [error] ToNode 'a@15.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:30.127 [error] C1 propagation "2020-07-04T21:37:30.127" 
+21:37:30.127 [error] Sending find_sub batch [] 
+21:37:30.128 [error] Sending find_sub_aq batch [{"c@10.0.0.13c1",'c@17.0.0.13','a@11.0.0.11','a@10.0.0.11',4,'c@10.0.0.13'}] 
+21:37:30.128 [error] Sent find_sub_aq control message for "c@10.0.0.13c1" ['c@17.0.0.13'] 'a@11.0.0.11' 'a@10.0.0.11' 4 'c@10.0.0.13' 
+21:37:30.128 [error] batched message propagation "2020-07-04T21:37:30.128" 
+21:37:31.623 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@12.0.0.11','a@11.0.0.11','a@15.0.0.11'] Via:'a@16.0.0.11' From:'a@16.0.0.11' HopCount:2 
+21:37:31.689 [error] ToNode 'a@12.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:31.729 [error] ToNode 'a@11.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:31.771 [error] ToNode 'a@15.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:32.081 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@18.0.0.11','a@16.0.0.11','a@13.0.0.11','a@11.0.0.11'] Via:'a@19.0.0.11' From:'a@19.0.0.11' HopCount:2 
+21:37:32.170 [error] ToNode 'a@18.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:32.205 [error] ToNode 'a@16.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:32.301 [error] ToNode 'a@13.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:32.394 [error] ToNode 'a@11.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:32.412 [error] Received check_tonode From:'c@10.0.0.13' for ToNode:'c@11.0.0.13' Hop:3 
+21:37:33.596 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@11.0.0.11'] Via:'a@18.0.0.11' From:'a@18.0.0.11' HopCount:2 
+21:37:33.669 [error] ToNode 'a@11.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:35.402 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@11.0.0.11','a@15.0.0.11'] Via:'a@12.0.0.11' From:'a@12.0.0.11' HopCount:2 
+21:37:35.467 [error] ToNode 'a@11.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:35.531 [error] ToNode 'a@15.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:36.636 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@12.0.0.11','a@15.0.0.11'] Via:'a@11.0.0.11' From:'a@11.0.0.11' HopCount:2 
+21:37:36.673 [error] ToNode 'a@12.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:36.713 [error] ToNode 'a@15.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:36.713 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@15.0.0.11','a@11.0.0.11'] Via:'a@13.0.0.11' From:'a@13.0.0.11' HopCount:2 
+21:37:36.788 [error] ToNode 'a@15.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:36.865 [error] ToNode 'a@11.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:37.442 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@11.0.0.11'] Via:'a@15.0.0.11' From:'a@15.0.0.11' HopCount:2 
+21:37:37.515 [error] ToNode 'a@11.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c2"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:40.129 [error] C1 propagation "2020-07-04T21:37:40.129" 
+21:37:40.129 [error] Sending find_sub batch [] 
+21:37:40.129 [error] Sending find_sub_aq batch [] 
+21:37:40.129 [error] batched message propagation "2020-07-04T21:37:40.129" 
+21:37:41.164 [error] Received new rate from 'a@19.0.0.11' with new rate "c1"
+21:37:41.165 [error] LASPVIN found the peer at "2020-07-04T21:37:41.165" for ID: "c@10.0.0.13c1" ToNode: 'a@19.0.0.11' Via:'a@10.0.0.11' 
+21:37:41.165 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+21:37:41.165 [error] Sub_aq exists and Hop:1 > existing HopCount:1 
+21:37:41.627 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@19.0.0.11'] Via:'a@16.0.0.11' From:'a@16.0.0.11' HopCount:2 
+21:37:41.672 [error] ToNode 'a@19.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c1"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:42.226 [error] Received check_tonode From:'c@10.0.0.13' for ToNode:'c@12.0.0.13' Hop:3 
+21:37:43.695 [error] LASPVIN found the peer at "2020-07-04T21:37:43.695" for ID: "c@10.0.0.13c1" ToNode: 'a@19.0.0.11' Via:'a@10.0.0.11' 
+21:37:43.695 [error] LASPVIN find_sub_aq Id exists not forwarding found_sub
+21:37:43.695 [error] Sub_aq exists and Hop:1 > existing HopCount:1 
+21:37:43.752 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@15.0.0.11','a@11.0.0.11'] Via:'a@19.0.0.11' From:'a@19.0.0.11' HopCount:2 
+21:37:43.786 [error] ToNode 'a@15.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c1"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:43.844 [error] ToNode 'a@11.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c1"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:45.722 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@19.0.0.11','a@17.0.0.11'] Via:'a@18.0.0.11' From:'a@18.0.0.11' HopCount:2 
+21:37:45.774 [error] ToNode 'a@19.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c1"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:45.821 [error] LASPVINDEBUG Forwarding find_sub_aq for Id: "c@10.0.0.13c1" ToNode:'a@17.0.0.11' From:'a@18.0.0.11' to 'c@10.0.0.13' HopCount:3 
+21:37:46.835 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@17.0.0.11'] Via:'a@12.0.0.11' From:'a@12.0.0.11' HopCount:2 
+21:37:46.836 [error] LASPVIN path ToNode: 'a@17.0.0.11' exists [['c@14.0.0.13'],['c@18.0.0.13'],['c@13.0.0.13'],['c@16.0.0.13'],['c@15.0.0.13'],['c@11.0.0.13'],['c@12.0.0.13'],['c@19.0.0.13'],['c@17.0.0.13'],['a@17.0.0.11']] 
+21:37:46.837 [error] HopCount is more than existing, skipping.....
+21:37:46.950 [error] C2 propagation "2020-07-04T21:37:46.949" 
+21:37:47.567 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@19.0.0.11','a@17.0.0.11'] Via:'a@15.0.0.11' From:'a@15.0.0.11' HopCount:2 
+21:37:47.613 [error] ToNode 'a@19.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c1"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:47.615 [error] LASPVIN path ToNode: 'a@17.0.0.11' exists [['c@14.0.0.13'],['c@18.0.0.13'],['c@13.0.0.13'],['c@16.0.0.13'],['c@15.0.0.13'],['c@11.0.0.13'],['c@12.0.0.13'],['c@19.0.0.13'],['c@17.0.0.13'],['a@17.0.0.11']] 
+21:37:47.615 [error] HopCount is more than existing, skipping.....
+21:37:47.615 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@19.0.0.11','a@17.0.0.11'] Via:'a@13.0.0.11' From:'a@13.0.0.11' HopCount:2 
+21:37:47.687 [error] ToNode 'a@19.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c1"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:47.688 [error] LASPVIN path ToNode: 'a@17.0.0.11' exists [['c@14.0.0.13'],['c@18.0.0.13'],['c@13.0.0.13'],['c@16.0.0.13'],['c@15.0.0.13'],['c@11.0.0.13'],['c@12.0.0.13'],['c@19.0.0.13'],['c@17.0.0.13'],['a@17.0.0.11']] 
+21:37:47.688 [error] HopCount is more than existing, skipping.....
+21:37:49.897 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@19.0.0.11','a@17.0.0.11'] Via:'a@14.0.0.11' From:'a@14.0.0.11' HopCount:2 
+21:37:49.914 [error] ToNode 'a@19.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c1"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:49.915 [error] LASPVIN path ToNode: 'a@17.0.0.11' exists [['c@14.0.0.13'],['c@18.0.0.13'],['c@13.0.0.13'],['c@16.0.0.13'],['c@15.0.0.13'],['c@11.0.0.13'],['c@12.0.0.13'],['c@19.0.0.13'],['c@17.0.0.13'],['a@17.0.0.11']] 
+21:37:49.915 [error] HopCount is more than existing, skipping.....
+21:37:50.130 [error] C1 propagation "2020-07-04T21:37:50.130" 
+21:37:50.130 [error] Sending find_sub batch [] 
+21:37:50.130 [error] Sending find_sub_aq batch [{"c@10.0.0.13c1",'a@17.0.0.11','a@18.0.0.11','a@10.0.0.11',3,'c@10.0.0.13'}] 
+21:37:50.130 [error] Sent find_sub_aq control message for "c@10.0.0.13c1" ['a@17.0.0.11'] 'a@18.0.0.11' 'a@10.0.0.11' 3 'c@10.0.0.13' 
+21:37:50.130 [error] batched message propagation "2020-07-04T21:37:50.130" 
+21:37:51.266 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@19.0.0.11','a@17.0.0.11'] Via:'a@11.0.0.11' From:'a@11.0.0.11' HopCount:2 
+21:37:51.306 [error] ToNode 'a@19.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c1"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:51.306 [error] LASPVIN path ToNode: 'a@17.0.0.11' exists [['c@14.0.0.13'],['c@18.0.0.13'],['c@13.0.0.13'],['c@16.0.0.13'],['c@15.0.0.13'],['c@11.0.0.13'],['c@12.0.0.13'],['c@19.0.0.13'],['c@17.0.0.13'],['a@17.0.0.11']] 
+21:37:51.306 [error] HopCount is more than existing, skipping.....
+21:37:51.628 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@17.0.0.11','a@19.0.0.11'] Via:'a@16.0.0.11' From:'a@16.0.0.11' HopCount:2 
+21:37:51.695 [error] LASPVIN path ToNode: 'a@17.0.0.11' exists [['c@14.0.0.13'],['c@18.0.0.13'],['c@13.0.0.13'],['c@16.0.0.13'],['c@15.0.0.13'],['c@11.0.0.13'],['c@12.0.0.13'],['c@19.0.0.13'],['c@17.0.0.13'],['a@17.0.0.11']] 
+21:37:51.695 [error] HopCount is more than existing, skipping.....
+21:37:51.779 [error] ToNode 'a@19.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c1"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:52.233 [error] Received check_tonode From:'c@10.0.0.13' for ToNode:'c@15.0.0.13' Hop:3 
+21:37:55.725 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@19.0.0.11'] Via:'a@18.0.0.11' From:'a@18.0.0.11' HopCount:2 
+21:37:55.734 [error] ToNode 'a@19.0.0.11' is a peer [{'a@11.0.0.11',"c1"},{'a@12.0.0.11',"c1"},{'a@13.0.0.11',"c1"},{'a@14.0.0.11',"c1"},{'a@15.0.0.11',"c1"},{'a@16.0.0.11',"c1"},{'a@18.0.0.11',"c1"},{'a@19.0.0.11',"c1"},{'b@10.0.0.12',"c2"},{'c@10.0.0.13',"c1"},{'d@10.0.0.14',"c3"},{'e@10.0.0.15',"c2"},{'f@10.0.0.16',"c2"},{"self_rate","c1"},{"subscription",'c@10.0.0.13'}].. Not forwarding req... 
+21:37:56.310 [error] LASPVIN received find_sub_aq for Id:"c@10.0.0.13c1" ToNodes:['a@17.0.0.11'] Via:'a@19.0.0.11' From:'a@19.0.0.11' HopCount:2 
+21:37:56.311 [error] LASPVIN path ToNode: 'a@17.0.0.11' exists [['c@14.0.0.13'],['c@18.0.0.13'],['c@13.0.0.13'],['c@16.0.0.13'],['c@15.0.0.13'],['c@11.0.0.13'],['c@12.0.0.13'],['c@19.0.0.13'],['c@17.0.0.13'],['a@17.0.0.11']] 
+21:37:56.311 [error] HopCount is more than existing, skipping.....
+21:38:00.132 [error] C1 propagation "2020-07-04T21:38:00.132" 
+21:38:00.132 [error] Sending find_sub batch [] 
+21:38:00.132 [error] Sending find_sub_aq batch [] 
+21:38:00.132 [error] batched message propagation "2020-07-04T21:38:00.132" 
+21:38:02.241 [error] Received check_tonode From:'c@10.0.0.13' for ToNode:'c@16.0.0.13' Hop:3 
+21:38:04.074 [warning] global: 'a@10.0.0.11' failed to connect to 'f@11.0.0.16'
+21:38:10.134 [error] C1 propagation "2020-07-04T21:38:10.134" 
+21:38:10.134 [error] Sending find_sub batch [] 
+21:38:10.134 [error] Sending find_sub_aq batch [] 
+21:38:10.134 [error] batched message propagation "2020-07-04T21:38:10.134" 
+21:38:12.249 [error] Received check_tonode From:'c@10.0.0.13' for ToNode:'c@19.0.0.13' Hop:3 
+21:38:20.135 [error] C1 propagation "2020-07-04T21:38:20.135" 
+21:38:20.135 [error] Sending find_sub batch [] 
+21:38:20.135 [error] Sending find_sub_aq batch [] 
+21:38:20.135 [error] batched message propagation "2020-07-04T21:38:20.135" 
+21:38:22.259 [error] Received check_tonode From:'c@10.0.0.13' for ToNode:'c@17.0.0.13' Hop:4 
+21:38:26.951 [error] C2 propagation "2020-07-04T21:38:26.951" 
+21:38:30.137 [error] C1 propagation "2020-07-04T21:38:30.137" 
+21:38:30.137 [error] Sending find_sub batch [] 
+21:38:30.137 [error] Sending find_sub_aq batch [] 
+21:38:30.137 [error] batched message propagation "2020-07-04T21:38:30.137" 
+21:38:32.268 [error] Received check_tonode From:'c@10.0.0.13' for ToNode:'a@17.0.0.11' Hop:3 
+21:38:36.012 [error] C3 propagation "2020-07-04T21:38:36.124" 
+21:38:40.138 [error] C1 propagation "2020-07-04T21:38:40.138" 
+21:38:40.138 [error] Sending find_sub batch [] 
+21:38:40.138 [error] Sending find_sub_aq batch [] 
+21:38:40.138 [error] batched message propagation "2020-07-04T21:38:40.138" 
+21:38:50.139 [error] C1 propagation "2020-07-04T21:38:50.139" 
+21:38:50.139 [error] Sending find_sub batch [] 
+21:38:50.139 [error] Sending find_sub_aq batch [] 
+21:38:50.139 [error] batched message propagation "2020-07-04T21:38:50.139" 
+21:39:00.140 [error] C1 propagation "2020-07-04T21:39:00.140" 
+21:39:00.140 [error] Sending find_sub batch [] 
+21:39:00.140 [error] Sending find_sub_aq batch [] 
+21:39:00.140 [error] batched message propagation "2020-07-04T21:39:00.140" 
+21:39:00.371 [warning] global: 'a@10.0.0.11' failed to connect to 'd@17.0.0.14'
+21:39:00.375 [warning] global: 'a@10.0.0.11' failed to connect to 'f@17.0.0.16'
+21:39:00.382 [warning] global: 'a@10.0.0.11' failed to connect to 'c@17.0.0.13'
+21:39:00.390 [warning] global: 'a@10.0.0.11' failed to connect to 'e@17.0.0.15'
+21:39:00.395 [warning] global: 'a@10.0.0.11' failed to connect to 'b@17.0.0.12'
+21:39:06.953 [error] C2 propagation "2020-07-04T21:39:06.953" 
+21:39:10.142 [error] C1 propagation "2020-07-04T21:39:10.142" 
+21:39:10.142 [error] Sending find_sub batch [] 
+21:39:10.142 [error] Sending find_sub_aq batch [] 
+21:39:10.142 [error] batched message propagation "2020-07-04T21:39:10.142" 
+21:39:20.144 [error] C1 propagation "2020-07-04T21:39:20.144" 
+21:39:20.144 [error] Sending find_sub batch [] 
+21:39:20.144 [error] Sending find_sub_aq batch [] 
+21:39:20.144 [error] batched message propagation "2020-07-04T21:39:20.144" 
+21:39:30.145 [error] C1 propagation "2020-07-04T21:39:30.145" 
+21:39:30.145 [error] Sending find_sub batch [] 
+21:39:30.145 [error] Sending find_sub_aq batch [] 
+21:39:30.145 [error] batched message propagation "2020-07-04T21:39:30.145" 
+21:39:40.146 [error] C1 propagation "2020-07-04T21:39:40.146" 
+21:39:40.146 [error] Sending find_sub batch [] 
+21:39:40.146 [error] Sending find_sub_aq batch [] 
+21:39:40.146 [error] batched message propagation "2020-07-04T21:39:40.146" 
+21:39:46.014 [error] C3 propagation "2020-07-04T21:39:46.143" 
+21:39:46.955 [error] C2 propagation "2020-07-04T21:39:46.955" 
+21:39:50.147 [error] C1 propagation "2020-07-04T21:39:50.147" 
+21:39:50.147 [error] Sending find_sub batch [] 
+21:39:50.147 [error] Sending find_sub_aq batch [] 
+21:39:50.147 [error] batched message propagation "2020-07-04T21:39:50.147" 
+21:40:00.148 [error] C1 propagation "2020-07-04T21:40:00.148" 
+21:40:00.148 [error] Sending find_sub batch [] 
+21:40:00.148 [error] Sending find_sub_aq batch [] 
+21:40:00.148 [error] batched message propagation "2020-07-04T21:40:00.148" 
+21:40:10.149 [error] C1 propagation "2020-07-04T21:40:10.149" 
+21:40:10.149 [error] Sending find_sub batch [] 
+21:40:10.149 [error] Sending find_sub_aq batch [] 
+21:40:10.149 [error] batched message propagation "2020-07-04T21:40:10.149" 
+21:40:20.150 [error] C1 propagation "2020-07-04T21:40:20.150" 
+21:40:20.150 [error] Sending find_sub batch [] 
+21:40:20.151 [error] Sending find_sub_aq batch [] 
+21:40:20.151 [error] batched message propagation "2020-07-04T21:40:20.151" 
+21:40:22.364 [error] LASPVIN Received delta From='c@10.0.0.13' at TimeStamp="2020-07-04T21:40:22.364" Took=67573 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+21:40:22.364 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",0,0},{"delta_send",0,1},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",91,0},{"sub_cancel",0,0}] 
+21:40:26.957 [error] C2 propagation "2020-07-04T21:40:26.957" 
+21:40:26.957 [error] LASPVIN Sending delta to 'a@18.0.0.11' 
+21:40:26.958 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+21:40:26.958 [error] LASPVIN Sending delta to 'a@19.0.0.11' 
+21:40:26.958 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+21:40:26.959 [error] LASPVIN Sending delta to 'a@11.0.0.11' 
+21:40:26.959 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+21:40:26.959 [error] LASPVIN Sending delta to 'a@13.0.0.11' 
+21:40:26.960 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+21:40:26.960 [error] LASPVIN Sending delta to 'a@16.0.0.11' 
+21:40:26.960 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+21:40:26.961 [error] LASPVIN Sending delta to 'a@15.0.0.11' 
+21:40:26.961 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+21:40:26.962 [error] LASPVIN Sending delta to 'a@12.0.0.11' 
+21:40:26.962 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+21:40:26.962 [error] LASPVIN Sending delta to 'e@10.0.0.15' 
+21:40:26.962 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+21:40:26.963 [error] LASPVIN Sending delta to 'f@10.0.0.16' 
+21:40:26.963 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,2}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+21:40:27.608 [error] LASPVIN Received delta From='a@13.0.0.11' at TimeStamp="2020-07-04T21:40:27.608" Took=305 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+21:40:27.608 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",1,9},{"delta_send",9,2},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",101,0},{"sub_cancel",0,0}] 
+21:40:27.676 [error] LASPVIN Received delta From='a@15.0.0.11' at TimeStamp="2020-07-04T21:40:27.676" Took=321 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+21:40:27.677 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",2,9},{"delta_send",9,3},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",102,0},{"sub_cancel",0,0}] 
+21:40:29.992 [error] LASPVIN Received delta From='a@14.0.0.11' at TimeStamp="2020-07-04T21:40:29.992" Took=313 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+21:40:29.993 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",3,9},{"delta_send",9,4},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",103,0},{"sub_cancel",0,0}] 
+21:40:30.152 [error] C1 propagation "2020-07-04T21:40:30.152" 
+21:40:30.152 [error] Sending find_sub batch [] 
+21:40:30.152 [error] Sending find_sub_aq batch [] 
+21:40:30.152 [error] batched message propagation "2020-07-04T21:40:30.152" 
+21:40:30.152 [error] LASPVIN Sending delta to 'c@10.0.0.13' 
+21:40:30.152 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,5}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:1 
+21:40:30.153 [error] LASPVIN Sending delta to 'a@14.0.0.11' 
+21:40:30.153 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,5}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1},#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},1}],[]}}}} Counter:1 
+21:40:31.295 [error] LASPVIN Received delta From='a@11.0.0.11' at TimeStamp="2020-07-04T21:40:31.294" Took=352 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+21:40:31.295 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",4,11},{"delta_send",11,5},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",106,0},{"sub_cancel",0,0}] 
+21:40:31.657 [error] LASPVIN Received delta From='a@16.0.0.11' at TimeStamp="2020-07-04T21:40:31.657" Took=288 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[#{what => val_XRQUZACCA7SAJ26UG9VYUBKGB78SL3UVA8Z491WTZ5GU5FK8Q6}],[],[],[],[],[],[],[],[],[],[]}}}}] 
+21:40:31.657 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",5,11},{"delta_send",11,6},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",107,0},{"sub_cancel",0,0}] 
+21:40:32.314 [error] LASPVIN Received delta From='c@10.0.0.13' at TimeStamp="2020-07-04T21:40:32.313" Took=24208 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:32.314 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",6,11},{"delta_send",11,7},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",108,0},{"sub_cancel",0,0}] 
+21:40:33.459 [error] LASPVIN Received delta From='f@10.0.0.16' at TimeStamp="2020-07-04T21:40:33.458" Took=405 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:33.459 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",7,11},{"delta_send",11,8},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",109,0},{"sub_cancel",0,0}] 
+21:40:33.550 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-04T21:40:33.549" Took=345 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:33.550 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",8,11},{"delta_send",11,9},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",110,0},{"sub_cancel",0,0}] 
+21:40:35.753 [error] LASPVIN Received delta From='a@18.0.0.11' at TimeStamp="2020-07-04T21:40:35.753" Took=283 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:35.753 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",9,11},{"delta_send",11,10},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",111,0},{"sub_cancel",0,0}] 
+21:40:36.356 [error] LASPVIN Received delta From='a@19.0.0.11' at TimeStamp="2020-07-04T21:40:36.355" Took=304 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:36.356 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",10,11},{"delta_send",11,11},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",112,0},{"sub_cancel",0,0}] 
+21:40:36.874 [error] LASPVIN Received delta From='a@12.0.0.11' at TimeStamp="2020-07-04T21:40:36.874" Took=242 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:36.875 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",11,11},{"delta_send",11,12},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",113,0},{"sub_cancel",0,0}] 
+21:40:40.154 [error] C1 propagation "2020-07-04T21:40:40.154" 
+21:40:40.155 [error] Sending find_sub batch [] 
+21:40:40.155 [error] Sending find_sub_aq batch [] 
+21:40:40.155 [error] batched message propagation "2020-07-04T21:40:40.155" 
+21:40:40.155 [error] LASPVIN Sending delta to 'c@10.0.0.13' 
+21:40:40.155 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[],{[],[]}}}} Counter:2 
+21:40:40.156 [error] LASPVIN Sending delta to 'a@14.0.0.11' 
+21:40:40.156 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+21:40:40.156 [error] LASPVIN Sending delta to 'a@18.0.0.11' 
+21:40:40.156 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+21:40:40.157 [error] LASPVIN Sending delta to 'a@16.0.0.11' 
+21:40:40.157 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+21:40:40.157 [error] LASPVIN Sending delta to 'a@13.0.0.11' 
+21:40:40.158 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+21:40:40.159 [error] LASPVIN Sending delta to 'a@12.0.0.11' 
+21:40:40.159 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+21:40:40.160 [error] LASPVIN Sending delta to 'a@11.0.0.11' 
+21:40:40.160 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+21:40:40.161 [error] LASPVIN Sending delta to 'a@15.0.0.11' 
+21:40:40.161 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+21:40:40.161 [error] LASPVIN Sending delta to 'a@19.0.0.11' 
+21:40:40.162 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,13}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+21:40:41.296 [error] LASPVIN Received delta From='a@11.0.0.11' at TimeStamp="2020-07-04T21:40:41.295" Took=261 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:41.296 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",12,20},{"delta_send",20,13},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",123,0},{"sub_cancel",0,0}] 
+21:40:41.659 [error] LASPVIN Received delta From='a@16.0.0.11' at TimeStamp="2020-07-04T21:40:41.658" Took=233 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:41.659 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",13,20},{"delta_send",20,14},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",124,0},{"sub_cancel",0,0}] 
+21:40:45.755 [error] LASPVIN Received delta From='a@18.0.0.11' at TimeStamp="2020-07-04T21:40:45.755" Took=645 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:45.756 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",14,20},{"delta_send",20,15},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",125,0},{"sub_cancel",0,0}] 
+21:40:46.365 [error] LASPVIN Received delta From='a@19.0.0.11' at TimeStamp="2020-07-04T21:40:46.365" Took=261 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:46.365 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",15,20},{"delta_send",20,16},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",126,0},{"sub_cancel",0,0}] 
+21:40:46.878 [error] LASPVIN Received delta From='a@12.0.0.11' at TimeStamp="2020-07-04T21:40:46.878" Took=260 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:46.878 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",16,20},{"delta_send",20,17},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",127,0},{"sub_cancel",0,0}] 
+21:40:47.608 [error] LASPVIN Received delta From='a@13.0.0.11' at TimeStamp="2020-07-04T21:40:47.608" Took=267 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:47.608 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",17,20},{"delta_send",20,18},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",128,0},{"sub_cancel",0,0}] 
+21:40:47.736 [error] LASPVIN Received delta From='a@15.0.0.11' at TimeStamp="2020-07-04T21:40:47.736" Took=271 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:47.736 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",18,20},{"delta_send",20,19},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",129,0},{"sub_cancel",0,0}] 
+21:40:49.876 [error] LASPVIN Received delta From='a@14.0.0.11' at TimeStamp="2020-07-04T21:40:49.876" Took=214 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:49.876 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",19,20},{"delta_send",20,20},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",130,0},{"sub_cancel",0,0}] 
+21:40:50.155 [error] C1 propagation "2020-07-04T21:40:50.155" 
+21:40:50.155 [error] Sending find_sub batch [] 
+21:40:50.155 [error] Sending find_sub_aq batch [] 
+21:40:50.155 [error] batched message propagation "2020-07-04T21:40:50.155" 
+21:40:50.159 [error] LASPVIN Received delta From='b@10.0.0.12' at TimeStamp="2020-07-04T21:40:50.159" Took=326 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:50.159 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",20,20},{"delta_send",20,21},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",131,0},{"sub_cancel",0,0}] 
+21:40:56.016 [error] C3 propagation "2020-07-04T21:40:56.163" 
+21:40:56.016 [error] LASPVIN Sending delta to 'd@10.0.0.14' 
+21:40:56.016 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,22}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+21:40:58.455 [error] LASPVIN Received delta From='d@10.0.0.14' at TimeStamp="2020-07-04T21:40:58.455" Took=308 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:40:58.455 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",21,21},{"delta_send",21,22},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",133,0},{"sub_cancel",0,0}] 
+21:41:00.156 [error] C1 propagation "2020-07-04T21:41:00.156" 
+21:41:00.156 [error] Sending find_sub batch [] 
+21:41:00.156 [error] Sending find_sub_aq batch [] 
+21:41:00.156 [error] batched message propagation "2020-07-04T21:41:00.156" 
+21:41:06.959 [error] C2 propagation "2020-07-04T21:41:06.959" 
+21:41:06.960 [error] LASPVIN Sending delta to 'e@10.0.0.15' 
+21:41:06.960 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,23}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+21:41:06.960 [error] LASPVIN Sending delta to 'f@10.0.0.16' 
+21:41:06.961 [error] Id: {<<"awmap">>,{state_awmap,[state_mvregister]}} Type: {state_awmap,[state_mvregister]} Metadata: [{clock,[{<<125,77,131,56,119,66,210,129,48,185,161,155,112,188,187,57,72,201,31,86>>,23}]}] Deltas: {state_awmap,{state_mvregister,{[{<<"key1">>,[{{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2},#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}}]}],{[{{partisan_remote_reference,'c@10.0.0.13',{partisan_process_reference,"<0.209.0>"}},2}],[]}}}} Counter:2 
+21:41:10.158 [error] C1 propagation "2020-07-04T21:41:10.158" 
+21:41:10.158 [error] Sending find_sub batch [] 
+21:41:10.158 [error] Sending find_sub_aq batch [] 
+21:41:10.158 [error] batched message propagation "2020-07-04T21:41:10.158" 
+21:41:13.512 [error] LASPVIN Received delta From='f@10.0.0.16' at TimeStamp="2020-07-04T21:41:13.512" Took=311 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:41:13.512 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",22,23},{"delta_send",23,23},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",136,0},{"sub_cancel",0,0}] 
+21:41:13.555 [error] LASPVIN Received delta From='e@10.0.0.15' at TimeStamp="2020-07-04T21:41:13.554" Took=273 microseconds DeltaVal:[{<<"key1">>,{set,1,16,16,8,80,48,{[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},{{[],[],[],[],[],[],[],[],[],[],[#{what => val_GLWHKO6MTO873E4ZWMYHS7P0K9VC324LPLO059S7BW2UAERH98}],[],[],[],[],[]}}}}] 
+21:41:13.555 [error] Message Counters [{"Message","Tx","Rx"},{"check_tonode",0,7},{"check_tonode_ack",7,0},{"delta_ack",23,23},{"delta_send",23,24},{"find_sub",12,3},{"find_sub_aq",10,52},{"find_sub_aq_lock",3,6},{"rate_ack",24,23},{"rate_class",23,24},{"rate_refresh",0,0},{"rate_subscribe",1,11},{"rate_subscribe_ack",11,1},{"send_backend",137,0},{"sub_cancel",0,0}] 
+21:41:13.579 [warning] global: 'a@10.0.0.11' failed to connect to 'c@15.0.0.13'
+21:41:13.595 [warning] global: 'a@10.0.0.11' failed to connect to 'b@15.0.0.12'
+21:41:13.595 [warning] global: 'a@10.0.0.11' failed to connect to 'f@15.0.0.16'
+21:41:20.159 [error] C1 propagation "2020-07-04T21:41:20.159" 
+21:41:20.159 [error] Sending find_sub batch [] 
+21:41:20.159 [error] Sending find_sub_aq batch [] 
+21:41:20.159 [error] batched message propagation "2020-07-04T21:41:20.159" 
+21:41:30.160 [error] C1 propagation "2020-07-04T21:41:30.160" 
+21:41:30.160 [error] Sending find_sub batch [] 
+21:41:30.160 [error] Sending find_sub_aq batch [] 
+21:41:30.160 [error] batched message propagation "2020-07-04T21:41:30.160" 
+21:41:40.161 [error] C1 propagation "2020-07-04T21:41:40.161" 
+21:41:40.161 [error] Sending find_sub batch [] 
+21:41:40.161 [error] Sending find_sub_aq batch [] 
+21:41:40.161 [error] batched message propagation "2020-07-04T21:41:40.161" 
+21:41:46.960 [error] C2 propagation "2020-07-04T21:41:46.960" 
+21:41:50.162 [error] C1 propagation "2020-07-04T21:41:50.162" 
+21:41:50.163 [error] Sending find_sub batch [] 
+21:41:50.163 [error] Sending find_sub_aq batch [] 
+21:41:50.163 [error] batched message propagation "2020-07-04T21:41:50.163" 
+21:41:55.686 [warning] global: 'a@10.0.0.11' failed to connect to 'd@18.0.0.14'
+21:41:55.688 [warning] global: 'a@10.0.0.11' failed to connect to 'e@18.0.0.15'
+21:41:55.696 [warning] global: 'a@10.0.0.11' failed to connect to 'b@18.0.0.12'
+21:41:55.702 [warning] global: 'a@10.0.0.11' failed to connect to 'c@18.0.0.13'
+21:41:55.712 [warning] global: 'a@10.0.0.11' failed to connect to 'f@18.0.0.16'
+21:42:00.163 [error] C1 propagation "2020-07-04T21:42:00.163" 
+21:42:00.163 [error] Sending find_sub batch [] 
+21:42:00.163 [error] Sending find_sub_aq batch [] 
+21:42:00.163 [error] batched message propagation "2020-07-04T21:42:00.163" 
+21:42:06.017 [error] C3 propagation "2020-07-04T21:42:06.173" 
+21:42:10.165 [error] C1 propagation "2020-07-04T21:42:10.165" 
+21:42:10.165 [error] Sending find_sub batch [] 
+21:42:10.165 [error] Sending find_sub_aq batch [] 
+21:42:10.166 [error] batched message propagation "2020-07-04T21:42:10.165" 
+21:42:20.167 [error] C1 propagation "2020-07-04T21:42:20.167" 
+21:42:20.167 [error] Sending find_sub batch [] 
+21:42:20.167 [error] Sending find_sub_aq batch [] 
+21:42:20.167 [error] batched message propagation "2020-07-04T21:42:20.167" 
+21:42:26.962 [error] C2 propagation "2020-07-04T21:42:26.962" 
+21:42:30.169 [error] C1 propagation "2020-07-04T21:42:30.169" 
+21:42:30.169 [error] Sending find_sub batch [] 
+21:42:30.169 [error] Sending find_sub_aq batch [] 
+21:42:30.169 [error] batched message propagation "2020-07-04T21:42:30.169" 
+21:42:40.171 [error] C1 propagation "2020-07-04T21:42:40.171" 
+21:42:40.172 [error] Sending find_sub batch [] 
+21:42:40.173 [error] Sending find_sub_aq batch [] 
+21:42:40.173 [error] batched message propagation "2020-07-04T21:42:40.173" 
+21:42:50.172 [error] C1 propagation "2020-07-04T21:42:50.172" 
+21:42:50.174 [error] Sending find_sub batch [] 
+21:42:50.174 [error] Sending find_sub_aq batch [] 
+21:42:50.174 [error] batched message propagation "2020-07-04T21:42:50.174" 
+21:43:00.173 [error] C1 propagation "2020-07-04T21:43:00.173" 
+21:43:00.175 [error] Sending find_sub batch [] 
+21:43:00.175 [error] Sending find_sub_aq batch [] 
+21:43:00.175 [error] batched message propagation "2020-07-04T21:43:00.175" 
+21:43:06.964 [error] C2 propagation "2020-07-04T21:43:06.964" 
+21:43:10.175 [error] C1 propagation "2020-07-04T21:43:10.175" 
+21:43:10.192 [error] Sending find_sub batch [] 
+21:43:10.192 [error] Sending find_sub_aq batch [] 
+21:43:10.192 [error] batched message propagation "2020-07-04T21:43:10.192" 
+21:43:16.019 [error] C3 propagation "2020-07-04T21:43:16.195" 
+21:43:20.176 [error] C1 propagation "2020-07-04T21:43:20.176" 
+21:43:20.196 [error] Sending find_sub batch [] 
+21:43:20.196 [error] Sending find_sub_aq batch [] 
+21:43:20.196 [error] batched message propagation "2020-07-04T21:43:20.196" 
+21:43:30.178 [error] C1 propagation "2020-07-04T21:43:30.178" 
+21:43:30.198 [error] Sending find_sub batch [] 
+21:43:30.198 [error] Sending find_sub_aq batch [] 
+21:43:30.198 [error] batched message propagation "2020-07-04T21:43:30.198" 
+21:43:40.179 [error] C1 propagation "2020-07-04T21:43:40.179" 
+21:43:40.200 [error] Sending find_sub batch [] 
+21:43:40.200 [error] Sending find_sub_aq batch [] 
+21:43:40.200 [error] batched message propagation "2020-07-04T21:43:40.200" 
+21:43:46.966 [error] C2 propagation "2020-07-04T21:43:46.966" 
