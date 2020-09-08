@@ -1,0 +1,84 @@
+from jenks import jenks
+import numpy as np
+import random
+import NDutility as ND
+
+def goodness_of_variance_fit(array, classes):
+    # get the break points
+    classes = jenks(array, classes)
+
+    # do the actual classification
+    classified = np.array([classify(i, classes) for i in array])
+
+    # max value of zones
+    maxz = max(classified)
+
+    # nested list of zone indices
+    zone_indices = [[idx for idx, val in enumerate(classified) if zone + 1 == val] for zone in range(maxz)]
+
+    # sum of squared deviations from array mean
+    sdam = np.sum((array - array.mean()) ** 2)
+
+    # sorted polygon stats
+    array_sort = [np.array([array[index] for index in zone]) for zone in zone_indices]
+
+    # sum of squared deviations of class means
+    sdcm = sum([np.sum((classified - classified.mean()) ** 2) for classified in array_sort])
+
+    # goodness of variance fit
+    gvf = (sdam - sdcm) / sdam
+
+    return gvf
+
+def classify(value, breaks):
+    for i in range(1, len(breaks)):
+        if value < breaks[i]:
+            return i
+    return len(breaks) - 1
+
+if __name__=="__main__":
+    gvf = 0.0
+    nclasses = 3
+    print (ND.get_allNodes())
+    print ('NodeLength:'+str(len(ND.get_allNodes())))
+    '''randar =  np.random.randint(1,100,8)
+    print(np.sort(randar))
+    while gvf < .9 and nclasses!=2:
+        gvf = goodness_of_variance_fit(randar, nclasses)
+        print(np.sort(randar))
+        print("GVF: "+str(gvf))
+        print nclasses
+        print(jenks(randar,nclasses))
+        nclasses += 1
+        if nclasses > 3:
+            nclasses = 3
+            randar =  np.random.randint(1,100,8)'''
+    #a = np.array([2, 4, 20, 18, 22, 28, 35, 42])
+    a =  np.random.randint(1,100,8)
+    gvf = goodness_of_variance_fit(a, 3)
+    print(np.sort(a))
+    print("GVF: "+str(gvf))
+    segs = jenks(a,3)
+    print(segs)
+    rates = np.sort(a).tolist()
+    peers = ['d1', 'd2' , 'd3', 'd4', 'd5', 'd6', 'd7', 'd8']
+    c1 = {}
+    c2 = {}
+    c3 = {}
+    random.shuffle(peers)
+    print(peers)
+    print(np.sort(a))
+    ind = 0
+    for i in rates:
+        if i <= segs[1]:
+            c1.update({peers[ind] : i})
+        elif i <= segs[2]:
+            c2.update({peers[ind] : i})
+        elif i <= segs[3]:
+            c3.update({peers[ind] : i})
+        ind += 1
+    sort_rate = {'c1' : {}, 'c2' : {}, 'c3' : {}}
+    sort_rate.update({'c1' : c1})
+    sort_rate.update({'c2' : c2})
+    sort_rate.update({'c3' : c3})
+    print sort_rate
